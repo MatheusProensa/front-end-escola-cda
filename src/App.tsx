@@ -1,6 +1,6 @@
 import "./App.css";
-import { useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { useEffect, type ReactNode } from "react";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ContactProvider } from "./components/site";
 import Home from "./pages/Home";
 import Segmentos from "./pages/Segmentos";
@@ -11,6 +11,8 @@ import Sobre from "./pages/Sobre";
 import Matriculas from "./pages/Matriculas";
 
 // Painel administrativo (acesso só por URL /admin/*)
+import { AuthProvider } from "./admin/auth";
+import RequireAuth from "./admin/RequireAuth";
 import AdminLogin from "./admin/pages/Login";
 import Dashboard from "./admin/pages/Dashboard";
 import EditarHome from "./admin/pages/EditarHome";
@@ -47,24 +49,36 @@ function PublicSite() {
   );
 }
 
+// Área administrativa: provider de autenticação + rotas protegidas
+function AdminArea() {
+  const guard = (el: ReactNode) => <RequireAuth>{el}</RequireAuth>;
+  return (
+    <AuthProvider>
+      <Routes>
+        <Route path="login" element={<AdminLogin />} />
+        <Route path="dashboard" element={guard(<Dashboard />)} />
+        <Route path="home" element={guard(<EditarHome />)} />
+        <Route path="segmentos" element={guard(<EditarSegmentos />)} />
+        <Route path="vivencias" element={guard(<EditarVivencias />)} />
+        <Route path="espacos" element={guard(<EditarEspacos />)} />
+        <Route path="sobre" element={guard(<EditarSobre />)} />
+        <Route path="momentos" element={guard(<AdminMomentos />)} />
+        <Route path="contato" element={guard(<Contato />)} />
+        <Route path="configuracoes" element={guard(<Configuracoes />)} />
+        <Route index element={<Navigate to="/admin/login" replace />} />
+        <Route path="*" element={<Navigate to="/admin/login" replace />} />
+      </Routes>
+    </AuthProvider>
+  );
+}
+
 export default function App() {
   return (
     <>
       <ScrollToTop />
       <Routes>
-        {/* Painel administrativo — acessível apenas digitando /admin/... na URL */}
-        <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/home" element={<EditarHome />} />
-        <Route path="/admin/segmentos" element={<EditarSegmentos />} />
-        <Route path="/admin/vivencias" element={<EditarVivencias />} />
-        <Route path="/admin/espacos" element={<EditarEspacos />} />
-        <Route path="/admin/sobre" element={<EditarSobre />} />
-        <Route path="/admin/momentos" element={<AdminMomentos />} />
-        <Route path="/admin/contato" element={<Contato />} />
-        <Route path="/admin/configuracoes" element={<Configuracoes />} />
-
+        {/* Painel administrativo — só por URL /admin/*, protegido por login */}
+        <Route path="/admin/*" element={<AdminArea />} />
         {/* Site público */}
         <Route path="/*" element={<PublicSite />} />
       </Routes>

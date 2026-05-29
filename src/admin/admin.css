@@ -595,3 +595,13 @@ button { font-family: inherit; }
   .adm-savebar { margin: 22px -16px -50px; padding: 14px 16px; }
   .adm-page-head .ph-act { display: none; }
 }
+
+
+/* Mensagem de erro no login do painel */
+.adm-login-erro {
+  display: flex; align-items: center; gap: 9px;
+  background: #fdebef; color: #b8324b; border: 1px solid #f5c9d3;
+  border-radius: 12px; padding: 11px 14px; font-size: 13px; font-weight: 600;
+  margin-bottom: 16px;
+}
+.adm-login-erro i { font-size: 14px; }

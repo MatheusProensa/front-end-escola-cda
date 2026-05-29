@@ -1,20 +1,37 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { asset } from "../../lib/assets";
+import { useAuth } from "../auth";
+import { ApiError } from "../../lib/api";
 import "../admin.css";
 
 export default function Login() {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("equipe@escolacda.com.br");
+  const [senha, setSenha] = useState("");
+  const [erro, setErro] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErro("");
+    // validação simples (UX) — a validação de verdade é no backend
+    if (!email.trim() || !senha.trim()) {
+      setErro("Preencha e-mail e senha.");
+      return;
+    }
     setLoading(true);
-    // 🔌 Integração com backend entra aqui:
-    //    const res = await fetch("/api/admin/login", { method: "POST", body: JSON.stringify({ email, senha }) });
-    //    if (res.ok) navigate("/admin/dashboard");
-    setTimeout(() => navigate("/admin/dashboard"), 800);
+    try {
+      await login(email.trim(), senha);
+      navigate("/admin/dashboard");
+    } catch (err) {
+      const msg = err instanceof ApiError ? err.message : "Não foi possível entrar. Tente novamente.";
+      setErro(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,12 +46,16 @@ export default function Login() {
         <h1>Bem-vindo de volta</h1>
         <p className="sub">Acesse o painel para gerenciar o conteúdo do site da Escola CDA.</p>
 
-        <form onSubmit={submit}>
+        <form onSubmit={submit} noValidate>
+          {erro ? (
+            <div className="adm-login-erro"><i className="fa-solid fa-circle-exclamation"></i> {erro}</div>
+          ) : null}
+
           <div className="adm-field">
             <label htmlFor="email">E-mail</label>
             <div className="adm-input-wrap">
               <i className="fa-regular fa-envelope"></i>
-              <input id="email" className="adm-input" type="email" placeholder="seu@escolacda.com.br" defaultValue="equipe@escolacda.com.br" required />
+              <input id="email" className="adm-input" type="email" autoComplete="username" placeholder="seu@escolacda.com.br" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
           </div>
 
@@ -42,7 +63,7 @@ export default function Login() {
             <label htmlFor="senha">Senha</label>
             <div className="adm-input-wrap">
               <i className="fa-solid fa-lock"></i>
-              <input id="senha" className="adm-input" type={show ? "text" : "password"} placeholder="••••••••" defaultValue="senha123" required />
+              <input id="senha" className="adm-input" type={show ? "text" : "password"} autoComplete="current-password" placeholder="••••••••" value={senha} onChange={(e) => setSenha(e.target.value)} required />
               <button type="button" className="adm-eye" onClick={() => setShow((s) => !s)} aria-label="Mostrar senha">
                 <i className={show ? "fa-regular fa-eye-slash" : "fa-regular fa-eye"}></i>
               </button>

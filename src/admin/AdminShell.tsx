@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "./auth";
 import "./admin.css";
 
 /* Navegação do painel */
@@ -19,6 +20,8 @@ const NAV_GERIR: [string, string, string, string, string?][] = [
 
 function Sidebar({ active, open, onClose, logoSrc }: { active: string; open: boolean; onClose: () => void; logoSrc: string }) {
   const navigate = useNavigate();
+  const { logout } = useAuth();
+  const sair = async () => { await logout(); navigate("/admin/login"); };
   return (
     <>
       <div className={"adm-backdrop" + (open ? " show" : "")} onClick={onClose}></div>
@@ -52,7 +55,7 @@ function Sidebar({ active, open, onClose, logoSrc }: { active: string; open: boo
             <b>Site publicado</b>
             Última atualização há 2 dias. Tudo no ar e funcionando.
           </div>
-          <button className="adm-logout" onClick={() => navigate("/admin/login")}>
+          <button className="adm-logout" onClick={sair}>
             <i className="fa-solid fa-arrow-right-from-bracket"></i> Sair
           </button>
         </div>
