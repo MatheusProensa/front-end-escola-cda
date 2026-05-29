@@ -113,8 +113,8 @@ function Vivencias() {
   const navigate = useNavigate();
   const vivs = [
     { img: "supercerebro.webp", icon: "brain", c: "#0b82f6", t: "Super Cérebro", p: "Desenvolve o raciocínio lógico, a concentração e a autoconfiança.", pos: "" },
-    { img: "musica.webp", icon: "music", c: "#f0b400", t: "Musicalização", p: "Estímulo à sensibilidade, criatividade e expressão através da música.", pos: "center -110px" },
-    { img: "capoeira.webp", icon: "hand-fist", c: "#0b82f6", t: "Capoeira", p: "Promove disciplina, respeito, coordenação e consciência corporal.", pos: "center -110px" },
+    { img: "musica.webp", icon: "music", c: "#f0b400", t: "Musicalização", p: "Estímulo à sensibilidade, criatividade e expressão através da música.", pos: "center 72%" },
+    { img: "capoeira.webp", icon: "hand-fist", c: "#0b82f6", t: "Capoeira", p: "Promove disciplina, respeito, coordenação e consciência corporal.", pos: "center 72%" },
     { img: "ambiental.webp", icon: "leaf", c: "#0b82f6", t: "Ed. Ambiental", p: "Conexão com a natureza para formar cidadãos conscientes e responsáveis.", pos: "" },
     { img: "culinaria.webp", icon: "utensils", c: "#f0b400", t: "Culinária Afetiva", p: "Aprendizado prático que estimula autonomia, saúde e momentos especiais.", pos: "" },
     { img: "ingles.webp", icon: "globe", c: "#0b82f6", t: "Proposta Bilíngue", p: "Imersão no inglês desde cedo para formar alunos preparados para o futuro.", pos: "" },

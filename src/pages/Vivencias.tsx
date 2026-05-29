@@ -6,8 +6,8 @@ type Viv = { img?: string; icon: string; gold?: boolean; t: string; p: string; p
 
 const VIVS: Viv[] = [
   { img: "supercerebro.webp", icon: "brain", t: "Super Cérebro", p: "Raciocínio lógico, concentração e autoconfiança através do cálculo mental." },
-  { img: "musica.webp", icon: "music", gold: true, t: "Musicalização", p: "Sensibilidade, criatividade e expressão através da música e do ritmo.", pos: "center -90px" },
-  { img: "capoeira.webp", icon: "hand-fist", t: "Capoeira", p: "Disciplina, respeito, coordenação e consciência corporal em movimento.", pos: "center -90px" },
+  { img: "musica.webp", icon: "music", gold: true, t: "Musicalização", p: "Sensibilidade, criatividade e expressão através da música e do ritmo.", pos: "center 72%" },
+  { img: "capoeira.webp", icon: "hand-fist", t: "Capoeira", p: "Disciplina, respeito, coordenação e consciência corporal em movimento.", pos: "center 72%" },
   { img: "ambiental.webp", icon: "leaf", t: "Educação Ambiental", p: "Conexão com a natureza para formar cidadãos conscientes e responsáveis." },
   { img: "culinaria.webp", icon: "utensils", gold: true, t: "Culinária Afetiva", p: "Autonomia, saúde e afeto na cozinha — aprender com as mãos e o coração." },
   { img: "ingles.webp", icon: "globe", t: "Inglês", p: "Imersão no idioma desde cedo, de forma natural, lúdica e significativa." },
