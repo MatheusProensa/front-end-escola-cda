@@ -2133,3 +2133,15 @@ img, video, iframe { max-width: 100%; }
   /* listas com check permanecem alinhadas à esquerda para leitura */
   .feature-row .fr-body .cda-list { text-align: left; max-width: 460px; margin-left: auto; margin-right: auto; }
 }
+
+
+/* ════════ Mobile: selo da Conexão lado a lado + menos espaço ════════ */
+@media (max-width: 768px) {
+  .conexao-content { justify-content: flex-start; padding: 30px 22px; }
+  .conexao-cta {
+    flex-direction: row; align-items: center; text-align: left;
+    gap: 14px; margin-top: 22px; padding-top: 22px;
+  }
+  .conexao-seal-ic { width: 50px; height: 50px; }
+  .conexao-seal-text { font-size: 14.5px; }
+}
