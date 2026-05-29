@@ -2121,16 +2121,6 @@ img, video, iframe { max-width: 100%; }
   .nav a:hover, .nav a.is-active { background: #eef4ff; color: #0b82f6; }
   .nav-button-mobile { display: block; width: 100%; margin-top: 8px; }
 
-  /* HERO: texto primeiro, imagem inteira logo abaixo (sem corte) */
-  .hero { display: flex; flex-direction: column; min-height: 0; padding: 0 20px 34px; }
-  .hero::before, .hero::after { display: none !important; }
-  .hero-content { height: auto; }
-  .hero-left { width: 100%; padding-top: 22px; }
-  .hero-left p { color: #4e6078; }
-  .hero-bg {
-    position: static; width: 100%; height: 300px; opacity: 1;
-    margin-top: 24px; border-radius: 22px; object-fit: cover; object-position: center 30%;
-  }
 }
 
 
