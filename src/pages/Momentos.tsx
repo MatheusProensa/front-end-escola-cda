@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Layout, useContact }
+import { Layout, useContact } from "../components/site";
 import { asset } from "../lib/assets";
 
 type Album = { img: string; t: string; date: string; fotos: number; destaque?: boolean };
