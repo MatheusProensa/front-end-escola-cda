@@ -2128,7 +2128,18 @@ img, video, iframe { max-width: 100%; }
   .hero-left { width: 100%; padding-top: 22px; }
   .hero-left p { color: #4e6078; }
   .hero-bg {
-    position: static; width: 100%; height: auto; opacity: 1;
-    margin-top: 24px; border-radius: 22px; object-fit: cover;
+    position: static; width: 100%; height: 300px; opacity: 1;
+    margin-top: 24px; border-radius: 22px; object-fit: cover; object-position: center 30%;
   }
+}
+
+
+/* ════════ Mobile: centralizar títulos/intros das seções (listas seguem à esquerda) ════════ */
+@media (max-width: 768px) {
+  .feature-row .fr-body { text-align: center; }
+  .feature-row .fr-body > p { margin-left: auto; margin-right: auto; }
+  .feature-row .fr-body .seg-chips { justify-content: center; }
+  .feature-row .fr-body .mini-stats { justify-content: center; }
+  /* listas com check permanecem alinhadas à esquerda para leitura */
+  .feature-row .fr-body .cda-list { text-align: left; max-width: 460px; margin-left: auto; margin-right: auto; }
 }

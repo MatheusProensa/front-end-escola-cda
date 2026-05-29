@@ -69,7 +69,7 @@ export function useReveal() {
           io.unobserve(e.target);
         });
       },
-      { threshold: 0.15 }
+      { threshold: 0, rootMargin: "0px 0px -8% 0px" }
     );
     reveals.forEach((el) => io.observe(el));
     return () => io.disconnect();
