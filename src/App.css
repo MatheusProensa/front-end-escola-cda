@@ -2080,3 +2080,8 @@ img, video, iframe { max-width: 100%; }
   background: #fff;
   box-shadow: 0 0 0 4px rgba(11,130,246,0.1);
 }
+
+
+/* Item ativo do menu (página aberta) */
+.nav a.is-active { color: #0b82f6; }
+.nav a.is-active::after { width: 100%; background: #f0b400; }
