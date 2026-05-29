@@ -5,12 +5,9 @@ import { asset } from "../../lib/assets";
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 type Album = { img: string; t: string; date: string; fotos: number; st: string };
 const ALBUNS: Album[] = [
-  { img: "patio.webp", t: "Festa Junina 2025", date: "Junho · 2025", fotos: 24, st: "pub" },
-  { img: "timeline/t07.webp", t: "Formatura 2024", date: "Dezembro · 2024", fotos: 32, st: "pub" },
-  { img: "quadra.webp", t: "Dia das Crianças", date: "Outubro · 2024", fotos: 18, st: "pub" },
-  { img: "laboratorio.webp", t: "Feira de Ciências", date: "Setembro · 2024", fotos: 15, st: "pub" },
-  { img: "culinaria.webp", t: "Páscoa na CDA", date: "Abril · 2024", fotos: 12, st: "draft" },
-  { img: "conexao.webp", t: "Festa da Família", date: "Maio · 2024", fotos: 21, st: "pub" },
+  { img: "patio.webp", t: "Aniversário da Escola CDA — 15 anos", date: "31 de Março · 2026", fotos: 0, st: "pub" },
+  { img: "biblioteca.webp", t: "Feira do Livro", date: "11 de Abril · 2026", fotos: 0, st: "pub" },
+  { img: "conexao.webp", t: "Festa da Família — 1º semestre", date: "09 de Maio · 2026", fotos: 0, st: "pub" },
 ];
 
 export default function Momentos() {
@@ -27,9 +24,9 @@ export default function Momentos() {
       </div>
 
       <div className="adm-stats" style={{ gridTemplateColumns: "repeat(3,1fr)", marginBottom: 20 }}>
-        <div className="adm-stat"><div className="adm-stat-top"><div className="adm-stat-ic ic-blue"><i className="fa-solid fa-images"></i></div></div><div className="adm-stat-num">6</div><div className="adm-stat-lbl">Álbuns publicados</div></div>
-        <div className="adm-stat"><div className="adm-stat-top"><div className="adm-stat-ic ic-gold"><i className="fa-regular fa-image"></i></div></div><div className="adm-stat-num">122</div><div className="adm-stat-lbl">Fotos no total</div></div>
-        <div className="adm-stat"><div className="adm-stat-top"><div className="adm-stat-ic ic-green"><i className="fa-solid fa-calendar-check"></i></div></div><div className="adm-stat-num">Jun/25</div><div className="adm-stat-lbl">Álbum mais recente</div></div>
+        <div className="adm-stat"><div className="adm-stat-top"><div className="adm-stat-ic ic-blue"><i className="fa-solid fa-images"></i></div></div><div className="adm-stat-num">3</div><div className="adm-stat-lbl">Álbuns publicados</div></div>
+        <div className="adm-stat"><div className="adm-stat-top"><div className="adm-stat-ic ic-gold"><i className="fa-regular fa-image"></i></div></div><div className="adm-stat-num">0</div><div className="adm-stat-lbl">Fotos no total</div></div>
+        <div className="adm-stat"><div className="adm-stat-top"><div className="adm-stat-ic ic-green"><i className="fa-solid fa-calendar-check"></i></div></div><div className="adm-stat-num">Mar/26</div><div className="adm-stat-lbl">Próximo evento</div></div>
       </div>
 
       <div className="adm-card">
