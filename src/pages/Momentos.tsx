@@ -67,7 +67,7 @@ export default function Momentos() {
         <h2>Quer ver de perto o dia a dia da CDA?</h2>
         <p>Acompanhe nossos momentos no Instagram ou venha nos visitar — será um prazer receber a sua família.</p>
         <div className="cta-actions">
-          <a className="btn-white" href="https://instagram.com" target="_blank" rel="noreferrer"><i className="fa-brands fa-instagram"></i> Seguir no Instagram</a>
+          <a className="btn-white" href="https://www.instagram.com/escolacda.sm/" target="_blank" rel="noreferrer"><i className="fa-brands fa-instagram"></i> Seguir no Instagram</a>
           <Link className="btn-ghost" to="/matriculas"><i className="fa-solid fa-arrow-right"></i> Agendar visita</Link>
         </div>
       </div>

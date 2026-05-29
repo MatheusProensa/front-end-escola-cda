@@ -2089,3 +2089,10 @@ img, video, iframe { max-width: 100%; }
 
 /* Equilibra as linhas dos textos centralizados (evita palavra sozinha na última linha) */
 .page-hero p, .sec-head p, .cta-band p, .cta-band h2, .depo-head p, .conexao p { text-wrap: balance; }
+
+
+/* Coluna da marca no rodapé — centralizada (logo, texto e redes) */
+.footer-brand { text-align: center; }
+.footer-brand .footer-logo { margin-left: auto; margin-right: auto; }
+.footer-brand p { margin-left: auto; margin-right: auto; }
+.footer-brand .footer-social { justify-content: center; }
