@@ -2085,3 +2085,7 @@ img, video, iframe { max-width: 100%; }
 /* Item ativo do menu (página aberta) */
 .nav a.is-active { color: #0b82f6; }
 .nav a.is-active::after { width: 100%; background: #f0b400; }
+
+
+/* Equilibra as linhas dos textos centralizados (evita palavra sozinha na última linha) */
+.page-hero p, .sec-head p, .cta-band p, .cta-band h2, .depo-head p, .conexao p { text-wrap: balance; }
