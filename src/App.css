@@ -1718,9 +1718,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .viv-card:hover { transform: translateY(-5px); }
 .viv-card::after {
   content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(to bottom, transparent 34%, rgba(8,41,102,0.85) 56%, #082966 72%);
+  background: linear-gradient(to bottom, transparent 26%, rgba(8,41,102,0.5) 46%, rgba(8,41,102,0.92) 66%, #082966 84%);
 }
-.viv-card img { width: 100%; height: 60%; object-fit: cover; display: block; transition: .5s; }
+.viv-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: .5s; }
 .viv-card:hover img { transform: scale(1.06); }
 .viv-ov { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 0 24px 26px; }
 .viv-ic {
@@ -2003,7 +2003,7 @@ button.whatsapp-float {
 /* ─── MOMENTOS · galeria de álbuns ─── */
 .momentos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .album {
-  position: relative; border-radius: 22px; overflow: hidden; cursor: pointer;
+  position: relative; border: none; border-radius: 22px; overflow: hidden; cursor: pointer;
   aspect-ratio: 4/3; box-shadow: 0 14px 36px rgba(19,52,110,0.12);
   background: #082966; display: block; text-align: left;
 }
@@ -2025,3 +2025,36 @@ img, video, iframe { max-width: 100%; }
 @supports (padding: max(0px)) {
   .whatsapp-float { bottom: max(18px, env(safe-area-inset-bottom)); right: max(18px, env(safe-area-inset-right)); }
 }
+
+
+/* ─── MOMENTOS · modal de galeria (lightbox) ─── */
+.album-modal-backdrop {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(8,20,55,0.6); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+  animation: albFade .2s ease;
+}
+@keyframes albFade { from { opacity: 0; } to { opacity: 1; } }
+.album-modal {
+  background: #fff; border-radius: 26px; width: 100%; max-width: 880px;
+  max-height: 88vh; overflow: auto; box-shadow: 0 30px 80px rgba(8,20,55,.4);
+  animation: albRise .3s cubic-bezier(.2,.8,.25,1);
+}
+@keyframes albRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.album-modal-head { position: relative; padding: 30px 34px 22px; border-bottom: 1px solid #eef2f8; }
+.album-modal-date { display: inline-flex; align-items: center; gap: 7px; color: #0b82f6; font-size: 12.5px; font-weight: 800; letter-spacing: .4px; }
+.album-modal-head h2 { margin: 10px 0 0; color: #0e2d6e; font-size: 26px; font-weight: 800; letter-spacing: -1px; }
+.album-modal-x {
+  position: absolute; top: 22px; right: 22px; width: 38px; height: 38px;
+  border-radius: 50%; border: 1px solid #e6edf6; background: #f6f9fd; cursor: pointer;
+  color: #4a5d78; font-size: 18px; line-height: 1; display: grid; place-items: center; transition: .2s;
+}
+.album-modal-x:hover { background: #eef3fa; color: #0e2d6e; }
+.album-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 24px 34px 8px; }
+.album-ph {
+  aspect-ratio: 1; border-radius: 14px; background: #eef3fa;
+  border: 1.5px dashed #cdd9e8; display: grid; place-items: center; color: #aebfd4; font-size: 22px;
+}
+.album-empty-note { display: flex; align-items: center; justify-content: center; gap: 9px; text-align: center; color: #7488a3; font-size: 13.5px; font-weight: 600; padding: 12px 34px 30px; }
+.album-empty-note i { color: #f0b400; }
+@media (max-width: 640px) { .album-grid { grid-template-columns: 1fr 1fr; } .album-modal-head h2 { font-size: 22px; } }

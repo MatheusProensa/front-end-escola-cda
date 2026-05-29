@@ -40,23 +40,6 @@ export default function Espacos() {
         </div>
       </div>
 
-      <div className="feature-row flip reveal">
-        <div className="fr-media">
-          <img src={asset("refeitorio.webp")} alt="Refeitório da Escola CDA" decoding="async" />
-          <span className="fr-tag"><span className="dot"></span>Alimentação saudável</span>
-        </div>
-        <div className="fr-body">
-          <span className="eyebrow">Comer bem também é cuidar</span>
-          <h3>Comida de verdade, feita com carinho.</h3>
-          <p>Quatro refeições por dia, balanceadas e com acompanhamento nutricional. Sem industrializados — tudo preparado na escola, priorizando alimentos naturais e o que colhemos na nossa própria horta.</p>
-          <div className="cda-list">
-            <div className="li"><div className="li-ic"><Icon name="utensils" size={12} /></div><div><strong>4 refeições por dia</strong><span>Cardápio completo e balanceado, com nutricionista.</span></div></div>
-            <div className="li"><div className="li-ic gold"><Icon name="leaf" size={12} /></div><div><strong>Da horta para a mesa</strong><span>Alimentos orgânicos cultivados na própria escola.</span></div></div>
-            <div className="li"><div className="li-ic"><Icon name="ban" size={12} /></div><div><strong>Sem industrializados</strong><span>Receitas feitas na escola; nos berçários, sem sal e açúcar.</span></div></div>
-          </div>
-        </div>
-      </div>
-
       <div className="cda-panel tight reveal">
         <div className="sec-head"><span className="eyebrow">Por dentro de cada espaço</span><h2>Feitos para o bem-estar de cada criança.</h2></div>
         <div className="valores cols-4">

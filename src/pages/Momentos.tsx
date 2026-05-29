@@ -1,37 +1,62 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Layout, useContact } from "../components/site";
+import { Layout } from "../components/site";
 import { asset } from "../lib/assets";
 
-type Album = { img: string; t: string; date: string; fotos: number; destaque?: boolean };
+type Album = { id: string; img: string; t: string; date: string };
+
 const ALBUNS: Album[] = [
-  { img: "patio.webp", t: "Festa Junina 2025", date: "Junho · 2025", fotos: 24, destaque: true },
-  { img: "timeline/t07.webp", t: "Formatura 2024", date: "Dezembro · 2024", fotos: 32 },
-  { img: "quadra.webp", t: "Dia das Crianças", date: "Outubro · 2024", fotos: 18 },
-  { img: "laboratorio.webp", t: "Feira de Ciências", date: "Setembro · 2024", fotos: 15 },
-  { img: "culinaria.webp", t: "Páscoa na CDA", date: "Abril · 2024", fotos: 12 },
-  { img: "conexao.webp", t: "Festa da Família", date: "Maio · 2024", fotos: 21 },
+  { id: "aniversario-15", img: "patio.webp", t: "Aniversário da Escola CDA — 15 anos", date: "31 de Março · 2026" },
+  { id: "feira-do-livro", img: "biblioteca.webp", t: "Feira do Livro", date: "11 de Abril · 2026" },
+  { id: "festa-familia-1sem", img: "conexao.webp", t: "Festa da Família — 1º semestre", date: "09 de Maio · 2026" },
 ];
 
+function AlbumModal({ album, onClose }: { album: Album; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+  return (
+    <div className="album-modal-backdrop" onClick={onClose}>
+      <div className="album-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={album.t}>
+        <div className="album-modal-head">
+          <span className="album-modal-date"><i className="fa-regular fa-calendar"></i> {album.date}</span>
+          <h2>{album.t}</h2>
+          <button className="album-modal-x" onClick={onClose} aria-label="Fechar">×</button>
+        </div>
+        <div className="album-grid">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div className="album-ph" key={i}><i className="fa-regular fa-image"></i></div>
+          ))}
+        </div>
+        <div className="album-empty-note">
+          <i className="fa-solid fa-camera-retro"></i> As fotos deste evento serão publicadas em breve.
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Momentos() {
-  const contact = useContact();
+  const [aberto, setAberto] = useState<Album | null>(null);
   return (
     <Layout>
       <section className="page-hero reveal">
         <span className="eyebrow">Momentos</span>
         <h1>Cada conquista vira uma <span className="script">lembrança.</span></h1>
-        <p>Festas, formaturas, vivências e celebrações que marcam a vida das nossas crianças e famílias. Reviva com a gente os momentos mais especiais da CDA.</p>
+        <p>Festas, encontros e celebrações que marcam a vida das nossas crianças e famílias. Acompanhe a agenda e reviva com a gente cada momento especial da CDA.</p>
       </section>
 
       <div className="cda-panel reveal">
         <div className="momentos-grid">
-          {ALBUNS.map((a, i) => (
-            <button className="album" key={i} onClick={contact}>
-              {a.destaque ? <span className="album-badge">Mais recente</span> : null}
+          {ALBUNS.map((a) => (
+            <button className="album" key={a.id} onClick={() => setAberto(a)}>
               <img src={asset(a.img)} alt={a.t} loading="lazy" decoding="async" />
               <div className="album-body">
                 <span className="album-date"><i className="fa-regular fa-calendar"></i> {a.date}</span>
                 <h3>{a.t}</h3>
-                <span className="count"><i className="fa-regular fa-images"></i> {a.fotos} fotos</span>
+                <span className="count"><i className="fa-regular fa-images"></i> Ver galeria</span>
               </div>
             </button>
           ))}
@@ -46,6 +71,8 @@ export default function Momentos() {
           <Link className="btn-ghost" to="/matriculas"><i className="fa-solid fa-arrow-right"></i> Agendar visita</Link>
         </div>
       </div>
+
+      {aberto && <AlbumModal album={aberto} onClose={() => setAberto(null)} />}
     </Layout>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./admin.css";
+
 /* Navegação do painel */
 const NAV_MAIN: [string, string, string, string][] = [
   ["/admin/dashboard", "Dashboard", "gauge-high", "dashboard"],
