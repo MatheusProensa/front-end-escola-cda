@@ -2096,3 +2096,39 @@ img, video, iframe { max-width: 100%; }
 .footer-brand .footer-logo { margin-left: auto; margin-right: auto; }
 .footer-brand p { margin-left: auto; margin-right: auto; }
 .footer-brand .footer-social { justify-content: center; }
+
+
+/* ════════ CORREÇÕES MOBILE — menu clicável + hero inteiro ════════ */
+@media (max-width: 768px) {
+  /* navbar das páginas internas com a mesma altura compacta no mobile */
+  .page .navbar { height: 78px; }
+
+  /* o cabeçalho fica acima de tudo */
+  .navbar { position: relative; z-index: 200; }
+
+  /* menu mobile: fixo, sólido, por cima de tudo e clicável */
+  .nav {
+    position: fixed; top: 74px; left: 14px; right: 14px; z-index: 300;
+    flex-direction: column; align-items: stretch; gap: 4px;
+    background: #ffffff; border-radius: 20px; padding: 14px;
+    box-shadow: 0 24px 60px rgba(14,45,110,0.22);
+    transform: translateY(-12px); opacity: 0; pointer-events: none; transition: .25s ease;
+  }
+  .page .nav { top: 70px; }
+  .nav.nav-open { transform: none; opacity: 1; pointer-events: auto; }
+  .nav a { padding: 14px 16px; border-radius: 12px; font-size: 15px; }
+  .nav a::after { display: none; }
+  .nav a:hover, .nav a.is-active { background: #eef4ff; color: #0b82f6; }
+  .nav-button-mobile { display: block; width: 100%; margin-top: 8px; }
+
+  /* HERO: texto primeiro, imagem inteira logo abaixo (sem corte) */
+  .hero { display: flex; flex-direction: column; min-height: 0; padding: 0 20px 34px; }
+  .hero::before, .hero::after { display: none !important; }
+  .hero-content { height: auto; }
+  .hero-left { width: 100%; padding-top: 22px; }
+  .hero-left p { color: #4e6078; }
+  .hero-bg {
+    position: static; width: 100%; height: auto; opacity: 1;
+    margin-top: 24px; border-radius: 22px; object-fit: cover;
+  }
+}
