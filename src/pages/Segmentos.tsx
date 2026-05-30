@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Icon, Layout, useContact } from "../components/site";
+import { Icon, Layout, useContact, usePageMeta } from "../components/site";
 import { asset } from "../lib/assets";
 
 type Seg = {
@@ -24,11 +24,11 @@ const SEGS: Seg[] = [
   {
     key: "fundamental", img: "fundamental-home.webp", icon: "book", tag: "Anos iniciais", pos: "center 30%",
     title: "Ensino Fundamental",
-    p: "O momento de construir autonomia e pensamento crítico. Unimos base sólida e aprendizagem ativa para que cada aluno cresça curioso, confiante e preparado para os próximos passos.",
+    p: "O momento de ampliar horizontes sobre uma base sólida. Cada aluno cresce curioso, confiante e preparado para os próximos passos da vida escolar.",
     metodo: [
       ["Aprendizagem ativa", "O aluno no centro: investiga, questiona e constrói o conhecimento."],
       ["Pensamento crítico", "Projetos que desenvolvem raciocínio, leitura de mundo e argumentação."],
-      ["Contraturno opcional", "Reforço escolar e oficinas no turno da manhã, se a família quiser."],
+      ["Tecnologia no aprendizado", "Notebooks em atividades pedagógicas que conectam o aluno ao mundo digital."],
     ],
     chipsLabel: "Contraturno do Fundamental",
     chips: ["Artes Circenses", "Libras", "Reforço Escolar"],
@@ -78,6 +78,12 @@ function Segment({ s, flip }: { s: Seg; flip: boolean }) {
             <div className="mini-stat" key={i}><strong>{a}</strong><span>{b}</span></div>
           ))}
         </div>
+        {(s.key === "infantil" || s.key === "fundamental") && (
+          <Link className="seg-metodo-link" to="/metodologia">
+            <Icon name="book-open" size={14} /> Saiba mais sobre nossa metodologia
+            <Icon name="arrow-right" size={13} />
+          </Link>
+        )}
         <div className="fr-cta" style={{ display: "none" }}>
           <button className="primary-btn" onClick={contact}>Agendar uma visita</button>
         </div>
@@ -87,6 +93,7 @@ function Segment({ s, flip }: { s: Seg; flip: boolean }) {
 }
 
 export default function Segmentos() {
+  usePageMeta("Segmentos — Educação Infantil, Fundamental e Contraturno | Escola CDA", "Conheça os segmentos da Escola CDA: Educação Infantil, Ensino Fundamental e Contraturno, com proposta bilíngue e cuidado em cada fase.");
   const contact = useContact();
   return (
     <Layout>

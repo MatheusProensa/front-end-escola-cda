@@ -1746,12 +1746,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .viv-feature .vf-body p { color: rgba(255,255,255,0.82); font-size: 15px; line-height: 1.8; margin-top: 14px; }
 
 /* ─── Galeria de espaços (foco em imagem) ─── */
-.galeria { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 220px; gap: 16px; grid-auto-flow: dense; }
+.galeria { columns: 3; column-gap: 16px; }
 .gal {
   position: relative; overflow: hidden; border-radius: 22px;
   box-shadow: 0 12px 35px rgba(19,52,110,0.12);
+  break-inside: avoid; margin-bottom: 16px;
 }
-.gal img { width: 100%; height: 100%; object-fit: cover; display: block; transition: .6s; }
+.gal img { width: 100%; height: auto; max-height: 470px; object-fit: cover; object-position: center; display: block; transition: .6s; }
 .gal:hover img { transform: scale(1.05); }
 .gal::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,41,102,0.55), transparent 55%); }
 .gal-label {
@@ -1762,10 +1763,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .gal-label strong { font-size: 17px; font-weight: 800; letter-spacing: -.3px; }
 .gal-label span { display: block; font-size: 12px; color: rgba(255,255,255,0.85); font-weight: 500; }
 /* spans variados pra ritmo de galeria */
-.gal.w2 { grid-column: span 2; }
-.gal.w3 { grid-column: span 3; }
-.gal.w4 { grid-column: span 4; }
-.gal.h2 { grid-row: span 2; }
+/* larguras/alturas não se aplicam no masonry (multicol) */
 
 /* ─── Cards de valores (sobre) ─── */
 .valores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
@@ -1876,7 +1874,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .feature-row { grid-template-columns: 1fr; gap: 30px; }
   .feature-row.flip .fr-media { order: 0; }
   .viv-grid { grid-template-columns: repeat(var(--cols, 3), 1fr); }
-  .galeria { grid-template-columns: repeat(4, 1fr); }
+  .galeria { columns: 3; }
   .valores, .numeros, .timeline { grid-template-columns: 1fr 1fr; }
   .contato-grid { grid-template-columns: 1fr; }
   .viv-feature { grid-template-columns: 1fr; }
@@ -1893,9 +1891,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .fr-body h3 { font-size: 26px; }
   .sec-head h2 { font-size: 30px; }
   .viv-grid { grid-template-columns: 1fr; }
-  .galeria { grid-template-columns: 1fr 1fr; grid-auto-rows: 170px; }
-  .gal.w2, .gal.w3, .gal.w4 { grid-column: span 2; }
-  .gal.h2 { grid-row: span 1; }
+  .galeria { columns: 2; }
   .valores, .numeros, .timeline { grid-template-columns: 1fr; }
   .timeline .tl::before { display: none; }
   .cta-band { width: calc(100% - 40px); padding: 40px 26px; }
@@ -1906,8 +1902,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 480px) {
   .espaco-features { grid-template-columns: 1fr; }
   .page-hero h1 { font-size: 30px; }
-  .galeria { grid-template-columns: 1fr; grid-auto-rows: 200px; }
-  .gal.w2, .gal.w3, .gal.w4 { grid-column: span 1; }
+  .galeria { columns: 1; }
 }
 
 
@@ -2229,3 +2224,149 @@ img, video, iframe { max-width: 100%; }
 .cda-list .li:hover .li-ic { transform: scale(1.12); box-shadow: 0 6px 14px rgba(11,130,246,0.25); }
 .cda-list .li strong { transition: color 0.2s ease; }
 .cda-list .li:hover strong { color: #0b82f6; }
+
+
+/* ─── Galeria de fotos (álbum com fotos reais) ─── */
+.album-modal-sub { display: inline-block; margin-top: 6px; color: #7488a3; font-size: 13px; font-weight: 700; }
+.album-thumb {
+  aspect-ratio: 1; border-radius: 14px; overflow: hidden; border: none; padding: 0;
+  cursor: pointer; background: #eef3fa; position: relative;
+}
+.album-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .45s cubic-bezier(.2,.7,.2,1); }
+.album-thumb:hover img { transform: scale(1.08); }
+.album-thumb::after { content: ""; position: absolute; inset: 0; background: rgba(8,41,102,0); transition: background .25s ease; }
+.album-thumb:hover::after { background: rgba(8,41,102,.12); }
+
+/* ─── Lightbox (foto ampliada) ─── */
+.lb-backdrop {
+  position: fixed; inset: 0; z-index: 3000; background: rgba(6,16,42,.92);
+  display: grid; place-items: center; padding: 30px; animation: albFade .2s ease;
+}
+.lb-img { max-width: min(92vw, 1400px); max-height: 88vh; border-radius: 10px; box-shadow: 0 30px 80px rgba(0,0,0,.5); object-fit: contain; }
+.lb-x { position: fixed; top: 20px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: rgba(255,255,255,.14); color: #fff; font-size: 26px; cursor: pointer; transition: background .2s ease; line-height: 1; }
+.lb-x:hover { background: rgba(255,255,255,.28); }
+.lb-nav {
+  position: fixed; top: 50%; transform: translateY(-50%); width: 54px; height: 54px; border-radius: 50%;
+  border: none; background: rgba(255,255,255,.14); color: #fff; font-size: 20px; cursor: pointer; transition: background .2s ease;
+}
+.lb-nav:hover { background: rgba(255,255,255,.3); }
+.lb-prev { left: 24px; } .lb-next { right: 24px; }
+.lb-count { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,.85); font-size: 14px; font-weight: 700; letter-spacing: .5px; background: rgba(0,0,0,.3); padding: 6px 14px; border-radius: 999px; }
+@media (max-width: 640px) {
+  .lb-nav { width: 44px; height: 44px; } .lb-prev { left: 10px; } .lb-next { right: 10px; }
+  .lb-backdrop { padding: 12px; }
+}
+
+
+/* ─── Banner de capa (vista aérea/foto destaque no topo de página) ─── */
+.page-cover { position: relative; border-radius: 28px; overflow: hidden; width: calc(100% - 64px); max-width: 1480px; margin: 4px auto 30px; box-shadow: 0 20px 60px rgba(19,52,110,.14); }
+.page-cover img { width: 100%; height: clamp(300px, 40vw, 520px); object-fit: cover; object-position: center; display: block; }
+.page-cover-tag { position: absolute; left: 18px; bottom: 16px; display: inline-flex; align-items: center; gap: 8px; background: rgba(8,41,102,.78); backdrop-filter: blur(6px); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 14px; border-radius: 999px; }
+.page-cover-tag .dot { width: 8px; height: 8px; border-radius: 50%; background: #f0b400; }
+
+/* ─── Faixa da fachada (Home: convite a conhecer a escola) ─── */
+.fachada-band { position: relative; width: calc(100% - 64px); max-width: 1480px; margin: 100px auto; border-radius: 32px; overflow: hidden; box-shadow: 0 24px 70px rgba(19,52,110,.18); }
+.fachada-band img { width: 100%; height: clamp(340px, 42vw, 520px); object-fit: cover; display: block; }
+.fachada-band-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8,31,78,.85) 0%, rgba(8,31,78,.5) 45%, rgba(8,31,78,0) 72%); display: flex; flex-direction: column; justify-content: center; padding: 0 6%; }
+.fachada-band-overlay .fb-eyebrow { color:#ffd24a; font-size:13px; font-weight:800; letter-spacing:2px; text-transform:uppercase; }
+.fachada-band-overlay h2 { color:#fff; font-size: clamp(28px,3.4vw,46px); font-weight:800; letter-spacing:-1px; line-height:1.06; margin:12px 0 14px; max-width: 20ch; }
+.fachada-band-overlay p { color: rgba(255,255,255,.92); font-size:16px; line-height:1.65; max-width: 42ch; margin:0 0 24px; }
+.fachada-band-btn { align-self:flex-start; white-space:nowrap; background:#fff; color:#0b3a8a; border:none; padding:15px 28px; border-radius:999px; font-weight:800; font-size:15px; cursor:pointer; box-shadow:0 10px 26px rgba(0,0,0,.22); transition:.3s; text-decoration:none; display:inline-flex; align-items:center; gap:9px; }
+.fachada-band-btn:hover { transform: translateY(-2px); box-shadow:0 14px 32px rgba(0,0,0,.28); }
+@media (max-width:768px){ .fachada-band{ width: calc(100% - 36px); margin:64px auto; } .fachada-band-overlay{ background: linear-gradient(0deg, rgba(8,31,78,.92) 12%, rgba(8,31,78,.42) 72%); padding: 0 24px; } }
+
+
+/* Chips de destaque sobre o banner de capa */
+.page-cover-chips { position:absolute; right:16px; bottom:16px; display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; max-width:72%; }
+.page-cover-chips span { display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,.93); color:#0e2d6e; font-size:12.5px; font-weight:800; padding:7px 13px; border-radius:999px; box-shadow:0 4px 14px rgba(0,0,0,.16); }
+.page-cover-chips i { color:#0b82f6; font-size:12px; }
+@media (max-width:600px){ .page-cover-chips { display:none; } }
+
+
+/* Galeria de espaços clicável (lightbox) */
+.galeria .gal { border:none; padding:0; font:inherit; text-align:left; cursor:pointer; width:100%; background:#082966; }
+.gal-zoom { position:absolute; top:12px; right:12px; width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.92); color:#0b82f6; display:grid; place-items:center; opacity:0; transform:scale(.85); transition:.25s; z-index:3; }
+.gal:hover .gal-zoom { opacity:1; transform:scale(1); }
+/* legenda do lightbox */
+.lb-fig { margin:0; display:flex; flex-direction:column; align-items:center; gap:14px; max-width:min(92vw,1400px); }
+.lb-cap { color:rgba(255,255,255,.92); font-size:14px; max-width:60ch; text-align:center; }
+.lb-cap strong { color:#fff; font-weight:800; }
+
+
+/* Stagger suave: cards das grades surgem em sequência quando a seção entra na tela */
+@keyframes cdaFadeUp { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform:none; } }
+.reveal.in-view .valores > *, .reveal.in-view .viv-grid > *, .reveal.in-view .segmentos-grid > * { animation: cdaFadeUp .5s both; }
+.reveal.in-view .valores > *:nth-child(2), .reveal.in-view .viv-grid > *:nth-child(2), .reveal.in-view .segmentos-grid > *:nth-child(2) { animation-delay:.07s; }
+.reveal.in-view .valores > *:nth-child(3), .reveal.in-view .viv-grid > *:nth-child(3), .reveal.in-view .segmentos-grid > *:nth-child(3) { animation-delay:.14s; }
+.reveal.in-view .valores > *:nth-child(4), .reveal.in-view .viv-grid > *:nth-child(4), .reveal.in-view .segmentos-grid > *:nth-child(4) { animation-delay:.21s; }
+.reveal.in-view .valores > *:nth-child(5), .reveal.in-view .viv-grid > *:nth-child(5) { animation-delay:.28s; }
+.reveal.in-view .valores > *:nth-child(6), .reveal.in-view .viv-grid > *:nth-child(6) { animation-delay:.35s; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal.in-view .valores > *, .reveal.in-view .viv-grid > *, .reveal.in-view .segmentos-grid > * { animation: none !important; }
+}
+
+
+/* Faixa-convite isolada (fora da grade NOSSO ESPAÇO) */
+.espaco-banner.solo { width: calc(100% - 200px); max-width: 1240px; margin: 70px auto 0; }
+@media (max-width: 768px){ .espaco-banner.solo { width: calc(100% - 36px); margin: 50px auto 0; } }
+
+
+/* Chips de destaque das seções de sistema (ProRaiz / Diário Escola) */
+.sistema-chips { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:28px; }
+.sistema-chips .seg-chip { display:inline-flex; align-items:center; gap:7px; }
+.sistema-chips .seg-chip i { color:#0b82f6; }
+
+
+/* Logos das seções de sistema */
+.sistema-logo { display:block; height:128px; width:auto; max-width:420px; object-fit:contain; margin:0 auto 20px; }
+.sistema-logo.dark { display:inline-flex; align-items:center; background:#0e2d6e; padding:14px 22px; border-radius:16px; height:auto; box-shadow:0 8px 24px rgba(14,45,110,.18); }
+.sistema-logo.dark img { height:40px; width:auto; display:block; }
+
+
+/* Link "Saiba mais sobre nossa metodologia" nos cards de segmento */
+.seg-metodo-link { display:inline-flex; align-items:center; gap:10px; margin-top:22px; padding:13px 22px; border-radius:999px; background:#eef4ff; color:#0b5ed7; font-weight:700; font-size:14px; text-decoration:none; transition:.25s; border:1.5px solid #b9d3f0; }
+.seg-metodo-link:hover { background:#0b82f6; color:#fff; transform:translateY(-2px); box-shadow:0 10px 24px rgba(11,130,246,.28); }
+.seg-metodo-link i:last-child { transition:.25s; }
+.seg-metodo-link:hover i:last-child { transform:translateX(3px); }
+
+
+/* Seção Tecnologia no Ensino Fundamental — grade de 4 fotos */
+.tec-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:6px; }
+.tec-photo { border-radius:20px; overflow:hidden; box-shadow:0 12px 30px rgba(19,52,110,.12); aspect-ratio:3/4; }
+.tec-photo img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease; }
+.tec-photo:hover img { transform:scale(1.05); }
+@media (max-width:860px){ .tec-grid { grid-template-columns:repeat(2,1fr); } }
+
+
+/* Pilares (5 itens) — flex centralizado p/ não deixar vazio à direita */
+.valores.cols-5 { display:flex; flex-wrap:wrap; justify-content:center; gap:16px; }
+.valores.cols-5 > .valor { flex:1 1 200px; max-width:230px; text-align:center; padding:26px 20px; }
+.valores.cols-5 > .valor .v-ic { margin-left:auto; margin-right:auto; }
+@media (max-width:1024px){ .valores.cols-5 > .valor { flex-basis:240px; } }
+
+
+/* Painel tintado (azul suave) — cria ritmo entre seções claras */
+.cda-panel.tinted {
+  background: linear-gradient(160deg, #e9f2ff 0%, #eaf6ff 100%);
+  border: 1px solid rgba(11,130,246,0.10);
+  box-shadow: 0 14px 44px rgba(19,52,110,0.07);
+}
+.cda-panel.tinted .valor { background:#fff; border-color: rgba(19,52,110,0.05); }
+
+.espaco-left .espaco-ver-mais-btn { margin-top: 34px; }
+
+
+/* ─── Diário Escola — faixa compacta e estilosa (Home) ─── */
+.diario-band { width: calc(100% - 200px); max-width: 1240px; margin: 110px auto; display: grid; grid-template-columns: 1fr 1.05fr; gap: 46px; align-items: center; background: linear-gradient(160deg, #ffffff 0%, #eaf4ff 100%); border: 1px solid rgba(11,130,246,0.12); border-radius: 32px; padding: 44px 48px; box-shadow: 0 16px 48px rgba(19,52,110,0.08); }
+.diario-logo { height: 60px; width: auto; display: block; margin-bottom: 20px; }
+.diario-band-left h2 { color: #0e2d6e; font-size: 30px; font-weight: 800; letter-spacing: -1px; line-height: 1.12; }
+.diario-band-left h2 span { color: #0b82f6; }
+.diario-band-left p { color: #5f6f89; font-size: 15px; line-height: 1.7; margin-top: 12px; max-width: 44ch; }
+.diario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.diario-feat { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid rgba(19,52,110,0.07); border-radius: 14px; padding: 12px 15px; box-shadow: 0 6px 16px rgba(19,52,110,0.05); color: #0e2d6e; font-size: 13.5px; font-weight: 700; transition: transform .25s ease, box-shadow .25s ease; }
+.diario-feat:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(19,52,110,0.12); }
+.diario-feat .di-ic { min-width: 36px; width: 36px; height: 36px; border-radius: 10px; background: #eef4ff; display: flex; align-items: center; justify-content: center; }
+.diario-feat.gold .di-ic { background: #fff7e4; }
+@media (max-width: 1024px) { .diario-band { width: calc(100% - 80px); grid-template-columns: 1fr; gap: 30px; } }
+@media (max-width: 768px) { .diario-band { width: calc(100% - 40px); margin: 70px auto; padding: 32px 24px; border-radius: 26px; } .diario-band-left h2 { font-size: 26px; } }
+@media (max-width: 480px) { .diario-grid { grid-template-columns: 1fr; } }

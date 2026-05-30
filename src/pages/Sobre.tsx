@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Icon, Layout } from "../components/site";
+import { Icon, Layout, usePageMeta } from "../components/site";
 import { asset } from "../lib/assets";
 
 const VALORES = [
@@ -30,6 +30,7 @@ const TL: [string, string][] = [
 ];
 
 export default function Sobre() {
+  usePageMeta("Sobre a Escola CDA — 15 anos de história em Santa Maria/RS", "Há 15 anos sonhando junto com as famílias. Conheça a história, os valores e a proposta educacional da Escola CDA.");
   return (
     <Layout>
       <section className="page-hero reveal">
@@ -83,26 +84,18 @@ export default function Sobre() {
 
       <div className="feature-row reveal">
         <div className="fr-media">
-          <img src={asset("refeitorio.webp")} alt="Refeitório da Escola CDA" decoding="async" />
+          <img src={asset("alimentacao.webp")} alt="Refeitório da Escola CDA" decoding="async" />
           <span className="fr-tag"><span className="dot"></span>Alimentação saudável</span>
         </div>
         <div className="fr-body">
           <span className="eyebrow">Comer bem também é cuidar</span>
           <h3>Comida de verdade, feita com carinho.</h3>
-          <p>Quatro refeições por dia, balanceadas e com acompanhamento nutricional. Sem industrializados — tudo preparado na escola, priorizando alimentos naturais e o que colhemos na nossa própria horta.</p>
+          <p>Comida de verdade, feita na escola e com acompanhamento nutricional. Sem industrializados — priorizamos alimentos naturais e o que colhemos na nossa própria horta.</p>
           <div className="cda-list">
-            <div className="li"><div className="li-ic"><Icon name="utensils" size={12} /></div><div><strong>4 refeições por dia</strong><span>Cardápio completo e balanceado, com nutricionista.</span></div></div>
+            <div className="li"><div className="li-ic"><Icon name="utensils" size={12} /></div><div><strong>Refeições ao longo do dia</strong><span>Fruta e almoço pela manhã; fruta e lanche à tarde. No Ensino Fundamental, o lanche.</span></div></div>
             <div className="li"><div className="li-ic gold"><Icon name="leaf" size={12} /></div><div><strong>Da horta para a mesa</strong><span>Parte das hortaliças e temperos vem da nossa própria horta.</span></div></div>
             <div className="li"><div className="li-ic"><Icon name="ban" size={12} /></div><div><strong>Sem industrializados</strong><span>Receitas feitas na escola; nos berçários, sem sal e açúcar.</span></div></div>
           </div>
-        </div>
-      </div>
-
-      <div className="cda-panel reveal">
-        <div className="sec-head"><span className="eyebrow">Por que a CDA</span><h2>Diferenciais que fazem a diferença.</h2></div>
-        <div className="valores cols-2">
-          <div className="valor"><div className="v-ic"><Icon name="seedling" color="#fff" size={22} /></div><h3>Sistema ProRaiz</h3><p>Ensino alinhado à BNCC, crítico, multidisciplinar e cheio de propósito.</p></div>
-          <div className="valor gold"><div className="v-ic"><Icon name="mobile-screen-button" color="#fff" size={22} /></div><h3>App Diário Escola</h3><p>Comunicação aberta e diária entre escola e família, na palma da mão.</p></div>
         </div>
       </div>
 

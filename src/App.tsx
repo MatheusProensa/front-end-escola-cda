@@ -5,6 +5,7 @@ import { ContactProvider } from "./components/site";
 import Home from "./pages/Home";
 import Segmentos from "./pages/Segmentos";
 import Vivencias from "./pages/Vivencias";
+import Metodologia from "./pages/Metodologia";
 import Espacos from "./pages/Espacos";
 import Momentos from "./pages/Momentos";
 import Sobre from "./pages/Sobre";
@@ -40,6 +41,7 @@ function PublicSite() {
         <Route path="/" element={<Home />} />
         <Route path="/segmentos" element={<Segmentos />} />
         <Route path="/vivencias" element={<Vivencias />} />
+        <Route path="/metodologia" element={<Metodologia />} />
         <Route path="/espacos" element={<Espacos />} />
         <Route path="/momentos" element={<Momentos />} />
         <Route path="/sobre" element={<Sobre />} />

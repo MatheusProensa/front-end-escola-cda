@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Icon, Layout, useContact } from "../components/site";
+import { Icon, Layout, useContact, usePageMeta } from "../components/site";
 import { asset } from "../lib/assets";
 
 type Viv = { img?: string; icon: string; gold?: boolean; t: string; p: string; pos?: string; fit?: string };
@@ -57,6 +57,7 @@ function VivCard({ v }: { v: Viv }) {
 }
 
 export default function Vivencias() {
+  usePageMeta("Vivências — Especializadas, Oficinas e Aulas extras | Escola CDA", "Musicalização, capoeira, educação ambiental, culinária e mais: vivências que despertam talentos e valores na Escola CDA.");
   const contact = useContact();
   return (
     <Layout>

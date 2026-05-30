@@ -5,9 +5,9 @@ import { asset } from "../../lib/assets";
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 type Album = { img: string; t: string; date: string; fotos: number; st: string };
 const ALBUNS: Album[] = [
-  { img: "aniversario-15.webp", t: "Aniversário da Escola CDA — 15 anos", date: "31 de Março · 2026", fotos: 0, st: "pub" },
-  { img: "biblioteca.webp", t: "Feira do Livro", date: "11 de Abril · 2026", fotos: 0, st: "pub" },
-  { img: "conexao.webp", t: "Festa da Família — 1º semestre", date: "09 de Maio · 2026", fotos: 0, st: "pub" },
+  { img: "aniversario-15.webp", t: "Aniversário da Escola CDA — 15 anos", date: "31 de Março · 2026", fotos: 132, st: "pub" },
+  { img: "biblioteca.webp", t: "Feira do Livro", date: "11 de Abril · 2026", fotos: 7, st: "pub" },
+  { img: "eventos/festa-familia-1sem/010.webp", t: "Festa da Família — 1º semestre", date: "09 de Maio · 2026", fotos: 45, st: "pub" },
 ];
 
 export default function Momentos() {

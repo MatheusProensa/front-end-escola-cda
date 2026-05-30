@@ -5,10 +5,22 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { asset } from "../lib/assets";
 
 export const WPP = "https://wa.me/555532177947";
+
+// Título + descrição únicos por página (SEO em SPA)
+export function usePageMeta(title: string, description?: string) {
+  useEffect(() => {
+    document.title = title;
+    if (description) {
+      let m = document.querySelector('meta[name="description"]');
+      if (!m) { m = document.createElement("meta"); m.setAttribute("name", "description"); document.head.appendChild(m); }
+      m.setAttribute("content", description);
+    }
+  }, [title, description]);
+}
 
 /* ───────────── Ícone (Font Awesome 6 via CDN) ───────────── */
 type IconProps = { name: string; color?: string; size?: number; brand?: boolean };
@@ -20,16 +32,16 @@ export function Icon({ name, color, size, brand }: IconProps) {
 }
 
 /* ───────────── Contexto do modal de contato ───────────── */
+/* ───────────── Contexto de contato (→ página Matrículas) ───────────── */
 const ContactCtx = createContext<() => void>(() => {});
 export const useContact = () => useContext(ContactCtx);
 
 export function ContactProvider({ children }: { children: ReactNode }) {
-  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   return (
-    <ContactCtx.Provider value={() => setOpen(true)}>
+    <ContactCtx.Provider value={() => navigate("/matriculas")}>
       {children}
       <WhatsAppFloat />
-      <ContactModal open={open} onClose={() => setOpen(false)} />
     </ContactCtx.Provider>
   );
 }
@@ -81,6 +93,7 @@ const NAV: [string, string][] = [
   ["/", "Início"],
   ["/segmentos", "Segmentos"],
   ["/vivencias", "Vivências"],
+  ["/metodologia", "Metodologia"],
   ["/espacos", "Espaços"],
   ["/momentos", "Momentos"],
   ["/sobre", "Sobre"],
@@ -109,10 +122,10 @@ export function Navbar() {
           </Link>
         ))}
         <Link to="/matriculas" className="nav-button nav-button-mobile" onClick={() => setOpen(false)}>
-          Matrículas Abertas
+          Agende uma visita
         </Link>
       </nav>
-      <Link to="/matriculas" className="nav-button nav-button-desktop">Matrículas Abertas</Link>
+      <Link to="/matriculas" className="nav-button nav-button-desktop">Agende uma visita</Link>
     </header>
   );
 }
@@ -181,55 +194,6 @@ export function WhatsAppFloat() {
     <button type="button" className="whatsapp-float" onClick={contact}>
       <Icon name="whatsapp" brand size={22} /><span>Falar com a escola</span>
     </button>
-  );
-}
-
-/* ───────────── Modal de contato (funil de matrícula) ───────────── */
-function ContactModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [sent, setSent] = useState(false);
-  const [form, setForm] = useState({ nome: "", seg: "", contato: "" });
-  useEffect(() => {
-    if (open) {
-      setSent(false);
-      setForm({ nome: "", seg: "", contato: "" });
-    }
-  }, [open]);
-  if (!open) return null;
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
-    setForm((f) => ({ ...f, [k]: e.target.value }));
-  return (
-    <div className="cda-modal-backdrop" onClick={onClose}>
-      <div className="cda-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="Formulário de matrícula">
-        <button className="cda-modal-x" onClick={onClose} aria-label="Fechar">×</button>
-        {sent ? (
-          <div className="cda-success">
-            <div className="cda-success-ic"><Icon name="heart" color="#fff" size={26} /></div>
-            <h3>Recebemos com carinho!</h3>
-            <p>Obrigado{form.nome ? ", " + form.nome.split(" ")[0] : ""}. Em breve a equipe da CDA entra em contato para agendar sua visita.</p>
-            <a className="cda-modal-wpp" href={WPP} target="_blank" rel="noreferrer"><Icon name="whatsapp" brand size={16} /> Adiantar pelo WhatsApp</a>
-          </div>
-        ) : (
-          <form onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
-            <span className="mini-title" style={{ display: "block", marginBottom: 10 }}>MATRÍCULAS ABERTAS</span>
-            <h3>Vamos conversar sobre o futuro do seu filho?</h3>
-            <p>Deixe seus dados e a equipe CDA entra em contato para agendar uma visita acolhedora pela escola.</p>
-            <div className="cda-field"><label htmlFor="m-nome">Nome do responsável</label><input id="m-nome" type="text" placeholder="Seu nome" value={form.nome} onChange={set("nome")} required /></div>
-            <div className="cda-field"><label htmlFor="m-seg">Segmento de interesse</label>
-              <select id="m-seg" value={form.seg} onChange={set("seg")} required>
-                <option value="" disabled>Selecione…</option>
-                <option>Educação Infantil</option>
-                <option>Ensino Fundamental</option>
-                <option>Contraturno</option>
-                <option>Ainda não sei</option>
-              </select>
-            </div>
-            <div className="cda-field"><label htmlFor="m-tel">WhatsApp</label><input id="m-tel" type="tel" placeholder="(55) 9 0000-0000" value={form.contato} onChange={set("contato")} required /></div>
-            <button type="submit" className="primary-btn" style={{ width: "100%", marginTop: 4 }}>Quero falar com a escola</button>
-            <a className="cda-modal-wpp" href={WPP} target="_blank" rel="noreferrer"><Icon name="whatsapp" brand size={16} /> Prefiro chamar no WhatsApp</a>
-          </form>
-        )}
-      </div>
-    </div>
   );
 }
 

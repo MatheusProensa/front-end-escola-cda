@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Icon, Navbar, Footer, useReveal, useContact } from "../components/site";
+import { Icon, Navbar, Footer, useReveal, useContact, usePageMeta } from "../components/site";
 import { asset } from "../lib/assets";
 
 /* ───────────── Hero ───────────── */
@@ -143,29 +143,15 @@ function Vivencias() {
 /* ───────────── Nosso Espaço ───────────── */
 function Espaco() {
   const navigate = useNavigate();
-  const contact = useContact();
-  const feats = [
-    { icon: "shield-halved", t: "Segurança", p: "Ambientes seguros pensados para o bem-estar dos alunos." },
-    { icon: "heart", t: "Acolhimento", p: "Espaços que acolhem com carinho e humanização." },
-    { icon: "seedling", t: "Natureza", p: "Contato com áreas verdes que despertam curiosidade." },
-    { icon: "lightbulb", t: "Descobertas", p: "Lugares que inspiram aprendizagem e novas experiências." },
-  ];
-  const fotos = ["laboratorio.webp", "horta.webp", "patio.webp", "biblioteca.webp", "refeitorio.webp", "quadra.webp"];
-  const labels = ["Laboratório", "Horta", "Pátio", "Biblioteca", "Refeitório", "Quadra"];
+  const fotos = ["patio.webp", "biblioteca.webp", "horta.webp", "quadra.webp"];
+  const labels = ["Pátio", "Biblioteca", "Horta", "Quadra"];
   return (
     <section className="espaco reveal" id="espaco">
       <div className="espaco-left">
         <span className="espaco-mini">NOSSO ESPAÇO</span>
         <h2>Ambientes pensados<br />para <span className="azul-accent">acolher, explorar</span><br />e crescer.</h2>
         <p>Cada espaço da CDA é preparado para proporcionar segurança, conforto e experiências que fazem parte do desenvolvimento infantil.</p>
-        <div className="espaco-features">
-          {feats.map((f, i) => (
-            <div className="espaco-feature" key={i}>
-              <div className="espaco-feature-icon"><Icon name={f.icon} color="#fff" size={16} /></div>
-              <div><strong>{f.t}</strong><span>{f.p}</span></div>
-            </div>
-          ))}
-        </div>
+        <button className="espaco-ver-mais-btn" onClick={() => navigate("/espacos")}>Conheça todos os nossos espaços →</button>
       </div>
       <div className="espaco-right">
         <div className="espaco-grid">
@@ -176,15 +162,6 @@ function Espaco() {
             </div>
           ))}
         </div>
-      </div>
-      <div className="espaco-ver-mais">
-        <button className="espaco-ver-mais-btn" onClick={() => navigate("/espacos")}>Conheça todos os nossos espaços →</button>
-      </div>
-      <div className="espaco-banner">
-        <div className="espaco-banner-icon"><Icon name="heart" color="#f0b400" size={22} /></div>
-        <div className="espaco-banner-text"><strong>Mais que espaços, criamos ambientes que incentivam o aprender, o brincar e o conviver.</strong></div>
-        <div className="espaco-banner-sub"><p>Venha conhecer de perto cada cantinho feito com cuidado para o seu filho.</p></div>
-        <button className="espaco-banner-btn" onClick={contact}>Agende uma visita →</button>
       </div>
     </section>
   );
@@ -260,7 +237,64 @@ function Conexao() {
   );
 }
 
+/* ───────────── Faixa da fachada (convite a conhecer) ───────────── */
+function FachadaBand() {
+  return (
+    <section className="fachada-band reveal">
+      <img src={asset("fachada.webp")} alt="Fachada da Escola CDA" decoding="async" />
+      <div className="fachada-band-overlay">
+        <span className="fb-eyebrow">Venha nos conhecer</span>
+        <h2>A sua próxima escolha começa com uma visita.</h2>
+        <p>Conheça de perto a estrutura, o acolhimento e o cuidado que fazem da CDA um segundo lar há 15 anos.</p>
+      </div>
+    </section>
+  );
+}
+
+/* ── Faixa-convite (logo após a fachada) ── */
+function EspacoConvite() {
+  const contact = useContact();
+  return (
+    <div className="espaco-banner solo reveal">
+      <div className="espaco-banner-icon"><Icon name="heart" color="#f0b400" size={22} /></div>
+      <div className="espaco-banner-text"><strong>Mais que espaços, criamos ambientes que incentivam o aprender, o brincar e o conviver.</strong></div>
+      <div className="espaco-banner-sub"><p>Venha conhecer de perto cada cantinho feito com cuidado para o seu filho.</p></div>
+      <button className="espaco-banner-btn" onClick={contact}>Agende uma visita →</button>
+    </div>
+  );
+}
+
+/* ─────────────── Diário Escola (faixa compacta) ─────────────── */
+function DiarioBand() {
+  const feats = [
+    { icon: "book", t: "Agenda diária" },
+    { icon: "comment-dots", gold: true, t: "Recados" },
+    { icon: "images", t: "Mural & álbuns" },
+    { icon: "kit-medical", gold: true, t: "Medicamentos" },
+    { icon: "calendar-check", t: "Calendário & presença" },
+    { icon: "bolt", gold: true, t: "Em tempo real" },
+  ];
+  return (
+    <section className="diario-band reveal">
+      <div className="diario-band-left">
+        <img className="diario-logo" src={asset("diarioescola-logo.webp")} alt="Diário Escola" />
+        <h2>Você acompanha tudo, <span>todos os dias.</span></h2>
+        <p>Recados, fotos e a rotina do seu filho direto no celular — em tempo real, pelo app Diário Escola.</p>
+      </div>
+      <div className="diario-grid">
+        {feats.map((f, i) => (
+          <div className={"diario-feat" + (f.gold ? " gold" : "")} key={i}>
+            <div className="di-ic"><Icon name={f.icon} color={f.gold ? "#f0b400" : "#0b82f6"} size={16} /></div>
+            {f.t}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
+  usePageMeta("Escola CDA — Educação infantil e fundamental em Santa Maria/RS", "Há 15 anos acolhendo, inspirando e transformando vidas com afeto e propósito. Educação infantil e ensino fundamental em Santa Maria/RS.");
   useReveal();
   return (
     <div className="app">
@@ -269,8 +303,11 @@ export default function Home() {
       <Proposito />
       <Segmentos />
       <Vivencias />
+      <FachadaBand />
+      <EspacoConvite />
       <Espaco />
       <Depoimentos />
+      <DiarioBand />
       <Conexao />
       <Footer />
     </div>

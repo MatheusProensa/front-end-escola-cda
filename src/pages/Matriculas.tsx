@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Icon, Layout, WPP } from "../components/site";
+import { Icon, Layout, WPP, usePageMeta } from "../components/site";
 
 const MAP = "https://www.google.com/maps?q=R.+Jos%C3%A9+Manhago,+194+-+Camobi,+Santa+Maria+-+RS&output=embed";
 
@@ -58,10 +58,11 @@ const INFO: Info[] = [
 ];
 
 export default function Matriculas() {
+  usePageMeta("Matrículas Abertas — Escola CDA, Santa Maria/RS", "Matrículas abertas na Escola CDA. Agende uma visita, conheça a escola e fale com a gente pelo WhatsApp.");
   return (
     <Layout>
       <section className="page-hero reveal">
-        <span className="eyebrow">Matrículas abertas</span>
+        <span className="eyebrow">Agende uma visita</span>
         <h1>Vamos conversar sobre o futuro do seu <span className="script">filho?</span></h1>
         <p>Estamos de portas abertas para receber a sua família. Escolha o caminho mais fácil para você — formulário, WhatsApp ou uma visita à escola.</p>
       </section>
@@ -95,8 +96,8 @@ export default function Matriculas() {
       </div>
 
       <div className="cta-band reveal">
-        <h2>As matrículas estão abertas.</h2>
-        <p>Garanta uma vaga e venha fazer parte de uma escola que acolhe, desenvolve e transforma há 15 anos.</p>
+        <h2>Venha conhecer a CDA de perto.</h2>
+        <p>Agende uma visita e sinta o acolhimento de uma escola que acolhe, desenvolve e transforma há 15 anos.</p>
         <div className="cta-actions">
           <a className="btn-white" href={WPP} target="_blank" rel="noreferrer"><Icon name="whatsapp" brand size={16} /> Falar no WhatsApp</a>
           <Link className="btn-ghost" to="/sobre"><Icon name="arrow-right" size={15} /> Conhecer a escola</Link>
