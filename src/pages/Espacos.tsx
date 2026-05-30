@@ -4,9 +4,9 @@ import { asset } from "../lib/assets";
 
 const GAL = [
   { img: "biblioteca.webp", t: "Biblioteca", d: "Mundos para descobrir em cada página.", cls: "w3 h2" },
-  { img: "jardim.webp", t: "Pátio", d: "Áreas verdes para brincar, respirar e conviver.", cls: "w3 h2" },
+  { img: "jardim.webp", t: "Pátio", d: "Áreas verdes para brincar, respirar e conviver.", cls: "w3 h2", pos: "center 88%" },
   { img: "patio.webp", t: "Pátio", d: "Parque ao ar livre com playground e natureza.", cls: "w2" },
-  { img: "quadra.webp", t: "Quadra", d: "Movimento, esporte e energia.", cls: "w2" },
+  { img: "quadra.webp", t: "Quadra", d: "Movimento, esporte e energia.", cls: "w2", pos: "center 78%" },
   { img: "recreio.webp", t: "Britas", d: "Brincar livre ao ar livre, do jeito da infância.", cls: "w2" },
   { img: "solario.webp", t: "Solário", d: "Espaço macio e seguro para os pequenos.", cls: "w2 h2" },
   { img: "areia.webp", t: "Areia", d: "Areia e balanço para explorar e imaginar.", cls: "w2 h2" },
@@ -39,7 +39,7 @@ export default function Espacos() {
         <div className="galeria">
           {GAL.map((g, i) => (
             <div className={"gal " + g.cls} key={i}>
-              <img src={asset(g.img)} alt={g.t} decoding="async" />
+              <img src={asset(g.img)} alt={g.t} decoding="async" style={g.pos ? { objectPosition: g.pos } : undefined} />
               <div className="gal-label"><span className="dot"></span><div><strong>{g.t}</strong><span>{g.d}</span></div></div>
             </div>
           ))}

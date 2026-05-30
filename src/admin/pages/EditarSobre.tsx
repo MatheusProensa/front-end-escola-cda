@@ -8,8 +8,6 @@ export default function EditarSobre() {
   const [toast, toastNode] = useToast();
   const diferenciais: [string, string][] = [
     ["Sistema ProRaiz", "Ensino alinhado à BNCC, crítico e com propósito."],
-    ["Ballet · Umbigo de Bruxa", "Parceria com a escola de ballet."],
-    ["Jiu-Jitsu", "Parceria que desenvolve disciplina e respeito."],
     ["App Diário Escola", "Comunicação diária entre escola e família."],
   ];
   return (

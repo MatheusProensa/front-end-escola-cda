@@ -9,7 +9,7 @@ const VIVS: V[] = [
   { img: "musica.webp", t: "Musicalização" }, { img: "capoeira.webp", t: "Capoeira" },
   { t: "Educação Física" },
   // Oficinas (manhã)
-  { img: "ambiental.webp", t: "Educação Ambiental" }, { img: "culinaria.webp", t: "Culinária" },
+  { img: "ambiental.webp", t: "Educação Ambiental" }, { img: "culinaria.webp", t: "Culinária Afetiva" },
   { t: "Educação Socioemocional" }, { t: "Libras" },
   // Aulas extras
   { t: "Bombeiro Mirim" }, { t: "Ballet" }, { t: "Taekwondo" },

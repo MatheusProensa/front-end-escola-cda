@@ -40,7 +40,7 @@ export default function Sobre() {
 
       <div className="feature-row reveal">
         <div className="fr-media">
-          <img src={asset("giovana.webp")} alt="Criança da Escola CDA" decoding="async" />
+          <img src={asset("nossa-historia.webp")} alt="Equipe da Escola CDA" decoding="async" style={{ objectPosition: "center 35%" }} />
           <span className="fr-tag"><span className="dot"></span>Nossa história</span>
         </div>
         <div className="fr-body">
@@ -92,7 +92,7 @@ export default function Sobre() {
           <p>Quatro refeições por dia, balanceadas e com acompanhamento nutricional. Sem industrializados — tudo preparado na escola, priorizando alimentos naturais e o que colhemos na nossa própria horta.</p>
           <div className="cda-list">
             <div className="li"><div className="li-ic"><Icon name="utensils" size={12} /></div><div><strong>4 refeições por dia</strong><span>Cardápio completo e balanceado, com nutricionista.</span></div></div>
-            <div className="li"><div className="li-ic gold"><Icon name="leaf" size={12} /></div><div><strong>Da horta para a mesa</strong><span>Alimentos orgânicos cultivados na própria escola.</span></div></div>
+            <div className="li"><div className="li-ic gold"><Icon name="leaf" size={12} /></div><div><strong>Da horta para a mesa</strong><span>Parte das hortaliças e temperos vem da nossa própria horta.</span></div></div>
             <div className="li"><div className="li-ic"><Icon name="ban" size={12} /></div><div><strong>Sem industrializados</strong><span>Receitas feitas na escola; nos berçários, sem sal e açúcar.</span></div></div>
           </div>
         </div>
@@ -100,10 +100,8 @@ export default function Sobre() {
 
       <div className="cda-panel reveal">
         <div className="sec-head"><span className="eyebrow">Por que a CDA</span><h2>Diferenciais que fazem a diferença.</h2></div>
-        <div className="valores cols-4">
+        <div className="valores cols-2">
           <div className="valor"><div className="v-ic"><Icon name="seedling" color="#fff" size={22} /></div><h3>Sistema ProRaiz</h3><p>Ensino alinhado à BNCC, crítico, multidisciplinar e cheio de propósito.</p></div>
-          <div className="valor gold"><div className="v-ic"><Icon name="person-rays" color="#fff" size={22} /></div><h3>Ballet · Umbigo de Bruxa</h3><p>Parceria com a escola de ballet, com profissionais capacitados e experientes.</p></div>
-          <div className="valor"><div className="v-ic"><Icon name="hand-fist" color="#fff" size={22} /></div><h3>Jiu-Jitsu</h3><p>Parceria que desenvolve disciplina, respeito, coordenação e autoconfiança.</p></div>
           <div className="valor gold"><div className="v-ic"><Icon name="mobile-screen-button" color="#fff" size={22} /></div><h3>App Diário Escola</h3><p>Comunicação aberta e diária entre escola e família, na palma da mão.</p></div>
         </div>
       </div>

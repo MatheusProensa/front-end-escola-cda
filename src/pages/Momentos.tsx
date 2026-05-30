@@ -6,7 +6,7 @@ import { asset } from "../lib/assets";
 type Album = { id: string; img: string; t: string; date: string };
 
 const ALBUNS: Album[] = [
-  { id: "aniversario-15", img: "patio.webp", t: "Aniversário da Escola CDA — 15 anos", date: "31 de Março · 2026" },
+  { id: "aniversario-15", img: "aniversario-15.webp", t: "Aniversário da Escola CDA — 15 anos", date: "31 de Março · 2026" },
   { id: "feira-do-livro", img: "biblioteca.webp", t: "Feira do Livro", date: "11 de Abril · 2026" },
   { id: "festa-familia-1sem", img: "conexao.webp", t: "Festa da Família — 1º semestre", date: "09 de Maio · 2026" },
 ];

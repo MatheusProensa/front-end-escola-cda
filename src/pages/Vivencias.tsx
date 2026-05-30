@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Icon, Layout, useContact } from "../components/site";
 import { asset } from "../lib/assets";
 
-type Viv = { img?: string; icon: string; gold?: boolean; t: string; p: string; pos?: string };
+type Viv = { img?: string; icon: string; gold?: boolean; t: string; p: string; pos?: string; fit?: string };
 type Grupo = { eyebrow: string; titulo: string; intro: string; itens: Viv[] };
 
 const GRUPOS: Grupo[] = [
@@ -11,8 +11,8 @@ const GRUPOS: Grupo[] = [
     titulo: "Especializadas",
     intro: "Aulas que fazem parte da rotina e ampliam o repertório de corpo, ritmo e movimento.",
     itens: [
-      { img: "musica.webp", icon: "music", gold: true, t: "Musicalização", p: "Sensibilidade, criatividade e expressão através da música e do ritmo.", pos: "center 68%" },
-      { img: "capoeira.webp", icon: "hand-fist", t: "Capoeira", p: "Disciplina, respeito, coordenação e consciência corporal em movimento.", pos: "center 70%" },
+      { img: "musica.webp", icon: "music", gold: true, t: "Musicalização", p: "Sensibilidade, criatividade e expressão através da música e do ritmo.", pos: "center 88%" },
+      { img: "capoeira.webp", icon: "hand-fist", t: "Capoeira", p: "Disciplina, respeito, coordenação e consciência corporal em movimento.", pos: "center 42%" },
       { icon: "person-running", gold: true, t: "Educação Física", p: "Movimento, esquema corporal, coordenação e o prazer de praticar esportes.", img: "edfisica.webp", pos: "center 52%" },
     ],
   },
@@ -22,7 +22,7 @@ const GRUPOS: Grupo[] = [
     intro: "No contraturno, oficinas que despertam talentos, valores e novas descobertas a cada dia.",
     itens: [
       { img: "ambiental.webp", icon: "leaf", t: "Educação Ambiental", p: "Conexão com a natureza para formar cidadãos conscientes e responsáveis — conduzida pela professora da turma." },
-      { img: "culinaria.webp", icon: "utensils", gold: true, t: "Culinária", p: "Com a nutricionista: autonomia, saúde e afeto ao aprender com as mãos.", pos: "center 72%" },
+      { img: "culinaria.webp", icon: "utensils", gold: true, t: "Culinária Afetiva", p: "Com a nutricionista: autonomia, saúde e afeto ao aprender com as mãos.", pos: "center 100%" },
       { icon: "face-smile", t: "Educação Socioemocional", p: "Empatia, autoconhecimento e relações saudáveis — desenvolvida pela professora da turma.", img: "socioemocional.webp", pos: "center 35%" },
       { icon: "hands-asl-interpreting", gold: true, t: "Libras", p: "Com a educadora especial: primeiros contatos com a Língua Brasileira de Sinais para incluir e conectar.", img: "libras.webp", pos: "center 32%" },
     ],
@@ -32,7 +32,7 @@ const GRUPOS: Grupo[] = [
     titulo: "Aulas extras",
     intro: "Atividades opcionais em parceria, para a família escolher o que mais combina com a criança.",
     itens: [
-      { icon: "helmet-safety", t: "Bombeiro Mirim", p: "Disciplina, coragem e cidadania com noções de prevenção e segurança.", img: "bombeiromirim.webp", pos: "center 52%" },
+      { icon: "helmet-safety", t: "Bombeiro Mirim", p: "Disciplina, coragem e cidadania com noções de prevenção e segurança.", img: "bombeiromirim.webp", pos: "center 75%" },
       { icon: "shoe-prints", gold: true, t: "Ballet", p: "Postura, leveza e expressão: o corpo que aprende a dançar com graça." },
       { icon: "user-ninja", t: "Taekwondo", p: "Foco, respeito e autocontrole através da arte marcial." },
     ],
@@ -41,7 +41,7 @@ const GRUPOS: Grupo[] = [
 
 function VivCard({ v }: { v: Viv }) {
   return (
-    <div className="viv-card">
+    <div className={"viv-card" + (v.fit === "contain" ? " contain" : "")}>
       {v.img ? (
         <img src={asset(v.img)} alt={v.t} decoding="async" style={v.pos ? { objectPosition: v.pos } : undefined} />
       ) : (

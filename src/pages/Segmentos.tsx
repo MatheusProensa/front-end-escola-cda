@@ -44,7 +44,7 @@ const SEGS: Seg[] = [
       ["Aprender com leveza", "Experiências que estimulam talentos sem peso de conteúdo."],
     ],
     chipsLabel: "Oficinas da semana",
-    chips: ["Libras", "Educação Socioemocional", "Culinária", "Educação Ambiental"],
+    chips: ["Libras", "Educação Socioemocional", "Culinária Afetiva", "Educação Ambiental"],
     stats: [["Manhã", "7h–12h45"], ["1 oficina", "por dia"], ["Almoço", "incluso"]],
   },
 ];
