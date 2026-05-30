@@ -2213,3 +2213,19 @@ img, video, iframe { max-width: 100%; }
 /* Hover nos chips de oficinas/especializadas */
 .seg-chip { transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease; cursor: default; }
 .seg-chip:hover { transform: translateY(-2px); background: #0b82f6; border-color: #0b82f6; color: #fff; }
+
+
+/* Hover reforçado nos botões do banner CTA */
+.cta-band .btn-white { transition: transform .3s ease, box-shadow .3s ease, background .3s ease; }
+.cta-band .btn-white:hover { background: #fff; transform: translateY(-3px); box-shadow: 0 14px 30px rgba(0,0,0,0.22); }
+.cta-band .btn-ghost { transition: transform .3s ease, background .3s ease, border-color .3s ease, box-shadow .3s ease; }
+.cta-band .btn-ghost:hover { background: rgba(255,255,255,0.18); border-color: #fff; transform: translateY(-3px); box-shadow: 0 12px 26px rgba(0,0,0,0.18); }
+
+
+/* Hover sutil nos itens de lista (cda-list) */
+.cda-list .li { transition: transform 0.2s ease; }
+.cda-list .li-ic { transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s ease; }
+.cda-list .li:hover { transform: translateX(3px); }
+.cda-list .li:hover .li-ic { transform: scale(1.12); box-shadow: 0 6px 14px rgba(11,130,246,0.25); }
+.cda-list .li strong { transition: color 0.2s ease; }
+.cda-list .li:hover strong { color: #0b82f6; }
