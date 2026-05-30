@@ -3,20 +3,40 @@ import { Icon, Layout, useContact } from "../components/site";
 import { asset } from "../lib/assets";
 
 type Viv = { img?: string; icon: string; gold?: boolean; t: string; p: string; pos?: string };
+type Grupo = { eyebrow: string; titulo: string; intro: string; itens: Viv[] };
 
-const VIVS: Viv[] = [
-  { img: "supercerebro.webp", icon: "brain", t: "Super Cérebro", p: "Raciocínio lógico, concentração e autoconfiança através do cálculo mental." },
-  { img: "musica.webp", icon: "music", gold: true, t: "Musicalização", p: "Sensibilidade, criatividade e expressão através da música e do ritmo.", pos: "center 72%" },
-  { img: "capoeira.webp", icon: "hand-fist", t: "Capoeira", p: "Disciplina, respeito, coordenação e consciência corporal em movimento.", pos: "center 72%" },
-  { img: "ambiental.webp", icon: "leaf", t: "Educação Ambiental", p: "Conexão com a natureza para formar cidadãos conscientes e responsáveis." },
-  { img: "culinaria.webp", icon: "utensils", gold: true, t: "Culinária Afetiva", p: "Autonomia, saúde e afeto na cozinha — aprender com as mãos e o coração." },
-  { img: "ingles.webp", icon: "globe", t: "Inglês", p: "Imersão no idioma desde cedo, de forma natural, lúdica e significativa." },
-  { icon: "person-running", t: "Educação Física", p: "Movimento, esquema corporal, coordenação e o prazer de praticar esportes." },
-  { icon: "masks-theater", gold: true, t: "Arte Circense", p: "Equilíbrio, expressão e autoconfiança através das artes do circo." },
-  { icon: "face-smile", t: "Desenvolvimento Socioemocional", p: "Empatia, autoconhecimento e relações saudáveis através do brincar." },
-  { icon: "person-rays", gold: true, t: "Dança Criativa e Expressão Corporal", p: "O corpo como linguagem: ritmo, gesto, criatividade e expressão." },
-  { icon: "hands-asl-interpreting", t: "Libras", p: "Primeiros contatos com a Língua Brasileira de Sinais — incluir e conectar." },
-  { icon: "book-open-reader", gold: true, t: "Reforço Escolar", p: "Apoio no contraturno para consolidar a aprendizagem do Fundamental." },
+const GRUPOS: Grupo[] = [
+  {
+    eyebrow: "Turno da tarde",
+    titulo: "Especializadas",
+    intro: "Aulas que fazem parte da rotina e ampliam o repertório de corpo, ritmo e movimento.",
+    itens: [
+      { img: "musica.webp", icon: "music", gold: true, t: "Musicalização", p: "Sensibilidade, criatividade e expressão através da música e do ritmo.", pos: "center 68%" },
+      { img: "capoeira.webp", icon: "hand-fist", t: "Capoeira", p: "Disciplina, respeito, coordenação e consciência corporal em movimento.", pos: "center 70%" },
+      { icon: "person-running", gold: true, t: "Educação Física", p: "Movimento, esquema corporal, coordenação e o prazer de praticar esportes.", img: "edfisica.webp", pos: "center 52%" },
+    ],
+  },
+  {
+    eyebrow: "Turno da manhã",
+    titulo: "Oficinas",
+    intro: "No contraturno, oficinas que despertam talentos, valores e novas descobertas a cada dia.",
+    itens: [
+      { img: "ambiental.webp", icon: "leaf", t: "Educação Ambiental", p: "Conexão com a natureza para formar cidadãos conscientes e responsáveis — conduzida pela professora da turma." },
+      { img: "culinaria.webp", icon: "utensils", gold: true, t: "Culinária", p: "Com a nutricionista: autonomia, saúde e afeto ao aprender com as mãos.", pos: "center 72%" },
+      { icon: "face-smile", t: "Educação Socioemocional", p: "Empatia, autoconhecimento e relações saudáveis — desenvolvida pela professora da turma.", img: "socioemocional.webp", pos: "center 35%" },
+      { icon: "hands-asl-interpreting", gold: true, t: "Libras", p: "Com a educadora especial: primeiros contatos com a Língua Brasileira de Sinais para incluir e conectar.", img: "libras.webp", pos: "center 32%" },
+    ],
+  },
+  {
+    eyebrow: "Parcerias da escola",
+    titulo: "Aulas extras",
+    intro: "Atividades opcionais em parceria, para a família escolher o que mais combina com a criança.",
+    itens: [
+      { icon: "helmet-safety", t: "Bombeiro Mirim", p: "Disciplina, coragem e cidadania com noções de prevenção e segurança.", img: "bombeiromirim.webp", pos: "center 52%" },
+      { icon: "shoe-prints", gold: true, t: "Ballet", p: "Postura, leveza e expressão: o corpo que aprende a dançar com graça." },
+      { icon: "user-ninja", t: "Taekwondo", p: "Foco, respeito e autocontrole através da arte marcial." },
+    ],
+  },
 ];
 
 function VivCard({ v }: { v: Viv }) {
@@ -46,11 +66,18 @@ export default function Vivencias() {
         <p>Mais do que atividades, são vivências reais que estimulam talentos, desenvolvem competências e tornam o aprendizado vivo, criativo e cheio de significado.</p>
       </section>
 
-      <div className="cda-panel reveal">
-        <div className="viv-grid">
-          {VIVS.map((v, i) => <VivCard key={i} v={v} />)}
+      {GRUPOS.map((g, gi) => (
+        <div className="cda-panel reveal viv-group" key={gi}>
+          <div className="viv-group-head">
+            <span className="eyebrow">{g.eyebrow}</span>
+            <h2>{g.titulo}</h2>
+            <p>{g.intro}</p>
+          </div>
+          <div className="viv-grid" style={{ ["--cols" as string]: g.itens.length }}>
+            {g.itens.map((v, i) => <VivCard key={i} v={v} />)}
+          </div>
         </div>
-      </div>
+      ))}
 
       <div className="cta-band reveal">
         <h2>Toda criança tem um talento esperando para florescer.</h2>

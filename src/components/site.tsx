@@ -131,9 +131,9 @@ export function Footer() {
     ["Educação Infantil", "/segmentos"],
     ["Ensino Fundamental", "/segmentos"],
     ["Contraturno", "/segmentos"],
-    ["Super Cérebro", "/vivencias"],
-    ["Musicalização", "/vivencias"],
-    ["Capoeira", "/vivencias"],
+    ["Especializadas", "/vivencias"],
+    ["Oficinas", "/vivencias"],
+    ["Aulas extras", "/vivencias"],
   ];
   const contact = useContact();
   return (

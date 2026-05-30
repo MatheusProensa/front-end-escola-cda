@@ -4,12 +4,12 @@ import { asset } from "../lib/assets";
 
 type Seg = {
   key: string; img: string; icon: string; tag: string; title: string; p: string;
-  metodo: [string, string][]; chipsLabel: string; chips: string[]; stats: [string, string][];
+  metodo: [string, string][]; chipsLabel: string; chips: string[]; stats: [string, string][]; pos?: string;
 };
 
 const SEGS: Seg[] = [
   {
-    key: "infantil", img: "infantil.webp", icon: "child-reaching", tag: "Berçário à pré-escola",
+    key: "infantil", img: "infantil.webp", icon: "child-reaching", tag: "Berçário à pré-escola", pos: "center 30%",
     title: "Educação Infantil",
     p: "A fase das primeiras descobertas. Acolhemos cada criança com afeto e criamos um ambiente seguro onde aprender é, antes de tudo, brincar, explorar e se sentir amada.",
     metodo: [
@@ -22,7 +22,7 @@ const SEGS: Seg[] = [
     stats: [["0–5", "anos"], ["Tarde", "13h–18h30"], ["Contraturno", "opcional"]],
   },
   {
-    key: "fundamental", img: "fundamental.webp", icon: "book", tag: "Anos iniciais",
+    key: "fundamental", img: "fundamental-home.webp", icon: "book", tag: "Anos iniciais", pos: "center 30%",
     title: "Ensino Fundamental",
     p: "O momento de construir autonomia e pensamento crítico. Unimos base sólida e aprendizagem ativa para que cada aluno cresça curioso, confiante e preparado para os próximos passos.",
     metodo: [
@@ -35,7 +35,7 @@ const SEGS: Seg[] = [
     stats: [["Anos", "iniciais"], ["Tarde", "13h–18h30"], ["Contraturno", "opcional"]],
   },
   {
-    key: "contraturno", img: "contraturno.webp", icon: "clock|r", tag: "Turno da manhã",
+    key: "contraturno", img: "seg-contraturno.webp", icon: "clock|r", tag: "Turno da manhã", pos: "center 28%",
     title: "Contraturno",
     p: "No turno da manhã, cada dia é uma nova experiência. Oficinas diferenciadas ampliam o aprender de forma leve, com tempo também para o brincar livre e a alimentação cuidada.",
     metodo: [
@@ -44,7 +44,7 @@ const SEGS: Seg[] = [
       ["Aprender com leveza", "Experiências que estimulam talentos sem peso de conteúdo."],
     ],
     chipsLabel: "Oficinas da semana",
-    chips: ["Super Cérebro", "Educação Ambiental", "Arte Circense", "Desenvolvimento Socioemocional", "Dança Criativa e Expressão Corporal", "Culinária Afetiva", "Libras"],
+    chips: ["Libras", "Educação Socioemocional", "Culinária", "Educação Ambiental"],
     stats: [["Manhã", "7h–12h45"], ["1 oficina", "por dia"], ["Almoço", "incluso"]],
   },
 ];
@@ -54,7 +54,7 @@ function Segment({ s, flip }: { s: Seg; flip: boolean }) {
   return (
     <div className={"feature-row reveal" + (flip ? " flip" : "")}>
       <div className="fr-media">
-        <img src={asset(s.img)} alt={s.title} decoding="async" />
+        <img src={asset(s.img)} alt={s.title} decoding="async" style={s.pos ? { objectPosition: s.pos } : undefined} />
         <span className="fr-tag"><span className="dot"></span>{s.tag}</span>
       </div>
       <div className="fr-body">

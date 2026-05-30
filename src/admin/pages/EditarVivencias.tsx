@@ -5,12 +5,14 @@ import { asset } from "../../lib/assets";
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 type V = { img?: string; t: string };
 const VIVS: V[] = [
-  { img: "supercerebro.webp", t: "Super Cérebro" }, { img: "musica.webp", t: "Musicalização" },
-  { img: "capoeira.webp", t: "Capoeira" }, { img: "ambiental.webp", t: "Educação Ambiental" },
-  { img: "culinaria.webp", t: "Culinária Afetiva" }, { img: "ingles.webp", t: "Inglês" },
-  { t: "Educação Física" }, { t: "Arte Circense" },
-  { t: "Desenvolvimento Socioemocional" }, { t: "Dança Criativa" },
-  { t: "Libras" }, { t: "Reforço Escolar" },
+  // Especializadas (tarde)
+  { img: "musica.webp", t: "Musicalização" }, { img: "capoeira.webp", t: "Capoeira" },
+  { t: "Educação Física" },
+  // Oficinas (manhã)
+  { img: "ambiental.webp", t: "Educação Ambiental" }, { img: "culinaria.webp", t: "Culinária" },
+  { t: "Educação Socioemocional" }, { t: "Libras" },
+  // Aulas extras
+  { t: "Bombeiro Mirim" }, { t: "Ballet" }, { t: "Taekwondo" },
 ];
 
 export default function EditarVivencias() {

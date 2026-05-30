@@ -77,10 +77,10 @@ function Proposito() {
 function Segmentos() {
   const navigate = useNavigate();
   const segs = [
-    { img: "infantil.webp", icon: "child-reaching", t: "Educação Infantil", p: "Do berçário à pré-escola, acolhemos cada conquista com amor e estimulamos o aprender brincando.", to: "/segmentos" },
-    { img: "fundamental.webp", icon: "book", t: "Ensino Fundamental", p: "Anos iniciais com aprendizagem ativa, pensamento crítico e desenvolvimento integral.", to: "/segmentos" },
-    { img: "contraturno.webp", icon: "clock|r", t: "Contraturno", p: "Acolhimento no turno da manhã com rotina equilibrada e oficinas que ampliam o aprender.", to: "/segmentos" },
-    { img: "oficinas.webp", icon: "paintbrush", t: "Oficinas", p: "Super Cérebro, Musicalização, Capoeira, Educação Ambiental e Culinária Afetiva.", to: "/vivencias" },
+    { img: "infantil-home.webp", icon: "child-reaching", t: "Educação Infantil", p: "Do berçário à pré-escola, acolhemos cada conquista com amor e estimulamos o aprender brincando.", to: "/segmentos", pos: "center 35%" },
+    { img: "fundamental-livro.webp", icon: "book", t: "Ensino Fundamental", p: "Anos iniciais com aprendizagem ativa, pensamento crítico e desenvolvimento integral.", to: "/segmentos", pos: "center 24%" },
+    { img: "contraturno-home.webp", icon: "clock|r", t: "Contraturno", p: "Acolhimento no turno da manhã com rotina equilibrada e oficinas que ampliam o aprender.", to: "/segmentos", pos: "center 18%" },
+    { img: "oficinas.webp", icon: "paintbrush", t: "Oficinas", p: "Libras, Educação Socioemocional, Culinária e Educação Ambiental — no contraturno.", to: "/vivencias" },
   ];
   return (
     <section className="segmentos reveal" id="segmentos">
@@ -94,7 +94,7 @@ function Segmentos() {
       <div className="segmentos-grid">
         {segs.map((s, i) => (
           <div className="segmento-card" key={i}>
-            <img src={asset(s.img)} alt={s.t} decoding="async" />
+            <img src={asset(s.img)} alt={s.t} decoding="async" style={s.pos ? { objectPosition: s.pos } : undefined} />
             <div className="segmento-overlay">
               <div className="segmento-icon"><Icon name={s.icon} color="#0b82f6" size={20} /></div>
               <h3>{s.t}</h3>
@@ -112,11 +112,10 @@ function Segmentos() {
 function Vivencias() {
   const navigate = useNavigate();
   const vivs = [
-    { img: "supercerebro.webp", icon: "brain", c: "#0b82f6", t: "Super Cérebro", p: "Desenvolve o raciocínio lógico, a concentração e a autoconfiança.", pos: "" },
-    { img: "musica.webp", icon: "music", c: "#f0b400", t: "Musicalização", p: "Estímulo à sensibilidade, criatividade e expressão através da música.", pos: "center 72%" },
-    { img: "capoeira.webp", icon: "hand-fist", c: "#0b82f6", t: "Capoeira", p: "Promove disciplina, respeito, coordenação e consciência corporal.", pos: "center 72%" },
+    { img: "musica.webp", icon: "music", c: "#f0b400", t: "Musicalização", p: "Estímulo à sensibilidade, criatividade e expressão através da música.", pos: "center 82%" },
+    { img: "capoeira.webp", icon: "hand-fist", c: "#0b82f6", t: "Capoeira", p: "Promove disciplina, respeito, coordenação e consciência corporal.", pos: "center 82%" },
     { img: "ambiental.webp", icon: "leaf", c: "#0b82f6", t: "Ed. Ambiental", p: "Conexão com a natureza para formar cidadãos conscientes e responsáveis.", pos: "" },
-    { img: "culinaria.webp", icon: "utensils", c: "#f0b400", t: "Culinária Afetiva", p: "Aprendizado prático que estimula autonomia, saúde e momentos especiais.", pos: "" },
+    { img: "culinaria.webp", icon: "utensils", c: "#f0b400", t: "Culinária", p: "Com a nutricionista: autonomia, saúde e afeto ao aprender com as mãos.", pos: "center 72%" },
     { img: "ingles.webp", icon: "globe", c: "#0b82f6", t: "Proposta Bilíngue", p: "Imersão no inglês desde cedo para formar alunos preparados para o futuro.", pos: "" },
   ];
   return (

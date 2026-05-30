@@ -4,12 +4,18 @@ import { asset } from "../lib/assets";
 
 const GAL = [
   { img: "biblioteca.webp", t: "Biblioteca", d: "Mundos para descobrir em cada página.", cls: "w3 h2" },
-  { img: "patio.webp", t: "Pátio", d: "Espaço livre para brincar e respirar.", cls: "w3" },
-  { img: "quadra.webp", t: "Quadra", d: "Movimento, esporte e energia.", cls: "w3" },
+  { img: "jardim.webp", t: "Pátio", d: "Áreas verdes para brincar, respirar e conviver.", cls: "w3 h2" },
+  { img: "patio.webp", t: "Pátio", d: "Parque ao ar livre com playground e natureza.", cls: "w2" },
+  { img: "quadra.webp", t: "Quadra", d: "Movimento, esporte e energia.", cls: "w2" },
+  { img: "recreio.webp", t: "Britas", d: "Brincar livre ao ar livre, do jeito da infância.", cls: "w2" },
+  { img: "solario.webp", t: "Solário", d: "Espaço macio e seguro para os pequenos.", cls: "w2 h2" },
+  { img: "areia.webp", t: "Areia", d: "Areia e balanço para explorar e imaginar.", cls: "w2 h2" },
+  { img: "coberto.webp", t: "Entrada", d: "Brincar protegido em qualquer dia.", cls: "w2 h2" },
   { img: "laboratorio.webp", t: "Laboratório", d: "Ciência viva, mão na massa.", cls: "w2" },
   { img: "refeitorio.webp", t: "Refeitório", d: "Alimentação cuidada, com carinho.", cls: "w2" },
-  { img: "horta.webp", t: "Horta", d: "Plantar, cuidar e aprender com a natureza.", cls: "w2" },
-  { img: "conexao.webp", t: "Salas de aula", d: "Ambientes preparados para acolher e aprender.", cls: "w6" },
+  { img: "convivencia.webp", t: "Banheiro E. Fundamental e PCD", d: "Pebolim e descanso entre uma atividade e outra.", cls: "w2" },
+  { img: "horta.webp", t: "Horta", d: "Plantar, cuidar e aprender com a natureza.", cls: "w3" },
+  { img: "conexao.webp", t: "Salas de aula", d: "Ambientes preparados para acolher e aprender.", cls: "w3" },
 ];
 
 const FEATS = [

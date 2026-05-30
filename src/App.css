@@ -609,7 +609,7 @@
 
 .vivencias-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 14px;
   margin-top: 48px;
 }
@@ -1709,9 +1709,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .mini-stat span { color: #6b7c96; font-size: 12.5px; font-weight: 600; }
 
 /* ─── Grade de vivências (cards escuros, reusa estilo) ─── */
-.viv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.viv-grid { display: grid; grid-template-columns: repeat(var(--cols, 3), 1fr); gap: 18px; }
 .viv-card {
-  position: relative; height: 380px; overflow: hidden; border-radius: 24px;
+  position: relative; height: 500px; overflow: hidden; border-radius: 24px;
   background: #082966; box-shadow: 0 12px 35px rgba(19,52,110,0.12); text-align: left;
   transition: transform .3s;
 }
@@ -1745,7 +1745,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .viv-feature .vf-body p { color: rgba(255,255,255,0.82); font-size: 15px; line-height: 1.8; margin-top: 14px; }
 
 /* ─── Galeria de espaços (foco em imagem) ─── */
-.galeria { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 220px; gap: 16px; }
+.galeria { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 220px; gap: 16px; grid-auto-flow: dense; }
 .gal {
   position: relative; overflow: hidden; border-radius: 22px;
   box-shadow: 0 12px 35px rgba(19,52,110,0.12);
@@ -1873,7 +1873,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .page-hero h1 .script { font-size: 52px; }
   .feature-row { grid-template-columns: 1fr; gap: 30px; }
   .feature-row.flip .fr-media { order: 0; }
-  .viv-grid { grid-template-columns: 1fr 1fr; }
+  .viv-grid { grid-template-columns: repeat(var(--cols, 3), 1fr); }
   .galeria { grid-template-columns: repeat(4, 1fr); }
   .valores, .numeros, .timeline { grid-template-columns: 1fr 1fr; }
   .contato-grid { grid-template-columns: 1fr; }
@@ -2144,4 +2144,19 @@ img, video, iframe { max-width: 100%; }
   }
   .conexao-seal-ic { width: 50px; height: 50px; }
   .conexao-seal-text { font-size: 14.5px; }
+}
+
+
+/* ─── Vivências agrupadas (Especializadas · Oficinas · Aulas extras) ─── */
+.viv-group { margin-bottom: 26px; }
+.viv-group-head { margin-bottom: 22px; max-width: 640px; }
+.viv-group-head .eyebrow { display: block; }
+.viv-group-head h2 {
+  font-size: 34px; font-weight: 800; color: #0e2d6e;
+  letter-spacing: -1px; margin: 8px 0 10px;
+}
+.viv-group-head p { font-size: 15.5px; line-height: 1.65; color: #5f6f89; margin: 0; text-wrap: balance; }
+@media (max-width: 768px) {
+  .viv-group-head { text-align: center; margin-left: auto; margin-right: auto; }
+  .viv-group-head h2 { font-size: 27px; }
 }

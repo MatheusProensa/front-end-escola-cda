@@ -7,7 +7,7 @@ const logo = () => asset("logo-cda-15anos-semborda.webp");
 const SEGS = [
   { img: "infantil.webp", t: "Educação Infantil", tag: "Berçário à pré-escola", chips: "Musicalização, Educação Física, Capoeira, Inglês" },
   { img: "fundamental.webp", t: "Ensino Fundamental", tag: "Anos iniciais", chips: "Artes Circenses, Libras, Reforço Escolar" },
-  { img: "contraturno.webp", t: "Contraturno", tag: "Turno da manhã", chips: "Super Cérebro, Educação Ambiental, Arte Circense, Culinária Afetiva" },
+  { img: "contraturno.webp", t: "Contraturno", tag: "Turno da manhã", chips: "Libras, Educação Socioemocional, Culinária, Educação Ambiental" },
 ];
 
 export default function EditarSegmentos() {
