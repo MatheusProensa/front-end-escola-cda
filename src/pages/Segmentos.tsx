@@ -21,7 +21,7 @@ const G_BERCARIO = [
   "gal-bercario-6.webp","gal-bercario-12.webp",
 ];
 const GALERIAS: Record<string, { eyebrow: string; title: string; imgs: string[] }> = {
-  infantil: { eyebrow: "Maternal e pré-escola", title: "Momentos da Educação Infantil", imgs: G_INFANTIL },
+  infantil: { eyebrow: "Maternal e Pré-escola", title: "Brincar, criar e descobrir", imgs: G_INFANTIL },
   fundamental: { eyebrow: "Anos iniciais", title: "Momentos do Ensino Fundamental", imgs: G_FUNDAMENTAL },
 };
 
@@ -79,7 +79,7 @@ function BercarioDestaque() {
     <div className="bercario-band reveal">
       <div className="bercario-band-head">
         <div>
-          <span className="eyebrow">Berçário · a partir dos primeiros meses</span>
+          <span className="eyebrow">Berçário</span>
           <h2>Um começo cercado de <span style={{ color: "#1b84ff" }}>cuidado</span></h2>
         </div>
         <p>No berçário, cada bebê é acolhido com afeto e atenção individual. Cuidamos do sono, da alimentação e dos primeiros estímulos num ambiente seguro e cheio de carinho — onde a família fica tranquila e o bebê se sente em casa.</p>

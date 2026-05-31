@@ -36,8 +36,8 @@ export default function Contato() {
           <div className="adm-card">
             <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-share-nodes"></i></div><h3>Redes sociais</h3></div>
             <div className="adm-grid-fields">
-              <div><label className="adm-form-label"><i className="fa-brands fa-instagram"></i> Instagram</label><input className="adm-text" defaultValue="@escolacda" /></div>
-              <div><label className="adm-form-label"><i className="fa-brands fa-facebook"></i> Facebook</label><input className="adm-text" defaultValue="/escolacda" /></div>
+              <div><label className="adm-form-label"><i className="fa-brands fa-instagram"></i> Instagram</label><input className="adm-text" defaultValue="@escolacda.sm" /></div>
+              <div><label className="adm-form-label"><i className="fa-brands fa-facebook"></i> Facebook</label><input className="adm-text" defaultValue="/escolacda.sm" /></div>
             </div>
           </div>
         </div>

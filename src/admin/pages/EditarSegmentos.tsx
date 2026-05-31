@@ -52,6 +52,19 @@ export default function EditarSegmentos() {
               <div><label className="adm-form-label">Contraturno</label><input className="adm-text" defaultValue="Opcional" /></div>
             </div>
           </div>
+
+          <div className="adm-card">
+            <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-images"></i></div><h3>Galerias de fotos (rolo)</h3></div>
+            <p style={{ color: "#5f6f89", fontSize: 13.5, margin: "0 0 12px" }}>Carrosséis de fotos exibidos na página de Segmentos. O Berçário tem destaque próprio dentro da Educação Infantil.</p>
+            <div className="adm-grid-fields">
+              <div><label className="adm-form-label">Berçário (nº de fotos)</label><input className="adm-text" defaultValue="12" /></div>
+              <div><label className="adm-form-label">Educação Infantil (nº de fotos)</label><input className="adm-text" defaultValue="14" /></div>
+            </div>
+            <div className="adm-grid-fields" style={{ marginTop: 6 }}>
+              <div><label className="adm-form-label">Ensino Fundamental (nº de fotos)</label><input className="adm-text" defaultValue="18" /></div>
+              <div><label className="adm-form-label">Link "Saiba mais"</label><input className="adm-text" defaultValue="/metodologia" /></div>
+            </div>
+          </div>
         </div>
 
         <div className="adm-side-panel">

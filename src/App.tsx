@@ -18,6 +18,7 @@ import AdminLogin from "./admin/pages/Login";
 import Dashboard from "./admin/pages/Dashboard";
 import EditarHome from "./admin/pages/EditarHome";
 import EditarSegmentos from "./admin/pages/EditarSegmentos";
+import EditarMetodologia from "./admin/pages/EditarMetodologia";
 import EditarVivencias from "./admin/pages/EditarVivencias";
 import EditarEspacos from "./admin/pages/EditarEspacos";
 import EditarSobre from "./admin/pages/EditarSobre";
@@ -61,6 +62,7 @@ function AdminArea() {
         <Route path="dashboard" element={guard(<Dashboard />)} />
         <Route path="home" element={guard(<EditarHome />)} />
         <Route path="segmentos" element={guard(<EditarSegmentos />)} />
+        <Route path="metodologia" element={guard(<EditarMetodologia />)} />
         <Route path="vivencias" element={guard(<EditarVivencias />)} />
         <Route path="espacos" element={guard(<EditarEspacos />)} />
         <Route path="sobre" element={guard(<EditarSobre />)} />

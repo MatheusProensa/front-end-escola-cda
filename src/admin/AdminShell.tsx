@@ -8,6 +8,7 @@ const NAV_MAIN: [string, string, string, string][] = [
   ["/admin/dashboard", "Dashboard", "gauge-high", "dashboard"],
   ["/admin/home", "Home", "house", "home"],
   ["/admin/segmentos", "Segmentos", "layer-group", "segmentos"],
+  ["/admin/metodologia", "Metodologia", "graduation-cap", "metodologia"],
   ["/admin/vivencias", "Vivências", "palette", "vivencias"],
   ["/admin/espacos", "Espaços", "image", "espacos"],
   ["/admin/sobre", "Sobre", "book-open", "sobre"],

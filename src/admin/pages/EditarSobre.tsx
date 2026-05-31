@@ -6,10 +6,6 @@ const logo = () => asset("logo-cda-15anos-semborda.webp");
 
 export default function EditarSobre() {
   const [toast, toastNode] = useToast();
-  const diferenciais: [string, string][] = [
-    ["Sistema ProRaiz", "Ensino alinhado à BNCC, crítico e com propósito."],
-    ["App Diário Escola", "Comunicação diária entre escola e família."],
-  ];
   return (
     <AdminShell active="sobre" title="Editar — Sobre a Escola" subtitle="História, valores e linha do tempo" logoSrc={logo()}>
       <div className="adm-page-head">
@@ -46,13 +42,11 @@ export default function EditarSobre() {
           </div>
 
           <div className="adm-card">
-            <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-award"></i></div><h3>Diferenciais</h3></div>
-            {diferenciais.map((d, i) => (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 12, marginBottom: 12 }}>
-                <input className="adm-text" defaultValue={d[0]} />
-                <input className="adm-text" defaultValue={d[1]} />
-              </div>
-            ))}
+            <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-utensils"></i></div><h3>Alimentação saudável</h3></div>
+            <label className="adm-form-label">Texto</label>
+            <textarea className="adm-textarea" defaultValue="Comida de verdade, feita na escola e com acompanhamento nutricional. Sem industrializados — priorizamos alimentos naturais e o que colhemos na nossa própria horta."></textarea>
+            <label className="adm-form-label">Itens (um por linha)</label>
+            <textarea className="adm-textarea" defaultValue={"Refeições ao longo do dia — Fruta e almoço pela manhã; fruta e lanche à tarde. No Ensino Fundamental, o lanche.\nDa horta para a mesa — Parte das hortaliças e temperos vem da nossa própria horta.\nSem industrializados — Receitas feitas na escola; nos berçários, sem sal e açúcar."}></textarea>
           </div>
         </div>
 

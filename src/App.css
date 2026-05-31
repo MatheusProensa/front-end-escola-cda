@@ -2399,3 +2399,12 @@ img, video, iframe { max-width: 100%; }
 .bercario-band-head p { color: #5f6f89; font-size: 14.5px; line-height: 1.7; max-width: 54ch; flex: 1 1 340px; }
 @media (max-width: 1024px) { .bercario-band { width: calc(100% - 80px); } }
 @media (max-width: 768px) { .bercario-band { width: calc(100% - 40px); padding: 28px 22px; } .bercario-band-head h2 { font-size: 25px; } }
+
+
+/* Logo ProRaiz menor no celular */
+@media (max-width: 768px) {
+  .sistema-logo { height: 76px; max-width: 240px; margin-bottom: 14px; }
+}
+@media (max-width: 480px) {
+  .sistema-logo { height: 64px; max-width: 200px; }
+}

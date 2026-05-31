@@ -49,6 +49,17 @@ export default function EditarHome() {
           </div>
 
           <div className="adm-card">
+            <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-mobile-screen-button"></i></div><h3>Diário Escola (faixa)</h3></div>
+            <p className="hint">Faixa compacta do app, exibida antes da seção “Conexão que transforma”.</p>
+            <label className="adm-form-label">Título</label>
+            <input className="adm-text" defaultValue="Você acompanha tudo, todos os dias" />
+            <label className="adm-form-label">Texto</label>
+            <textarea className="adm-textarea" defaultValue="Recados, fotos e a rotina do seu filho direto no celular — em tempo real, pelo app Diário Escola."></textarea>
+            <label className="adm-form-label">Recursos (um por linha)</label>
+            <textarea className="adm-textarea" defaultValue={"Agenda diária\nRecados\nMural & álbuns\nMedicamentos\nCalendário & presença\nEm tempo real"}></textarea>
+          </div>
+
+          <div className="adm-card">
             <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-comment-dots"></i></div><h3>Depoimentos</h3></div>
             <p className="hint">8 depoimentos de famílias publicados no carrossel da Home.</p>
             <button className="adm-btn adm-btn-ghost adm-btn-sm"><i className="fa-solid fa-pen"></i> Gerenciar depoimentos (8)</button>

@@ -20,9 +20,10 @@ const ATIV = [
 ];
 const PAGINAS: [string, string, string, string, string][] = [
   ["house", "Home", "Hero, pilares, depoimentos", "pub", "/admin/home"],
-  ["layer-group", "Segmentos", "Infantil, Fundamental, Contraturno", "pub", "/admin/segmentos"],
-  ["palette", "Vivências", "12 atividades e oficinas", "pub", "/admin/vivencias"],
-  ["image", "Espaços", "Galeria + alimentação", "draft", "/admin/espacos"],
+  ["layer-group", "Segmentos", "Infantil (com berçário), Fundamental, Contraturno", "pub", "/admin/segmentos"],
+  ["graduation-cap", "Metodologia", "ProRaiz, pilares, tecnologia, materiais", "pub", "/admin/metodologia"],
+  ["palette", "Vivências", "Especializadas, Oficinas, Aulas extras", "pub", "/admin/vivencias"],
+  ["image", "Espaços", "Galeria + energia solar", "pub", "/admin/espacos"],
   ["book-open", "Sobre", "História, linha do tempo, valores", "pub", "/admin/sobre"],
 ];
 
