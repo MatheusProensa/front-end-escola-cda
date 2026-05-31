@@ -2445,3 +2445,9 @@ div[vw] [vw-access-button] { right: -200px !important; }
 .footer-credit { color: rgba(255,255,255,.62); font-size: 12.5px; }
 .footer-credit strong { color: rgba(255,255,255,.9); font-weight: 700; }
 @media (max-width: 768px) { .footer-credit { order: 3; width: 100%; text-align: center; margin-top: 4px; } }
+
+
+/* Botão Libras — estado "abrindo" */
+.a11y-btn.a11y-libras.loading { background: #0a64c0; max-width: 230px; }
+.a11y-btn.a11y-libras.loading .a11y-ic .fa-spinner { animation: a11ySpin 0.8s linear infinite; }
+@keyframes a11ySpin { to { transform: rotate(360deg); } }
