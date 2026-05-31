@@ -8,8 +8,41 @@
     <meta name="description" content="Escola CDA — educação infantil e ensino fundamental em Santa Maria/RS. Há 15 anos acolhendo, inspirando e transformando vidas com afeto, propósito e experiências que desenvolvem." />
     <meta name="theme-color" content="#0b82f6" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Escola CDA" />
+    <meta property="og:locale" content="pt_BR" />
     <meta property="og:title" content="Escola CDA — Família e escola sonham juntas" />
     <meta property="og:description" content="Há 15 anos formando crianças com afeto, propósito e experiências que transformam vidas e fortalecem famílias." />
+    <meta property="og:image" content="/og-cda.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Escola CDA — Família e escola sonham juntas" />
+    <meta name="twitter:description" content="Educação infantil e ensino fundamental em Santa Maria/RS, há 15 anos." />
+    <meta name="twitter:image" content="/og-cda.jpg" />
+    <!-- Dados estruturados: ajuda o Google a entender a escola (cartão rico em buscas locais) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "Escola CDA",
+      "alternateName": "Centro de Desenvolvimento e Aprendizagem",
+      "description": "Educação infantil e ensino fundamental em Santa Maria/RS. Há 15 anos acolhendo, inspirando e transformando vidas.",
+      "url": "https://www.escolacdasm.com.br",
+      "logo": "https://www.escolacdasm.com.br/favicon.png",
+      "image": "https://www.escolacdasm.com.br/og-cda.jpg",
+      "telephone": "+55-55-3217-7947",
+      "foundingDate": "2011",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "R. José Manhago, 194 - Camobi",
+        "addressLocality": "Santa Maria",
+        "addressRegion": "RS",
+        "addressCountry": "BR"
+      },
+      "sameAs": [
+        "https://www.instagram.com/escolacda.sm/",
+        "https://www.facebook.com/escolacda.sm"
+      ]
+    }
+    </script>
     <!-- Tipografia da marca -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,6 +52,17 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- VLibras — tradutor de Libras oficial do Governo Federal (acessibilidade) -->
+    <div vw class="enabled">
+      <div vw-access-button class="active"></div>
+      <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+      </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      try { new window.VLibras.Widget("https://vlibras.gov.br/app"); } catch (e) {}
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

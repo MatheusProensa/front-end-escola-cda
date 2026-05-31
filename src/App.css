@@ -2408,3 +2408,40 @@ img, video, iframe { max-width: 100%; }
 @media (max-width: 480px) {
   .sistema-logo { height: 64px; max-width: 200px; }
 }
+
+
+/* ═══ Barra de acessibilidade (estilo institucional / faculdade) ═══ */
+.a11y-bar { position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 99990; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.a11y-btn { display: flex; justify-content: flex-end; align-items: center; max-width: 52px; overflow: hidden; height: 52px; background: #1351b4; color: #fff; border: none; cursor: pointer; border-radius: 12px 0 0 12px; box-shadow: -2px 6px 18px rgba(19,52,110,.28); padding: 0; font-family: inherit; transition: max-width .38s cubic-bezier(.22,1,.36,1), background .2s; }
+.a11y-btn .a11y-ic { min-width: 52px; width: 52px; height: 52px; display: grid; place-items: center; font-size: 23px; }
+.a11y-btn .a11y-label { white-space: nowrap; font-size: 14px; font-weight: 700; padding-right: 16px; }
+.a11y-btn:hover, .a11y-btn:focus-visible { max-width: 280px; background: #0e3f8c; outline: none; }
+.a11y-libras { background: #0b82f6; }
+.a11y-libras:hover, .a11y-libras:focus-visible { background: #0a64c0; }
+
+.a11y-menu { position: fixed; right: 64px; top: 50%; transform: translateY(-50%); z-index: 99991; background: #fff; border-radius: 18px; box-shadow: 0 24px 64px rgba(19,52,110,.22); padding: 18px; width: 236px; }
+.a11y-menu h4 { margin: 0 0 4px; color: #0e2d6e; font-size: 15px; font-weight: 800; }
+.a11y-menu .a11y-menu-sub { margin: 0 0 14px; color: #6b7c96; font-size: 12px; }
+.a11y-menu .a11y-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.a11y-menu button.opt { flex: 1; border: 1.5px solid #d4e2f0; background: #fff; color: #0e2d6e; border-radius: 11px; padding: 11px 10px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 7px; transition: .15s; }
+.a11y-menu button.opt:hover { border-color: #1351b4; background: #eef4ff; }
+.a11y-menu button.opt.full { width: 100%; }
+.a11y-menu button.opt.active { border-color: #1351b4; background: #1351b4; color: #fff; }
+
+html.a11y-contrast { filter: contrast(1.32) saturate(1.25); }
+
+@media (max-width: 768px) {
+  .a11y-btn { height: 46px; max-width: 46px; }
+  .a11y-btn .a11y-ic { min-width: 46px; width: 46px; height: 46px; font-size: 20px; }
+  .a11y-menu { right: 56px; width: 210px; }
+}
+@media print { .a11y-bar, .a11y-menu { display: none !important; } }
+
+/* Botão nativo do VLibras fica oculto — acionado pelo botão "Acessível em Libras" */
+div[vw] [vw-access-button] { right: -200px !important; }
+
+
+/* Crédito de desenvolvimento no rodapé */
+.footer-credit { color: rgba(255,255,255,.62); font-size: 12.5px; }
+.footer-credit strong { color: rgba(255,255,255,.9); font-weight: 700; }
+@media (max-width: 768px) { .footer-credit { order: 3; width: 100%; text-align: center; margin-top: 4px; } }

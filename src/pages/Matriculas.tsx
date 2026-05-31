@@ -6,7 +6,7 @@ const MAP = "https://www.google.com/maps?q=R.+Jos%C3%A9+Manhago,+194+-+Camobi,+S
 
 function MatriculaForm() {
   const [sent, setSent] = useState(false);
-  const [f, setF] = useState({ resp: "", crianca: "", seg: "", tel: "", msg: "" });
+  const [f, setF] = useState({ resp: "", crianca: "", idade: "", seg: "", tel: "", msg: "" });
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setF((s) => ({ ...s, [k]: e.target.value }));
 
@@ -29,19 +29,20 @@ function MatriculaForm() {
       <p>Preencha os dados e nossa equipe entra em contato para agendar uma visita acolhedora.</p>
       <div className="form-grid">
         <div className="cda-field"><label htmlFor="resp">Responsável</label><input id="resp" type="text" placeholder="Seu nome" value={f.resp} onChange={set("resp")} required /></div>
-        <div className="cda-field"><label htmlFor="crianca">Nome da criança</label><input id="crianca" type="text" placeholder="Nome do(a) aluno(a)" value={f.crianca} onChange={set("crianca")} /></div>
+        <div className="cda-field"><label htmlFor="tel">WhatsApp</label><input id="tel" type="tel" placeholder="(55) 9 0000-0000" value={f.tel} onChange={set("tel")} required /></div>
       </div>
       <div className="form-grid">
-        <div className="cda-field"><label htmlFor="seg">Segmento</label>
-          <select id="seg" value={f.seg} onChange={set("seg")} required>
-            <option value="" disabled>Selecione…</option>
-            <option>Educação Infantil</option>
-            <option>Ensino Fundamental</option>
-            <option>Contraturno</option>
-            <option>Ainda não sei</option>
-          </select>
-        </div>
-        <div className="cda-field"><label htmlFor="tel">WhatsApp</label><input id="tel" type="tel" placeholder="(55) 9 0000-0000" value={f.tel} onChange={set("tel")} required /></div>
+        <div className="cda-field"><label htmlFor="crianca">Nome da criança</label><input id="crianca" type="text" placeholder="Nome do(a) aluno(a)" value={f.crianca} onChange={set("crianca")} /></div>
+        <div className="cda-field"><label htmlFor="idade">Idade da criança</label><input id="idade" type="text" placeholder="Ex.: 3 anos" value={f.idade} onChange={set("idade")} /></div>
+      </div>
+      <div className="cda-field"><label htmlFor="seg">Segmento</label>
+        <select id="seg" value={f.seg} onChange={set("seg")} required>
+          <option value="" disabled>Selecione…</option>
+          <option>Educação Infantil</option>
+          <option>Ensino Fundamental</option>
+          <option>Contraturno</option>
+          <option>Ainda não sei</option>
+        </select>
       </div>
       <div className="cda-field"><label htmlFor="msg">Mensagem (opcional)</label><textarea id="msg" placeholder="Conte um pouco sobre o que você procura…" value={f.msg} onChange={set("msg")}></textarea></div>
       <button type="submit" className="primary-btn" style={{ width: "100%", marginTop: 4 }}>Quero falar com a escola</button>

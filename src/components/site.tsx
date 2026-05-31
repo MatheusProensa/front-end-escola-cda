@@ -41,6 +41,7 @@ export function ContactProvider({ children }: { children: ReactNode }) {
   return (
     <ContactCtx.Provider value={() => navigate("/matriculas")}>
       {children}
+      <AccessibilityBar />
       <WhatsAppFloat />
     </ContactCtx.Provider>
   );
@@ -180,6 +181,7 @@ export function Footer() {
       <div className="footer-bottom">
         <div className="footer-bottom-inner">
           <p>© 2026 Escola CDA. Todos os direitos reservados.</p>
+          <span className="footer-credit">Desenvolvido por <strong>Júnior Ferreira</strong> e <strong>Matheus Proensa</strong></span>
           <button type="button" className="footer-link-btn" onClick={contact}>Agende uma visita</button>
         </div>
       </div>
@@ -187,13 +189,74 @@ export function Footer() {
   );
 }
 
+/* ───────────── Acessibilidade (dock + VLibras) ───────────── */
+export function AccessibilityBar() {
+  const [menu, setMenu] = useState(false);
+  const [contrast, setContrast] = useState(false);
+  useEffect(() => {
+    const z = parseFloat(localStorage.getItem("cda-zoom") || "1");
+    if (z !== 1) (document.body.style as unknown as { zoom: string }).zoom = String(z);
+    if (localStorage.getItem("cda-contrast") === "1") { document.documentElement.classList.add("a11y-contrast"); setContrast(true); }
+  }, []);
+  useEffect(() => {
+    if (!menu) return;
+    const onDoc = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      if (!t.closest(".a11y-menu") && !t.closest(".a11y-acc-btn")) setMenu(false);
+    };
+    document.addEventListener("click", onDoc);
+    return () => document.removeEventListener("click", onDoc);
+  }, [menu]);
+  const setZoom = (dir: number) => {
+    let z = parseFloat(localStorage.getItem("cda-zoom") || "1");
+    z = dir === 0 ? 1 : Math.min(1.4, Math.max(0.9, +(z + dir * 0.1).toFixed(2)));
+    (document.body.style as unknown as { zoom: string }).zoom = String(z);
+    localStorage.setItem("cda-zoom", String(z));
+  };
+  const toggleContrast = () => {
+    const on = document.documentElement.classList.toggle("a11y-contrast");
+    localStorage.setItem("cda-contrast", on ? "1" : "0");
+    setContrast(on);
+  };
+  const reset = () => { setZoom(0); document.documentElement.classList.remove("a11y-contrast"); localStorage.setItem("cda-contrast", "0"); setContrast(false); };
+  const openLibras = () => {
+    const btn = document.querySelector("[vw-access-button]") as HTMLElement | null;
+    if (btn) { btn.click(); ["mousedown", "mouseup", "click"].forEach((t) => btn.dispatchEvent(new MouseEvent(t, { bubbles: true, cancelable: true, view: window }))); }
+  };
+  return (
+    <>
+      <div className="a11y-bar">
+        <button className="a11y-btn a11y-acc-btn" aria-label="Recursos de acessibilidade" aria-expanded={menu} onClick={(e) => { e.stopPropagation(); setMenu((v) => !v); }}>
+          <span className="a11y-label">Recursos de acessibilidade</span>
+          <span className="a11y-ic"><Icon name="universal-access" size={24} /></span>
+        </button>
+        <button className="a11y-btn a11y-libras" aria-label="Acessível em Libras" onClick={openLibras}>
+          <span className="a11y-label">Acessível em Libras</span>
+          <span className="a11y-ic"><Icon name="hands-asl-interpreting" size={22} /></span>
+        </button>
+      </div>
+      {menu && (
+        <div className="a11y-menu" role="dialog" aria-label="Opções de acessibilidade">
+          <h4><Icon name="universal-access" size={15} /> Acessibilidade</h4>
+          <p className="a11y-menu-sub">Ajuste a leitura do site</p>
+          <div className="a11y-row">
+            <button className="opt" onClick={() => setZoom(1)}><Icon name="magnifying-glass-plus" size={13} /> Aumentar</button>
+            <button className="opt" onClick={() => setZoom(-1)}><Icon name="magnifying-glass-minus" size={13} /> Diminuir</button>
+          </div>
+          <button className={"opt full" + (contrast ? " active" : "")} onClick={toggleContrast}><Icon name="circle-half-stroke" size={13} /> Alto contraste</button>
+          <button className="opt full" onClick={reset}><Icon name="rotate-left" size={13} /> Restaurar padrão</button>
+        </div>
+      )}
+    </>
+  );
+}
+
 /* ───────────── WhatsApp flutuante ───────────── */
 export function WhatsAppFloat() {
-  const contact = useContact();
   return (
-    <button type="button" className="whatsapp-float" onClick={contact}>
+    <a className="whatsapp-float" href={WPP} target="_blank" rel="noopener noreferrer" aria-label="Falar com a escola no WhatsApp">
       <Icon name="whatsapp" brand size={22} /><span>Falar com a escola</span>
-    </button>
+    </a>
   );
 }
 
