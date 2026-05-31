@@ -1,7 +1,3 @@
-<div align="center">
-
-<img src="src/assets/logo-cda-15anos-semborda.png" alt="Escola CDA" width="220" />
-
 # 🌟 Site Institucional — Escola CDA
 
 **Família e escola sonham juntas.**
