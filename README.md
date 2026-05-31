@@ -1,3 +1,5 @@
+<div align="center">
+
 # 🌟 Site Institucional — Escola CDA
 
 **Família e escola sonham juntas.**
