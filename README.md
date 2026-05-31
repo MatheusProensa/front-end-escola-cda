@@ -26,10 +26,13 @@ Site institucional moderno da Escola CDA — educação infantil e ensino fundam
 <div align="center">
 
 ### Página inicial
-<img src="screenshots/home.png" alt="Home da Escola CDA" width="100%" />
+<img width="1900" height="865" alt="image" src="https://github.com/user-attachments/assets/55db7878-50c3-4d66-80f5-43b66a1e8dc4" />
+
+
 
 ### Nosso Espaço
-<img src="screenshots/espacos.png" alt="Página de Espaços da Escola CDA" width="100%" />
+<img width="1903" height="867" alt="image" src="https://github.com/user-attachments/assets/2a8c905e-aca7-43a0-abd7-804a2a35e70e" />
+
 
 </div>
 
@@ -176,7 +179,3 @@ Desenvolvido por **Matheus Proensa** (front-end) e **Júnior Ferreira** (back-en
 Projeto para a **Escola CDA** — R. José Manhago, 194 · Camobi, Santa Maria/RS.
 
 ---
-
-<div align="center">
-<sub>© 2026 Escola CDA · Feito com 💙 em Santa Maria/RS</sub>
-</div>
