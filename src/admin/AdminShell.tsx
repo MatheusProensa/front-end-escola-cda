@@ -14,7 +14,7 @@ const NAV_MAIN: [string, string, string, string][] = [
   ["/admin/sobre", "Sobre", "book-open", "sobre"],
 ];
 const NAV_GERIR: [string, string, string, string, string?][] = [
-  ["/admin/momentos", "Momentos", "camera-retro", "momentos", "6"],
+  ["/admin/momentos", "Momentos", "camera-retro", "momentos", "3"],
   ["/admin/contato", "Contato", "address-book", "contato"],
   ["/admin/configuracoes", "Configurações", "gear", "configuracoes"],
 ];

@@ -43,6 +43,12 @@ export default function Configuracoes() {
           </div>
 
           <div className="adm-card">
+            <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-universal-access"></i></div><h3>Acessibilidade</h3></div>
+            <div className="adm-toggle-row"><div className="tr-tx"><strong>Tradutor de Libras (VLibras)</strong><span>Exibe o botão “Acessível em Libras” em todas as páginas</span></div><Toggle on={true} /></div>
+            <div className="adm-toggle-row"><div className="tr-tx"><strong>Recursos de acessibilidade</strong><span>Aumentar/diminuir fonte e alto contraste</span></div><Toggle on={true} /></div>
+          </div>
+
+          <div className="adm-card">
             <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-sliders"></i></div><h3>Preferências</h3></div>
             <div className="adm-toggle-row"><div className="tr-tx"><strong>Notificações por e-mail</strong><span>Receber avisos de alterações no site</span></div><Toggle on={true} /></div>
             <div className="adm-toggle-row"><div className="tr-tx"><strong>Confirmar antes de publicar</strong><span>Pedir confirmação ao publicar mudanças</span></div><Toggle on={true} /></div>

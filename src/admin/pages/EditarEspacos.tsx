@@ -11,16 +11,16 @@ const GAL: [string, string][] = [
 export default function EditarEspacos() {
   const [toast, toastNode] = useToast();
   return (
-    <AdminShell active="espacos" title="Editar — Espaços" subtitle="Galeria de ambientes e alimentação" logoSrc={logo()}>
+    <AdminShell active="espacos" title="Editar — Espaços" subtitle="Galeria de ambientes e energia solar" logoSrc={logo()}>
       <div className="adm-page-head">
         <div className="ph-ic"><i className="fa-solid fa-image"></i></div>
-        <div><h1>Espaços</h1><p>Gerencie a galeria de ambientes e a seção de alimentação saudável.</p></div>
+        <div><h1>Espaços</h1><p>Gerencie a galeria de ambientes e a seção de energia solar.</p></div>
         <div className="ph-act"><a className="adm-btn adm-btn-ghost adm-btn-sm" href="/espacos" target="_blank"><i className="fa-solid fa-up-right-from-square"></i> Ver no site</a></div>
       </div>
 
       <div className="adm-card">
         <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-images"></i></div><h3>Galeria de ambientes</h3></div>
-        <p className="hint">Clique para trocar a foto ou o nome de cada ambiente.</p>
+        <p className="hint">Fotos exibidas na galeria da página Espaços (sem legendas no site). O nome é só referência interna / texto alternativo de acessibilidade.</p>
         <div className="adm-img-grid">
           {GAL.map(([img, name], i) => (
             <div key={i} style={{ border: "1px solid var(--adm-line)", borderRadius: 14, overflow: "hidden", background: "#fff" }}>
@@ -39,13 +39,17 @@ export default function EditarEspacos() {
       </div>
 
       <div className="adm-card" style={{ marginTop: 18 }}>
-        <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-utensils"></i></div><h3>Alimentação saudável</h3></div>
+        <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-solar-panel"></i></div><h3>Energia solar (sustentabilidade)</h3></div>
         <div className="adm-grid-fields">
-          <div><label className="adm-form-label">Título</label><input className="adm-text" defaultValue="Comida de verdade, feita com carinho." /></div>
-          <div><label className="adm-form-label">Selo</label><input className="adm-text" defaultValue="Comer bem também é cuidar" /></div>
+          <div><label className="adm-form-label">Selo</label><input className="adm-text" defaultValue="Sustentabilidade" /></div>
+          <div><label className="adm-form-label">Título</label><input className="adm-text" defaultValue="Uma escola movida a energia solar" /></div>
         </div>
         <label className="adm-form-label">Texto</label>
-        <textarea className="adm-textarea" defaultValue="Quatro refeições por dia, balanceadas e com acompanhamento nutricional. Sem industrializados — tudo preparado na escola, priorizando alimentos naturais e o que colhemos na nossa própria horta."></textarea>
+        <textarea className="adm-textarea" defaultValue="Investimos em energia limpa porque cuidar da infância também é cuidar do futuro do planeta. Nossos painéis abastecem o dia a dia da escola e ainda viram aprendizado sobre consciência ambiental."></textarea>
+        <label className="adm-form-label">Itens (um por linha)</label>
+        <textarea className="adm-textarea" defaultValue={"Energia limpa e renovável — Painéis solares que reduzem o impacto ambiental.\nConsciência ambiental — As crianças aprendem, na prática, a cuidar do planeta.\nRecurso que volta pra educação — A economia gerada é reinvestida no aprendizado."}></textarea>
+        <label className="adm-form-label">Foto (drone)</label>
+        <input className="adm-text" defaultValue="drone.webp" />
       </div>
 
       <SaveBar onSave={() => toast("Espaços atualizados!")} />

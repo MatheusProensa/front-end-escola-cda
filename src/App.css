@@ -1338,10 +1338,12 @@
   margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 14px 28px;
+  justify-content: space-between;
+  gap: 12px 24px;
   flex-wrap: wrap;
 }
+.footer-bottom-inner > * { flex: 1 1 auto; }
+.footer-bottom p { flex: 0 1 auto; }
 
 .footer-bottom p {
   color: rgba(255,255,255,0.4);
@@ -2442,9 +2444,9 @@ div[vw] [vw-access-button] { right: -200px !important; }
 
 
 /* Crédito de desenvolvimento no rodapé */
-.footer-credit { color: rgba(255,255,255,.62); font-size: 12.5px; }
-.footer-credit strong { color: rgba(255,255,255,.9); font-weight: 700; }
-@media (max-width: 768px) { .footer-credit { order: 3; width: 100%; text-align: center; margin-top: 4px; } }
+.footer-credit { flex: 1 1 auto; text-align: center; color: rgba(255,255,255,.5); font-size: 12.5px; white-space: nowrap; }
+.footer-credit strong { color: rgba(255,255,255,.82); font-weight: 700; }
+@media (max-width: 768px) { .footer-credit { order: 3; width: 100%; white-space: normal; margin-top: 2px; } }
 
 
 /* Botão Libras — estado "abrindo" */

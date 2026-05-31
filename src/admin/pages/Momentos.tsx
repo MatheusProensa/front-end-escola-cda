@@ -25,7 +25,7 @@ export default function Momentos() {
 
       <div className="adm-stats" style={{ gridTemplateColumns: "repeat(3,1fr)", marginBottom: 20 }}>
         <div className="adm-stat"><div className="adm-stat-top"><div className="adm-stat-ic ic-blue"><i className="fa-solid fa-images"></i></div></div><div className="adm-stat-num">3</div><div className="adm-stat-lbl">Álbuns publicados</div></div>
-        <div className="adm-stat"><div className="adm-stat-top"><div className="adm-stat-ic ic-gold"><i className="fa-regular fa-image"></i></div></div><div className="adm-stat-num">0</div><div className="adm-stat-lbl">Fotos no total</div></div>
+        <div className="adm-stat"><div className="adm-stat-top"><div className="adm-stat-ic ic-gold"><i className="fa-regular fa-image"></i></div></div><div className="adm-stat-num">184</div><div className="adm-stat-lbl">Fotos no total</div></div>
         <div className="adm-stat"><div className="adm-stat-top"><div className="adm-stat-ic ic-green"><i className="fa-solid fa-calendar-check"></i></div></div><div className="adm-stat-num">Mar/26</div><div className="adm-stat-lbl">Próximo evento</div></div>
       </div>
 
