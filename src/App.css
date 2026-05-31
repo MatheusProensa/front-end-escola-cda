@@ -2403,7 +2403,7 @@ img, video, iframe { max-width: 100%; }
 
 /* Logo ProRaiz menor no celular */
 @media (max-width: 768px) {
-  .sistema-logo { height: 76px; max-width: 240px; margin-bottom: 14px; }
+  .sistema-logo { height: 76px; max-width: 240px; margin: 0 auto 14px !important; display: block; }
 }
 @media (max-width: 480px) {
   .sistema-logo { height: 64px; max-width: 200px; }
