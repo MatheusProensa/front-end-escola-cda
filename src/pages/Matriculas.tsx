@@ -54,7 +54,7 @@ const INFO: Info[] = [
   { icon: "location-dot", t: "Endereço", v: "R. José Manhago, 194 - Camobi, Santa Maria - RS" },
   { icon: "whatsapp", brand: true, wpp: true, t: "WhatsApp", v: "(55) 3217-7947", href: WPP },
   { icon: "phone", t: "Telefone", v: "(55) 3217-7947", href: "tel:+555532177947" },
-  { icon: "clock|r", t: "Horário", v: "Segunda a Sexta, 7h30 às 18h" },
+  { icon: "clock|r", t: "Horário", v: "Segunda a Sexta, 7h às 18h" },
 ];
 
 export default function Matriculas() {
@@ -96,7 +96,7 @@ export default function Matriculas() {
       </div>
 
       <div className="cta-band reveal">
-        <h2>Venha conhecer a CDA de perto.</h2>
+        <h2>Venha conhecer a CDA de perto</h2>
         <p>Agende uma visita e sinta o acolhimento de uma escola que acolhe, desenvolve e transforma há 15 anos.</p>
         <div className="cta-actions">
           <a className="btn-white" href={WPP} target="_blank" rel="noreferrer"><Icon name="whatsapp" brand size={16} /> Falar no WhatsApp</a>

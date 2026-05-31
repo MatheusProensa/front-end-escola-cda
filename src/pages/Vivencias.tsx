@@ -63,7 +63,7 @@ export default function Vivencias() {
     <Layout>
       <section className="page-hero reveal">
         <span className="eyebrow">Vivências que transformam</span>
-        <h1>Experiências que despertam habilidades <span className="script">para a vida.</span></h1>
+        <h1>Experiências que despertam habilidades <span className="script">para a vida</span></h1>
         <p>Mais do que atividades, são vivências reais que estimulam talentos, desenvolvem competências e tornam o aprendizado vivo, criativo e cheio de significado.</p>
       </section>
 
@@ -81,7 +81,7 @@ export default function Vivencias() {
       ))}
 
       <div className="cta-band reveal">
-        <h2>Toda criança tem um talento esperando para florescer.</h2>
+        <h2>Toda criança tem um talento esperando para florescer</h2>
         <p>Venha ver de perto como as vivências da CDA despertam o melhor de cada aluno.</p>
         <div className="cta-actions">
           <button className="btn-white" onClick={contact}><Icon name="calendar-check" size={16} /> Agendar visita</button>

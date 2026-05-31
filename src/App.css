@@ -1405,7 +1405,7 @@
 .depo-head { text-align: center; max-width: 720px; margin: 0 auto 38px; }
 .depo-head h2 { margin-top: 14px; color: #0e2d6e; font-size: 40px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.08; }
 .depo-head p { margin-top: 14px; color: #5f6f89; font-size: 16px; line-height: 1.7; }
-.depo-track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 4px 22px; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+.depo-track { display: flex; gap: 20px; overflow-x: auto; padding: 6px 4px 22px; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
 .depo-card {
   flex: 0 0 380px; scroll-snap-align: start; display: flex; flex-direction: column;
   background: #fff; border: 1px solid rgba(19,52,110,0.06); border-radius: 26px;
@@ -1518,7 +1518,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
   /* segmentos → carrossel horizontal */
   .segmentos-grid {
-    display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory;
+    display: flex; gap: 14px; overflow-x: auto;
     -webkit-overflow-scrolling: touch; padding: 4px 0 14px; margin: 0 -4px;
     scrollbar-width: thin;
   }
@@ -1798,7 +1798,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .tl-hint { text-align: center; color: #8294ab; font-size: 12.5px; font-weight: 600; margin: -8px 0 14px; }
 .tl-hint i { color: #0b82f6; }
 .tl-track {
-  display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory;
+  display: flex; gap: 20px; overflow-x: auto;
   padding: 6px 4px 22px; scrollbar-width: thin; -webkit-overflow-scrolling: touch;
 }
 .tl-item { flex: 0 0 300px; scroll-snap-align: start; }
@@ -2370,3 +2370,32 @@ img, video, iframe { max-width: 100%; }
 @media (max-width: 1024px) { .diario-band { width: calc(100% - 80px); grid-template-columns: 1fr; gap: 30px; } }
 @media (max-width: 768px) { .diario-band { width: calc(100% - 40px); margin: 70px auto; padding: 32px 24px; border-radius: 26px; } .diario-band-left h2 { font-size: 26px; } }
 @media (max-width: 480px) { .diario-grid { grid-template-columns: 1fr; } }
+
+
+/* ─── Rolo de fotos (galeria horizontal) nos Segmentos ─── */
+.seg-galeria { width: calc(100% - 200px); max-width: 1240px; margin: 4px auto 48px; }
+.seg-galeria-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.seg-galeria-head h3 { color: #0e2d6e; font-size: 23px; font-weight: 800; letter-spacing: -0.5px; }
+.seg-galeria-hint { margin-left: auto; color: #8294ab; font-size: 12.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 7px; }
+.seg-galeria-track { display: flex; gap: 14px; overflow-x: auto; padding: 6px 4px 16px; -webkit-overflow-scrolling: touch; }
+.seg-galeria-item { flex: 0 0 auto; }
+.seg-galeria-item img { height: 340px; width: auto; border-radius: 18px; display: block; box-shadow: 0 12px 30px rgba(19,52,110,0.14); }
+.seg-galeria-track::-webkit-scrollbar { height: 8px; }
+.seg-galeria-track::-webkit-scrollbar-thumb { background: #cdd9e6; border-radius: 999px; }
+.seg-galeria-track::-webkit-scrollbar-thumb:hover { background: #b3c5da; }
+.seg-galeria-track::-webkit-scrollbar-track { background: transparent; }
+@media (max-width: 1024px) { .seg-galeria { width: calc(100% - 80px); } }
+@media (max-width: 768px) { .seg-galeria { width: calc(100% - 40px); } .seg-galeria-item img { height: 250px; border-radius: 14px; } }
+
+
+/* drag-to-scroll + seção de destaque do Berçário */
+.seg-galeria-track { cursor: grab; }
+.seg-galeria-track.dragging { cursor: grabbing; scroll-snap-type: none; }
+.seg-galeria-track.dragging img { pointer-events: none; }
+.seg-galeria-item img { user-select: none; -webkit-user-drag: none; }
+.bercario-band { width: calc(100% - 200px); max-width: 1240px; margin: 8px auto 48px; background: linear-gradient(160deg, #ffffff 0%, #eef6ff 100%); border: 1px solid rgba(11,130,246,0.12); border-radius: 32px; padding: 36px 40px 28px; box-shadow: 0 14px 44px rgba(19,52,110,0.07); }
+.bercario-band-head { display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 18px; }
+.bercario-band-head h2 { color: #0e2d6e; font-size: 30px; font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin-top: 4px; }
+.bercario-band-head p { color: #5f6f89; font-size: 14.5px; line-height: 1.7; max-width: 54ch; flex: 1 1 340px; }
+@media (max-width: 1024px) { .bercario-band { width: calc(100% - 80px); } }
+@media (max-width: 768px) { .bercario-band { width: calc(100% - 40px); padding: 28px 22px; } .bercario-band-head h2 { font-size: 25px; } }

@@ -174,7 +174,7 @@ export function Footer() {
           <div className="footer-contact-item"><Icon name="location-dot" color="#f0b400" size={14} /><span>R. José Manhago, 194 - Camobi, Santa Maria - RS</span></div>
           <div className="footer-contact-item"><Icon name="phone" color="#f0b400" size={14} /><a href="tel:+555532177947">(55) 3217-7947</a></div>
           <div className="footer-contact-item"><Icon name="whatsapp" brand color="#f0b400" size={14} /><a href={WPP} target="_blank" rel="noreferrer">(55) 3217-7947</a></div>
-          <div className="footer-contact-item"><Icon name="clock|r" color="#f0b400" size={14} /><span>Seg a Sex: 7h30 às 18h</span></div>
+          <div className="footer-contact-item"><Icon name="clock|r" color="#f0b400" size={14} /><span>Seg a Sex: 7h às 18h</span></div>
         </div>
       </div>
       <div className="footer-bottom">

@@ -62,7 +62,7 @@ export default function Espacos() {
     <Layout>
       <section className="page-hero reveal">
         <span className="eyebrow">Nosso espaço</span>
-        <h1>Ambientes pensados para acolher, explorar e <span className="script">crescer.</span></h1>
+        <h1>Ambientes pensados para acolher, explorar e <span className="script">crescer</span></h1>
         <p>Cada cantinho da CDA é preparado com cuidado para oferecer segurança, conforto e experiências que fazem parte do desenvolvimento infantil.</p>
       </section>
 
@@ -82,7 +82,7 @@ export default function Espacos() {
       </div>
 
       <div className="cda-panel tight reveal">
-        <div className="sec-head"><span className="eyebrow">Por dentro de cada espaço</span><h2>Feitos para o bem-estar de cada criança.</h2></div>
+        <div className="sec-head"><span className="eyebrow">Por dentro de cada espaço</span><h2>Feitos para o bem-estar de cada criança</h2></div>
         <div className="valores cols-4">
           {FEATS.map((f, i) => (
             <div className={"valor" + (f.gold ? " gold" : "")} key={i}>
@@ -101,7 +101,7 @@ export default function Espacos() {
         </div>
         <div className="fr-body">
           <span className="eyebrow">Sustentabilidade</span>
-          <h3>Uma escola movida a energia solar.</h3>
+          <h3>Uma escola movida a energia solar</h3>
           <p>Investimos em energia limpa porque cuidar da infância também é cuidar do futuro do planeta. Nossos painéis abastecem o dia a dia da escola e ainda viram aprendizado sobre consciência ambiental para as crianças.</p>
           <div className="cda-list">
             <div className="li"><div className="li-ic gold"><Icon name="solar-panel" size={12} /></div><div><strong>Energia limpa e renovável</strong><span>Painéis solares que reduzem o impacto ambiental.</span></div></div>
@@ -112,7 +112,7 @@ export default function Espacos() {
       </div>
 
       <div className="cta-band reveal">
-        <h2>Cada espaço fica ainda melhor com seu filho nele.</h2>
+        <h2>Cada espaço fica ainda melhor com seu filho nele</h2>
         <p>Agende uma visita e conheça de perto cada ambiente feito com cuidado para a infância.</p>
         <div className="cta-actions">
           <button className="btn-white" onClick={contact}><Icon name="calendar-check" size={16} /> Agendar visita</button>

@@ -30,7 +30,7 @@ export default function Contato() {
             <label className="adm-form-label">Endereço</label>
             <input className="adm-text" defaultValue="R. José Manhago, 194 - Camobi, Santa Maria - RS" />
             <label className="adm-form-label">Horário de atendimento</label>
-            <input className="adm-text" defaultValue="Segunda a Sexta, 7h30 às 18h" />
+            <input className="adm-text" defaultValue="Segunda a Sexta, 7h às 18h" />
           </div>
 
           <div className="adm-card">

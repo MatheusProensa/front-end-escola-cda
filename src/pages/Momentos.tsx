@@ -96,7 +96,7 @@ export default function Momentos() {
     <Layout>
       <section className="page-hero reveal">
         <span className="eyebrow">Momentos</span>
-        <h1>Cada conquista vira uma <span className="script">lembrança.</span></h1>
+        <h1>Cada conquista vira uma <span className="script">lembrança</span></h1>
         <p>Festas, encontros e celebrações que marcam a vida das nossas crianças e famílias — reviva cada momento com a gente.</p>
       </section>
 

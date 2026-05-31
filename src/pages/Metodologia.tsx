@@ -35,7 +35,7 @@ export default function Metodologia() {
     <Layout>
       <section className="page-hero reveal">
         <span className="eyebrow">Nossa metodologia</span>
-        <h1>Formação integral <span className="script">para a vida inteira.</span></h1>
+        <h1>Formação integral <span className="script">para a vida inteira</span></h1>
         <p>A CDA adota a metodologia <strong>ProRaiz</strong>, que une o aprendizado acadêmico ao desenvolvimento socioemocional para formar crianças mais autônomas, confiantes e conscientes do seu papel no mundo.</p>
       </section>
 
@@ -47,13 +47,13 @@ export default function Metodologia() {
         <div className="fr-body">
           <img className="sistema-logo" style={{ margin: "0 0 16px" }} src={asset("proraiz-logo.webp")} alt="Sistema ProRaiz" />
           <span className="eyebrow">Mais que conteúdo</span>
-          <h3>Um ensino que forma o intelecto, a cidadania e o emocional.</h3>
+          <h3>Um ensino que forma o intelecto, a cidadania e o emocional</h3>
           <p>Trabalhamos habilidades, valores e competências que acompanham nossos alunos em cada escolha, relação e desafio da vida. É a integração entre emoção, razão e ação — uma jornada educativa com propósito e sentido.</p>
         </div>
       </div>
 
       <div className="cda-panel tight reveal">
-        <div className="sec-head"><span className="eyebrow">Dimensões do desenvolvimento</span><h2>O que cultivamos em cada criança.</h2></div>
+        <div className="sec-head"><span className="eyebrow">Dimensões do desenvolvimento</span><h2>O que cultivamos em cada criança</h2></div>
         <div className="valores">
           {PILARES.map((v, i) => (
             <div className={"valor" + (v.gold ? " gold" : "")} key={i}>
@@ -72,7 +72,7 @@ export default function Metodologia() {
         </div>
         <div className="fr-body">
           <span className="eyebrow">Educação Infantil</span>
-          <h3>Descobrir, sentir e se expressar.</h3>
+          <h3>Descobrir, sentir e se expressar</h3>
           <p>Na Educação Infantil, a proposta do ProRaiz é <strong>baseada em vivências</strong>, como recomenda a BNCC: a criança aprende por meio de interações e brincadeiras, vivendo experiências com significado e propósito.</p>
           <div className="cda-list">
             {INFANTIL.map(([t, d], i) => (
@@ -89,7 +89,7 @@ export default function Metodologia() {
         </div>
         <div className="fr-body">
           <span className="eyebrow">Ensino Fundamental</span>
-          <h3>Pensar, criar e transformar.</h3>
+          <h3>Pensar, criar e transformar</h3>
           <p>No Ensino Fundamental, o conhecimento se constrói <strong>por meio de trocas</strong> — com os colegas, com o mundo e com os objetos de aprendizagem. Partindo do que o aluno já sabe, o aprendizado se torna relevante e aplicável à vida.</p>
           <div className="cda-list">
             {FUNDAMENTAL.map(([t, d], i) => (
@@ -100,7 +100,7 @@ export default function Metodologia() {
       </div>
 
       <div className="cda-panel reveal">
-        <div className="sec-head"><span className="eyebrow">Tecnologia no Ensino Fundamental</span><h2>Aprender também é <span style={{ color: "#1b84ff" }}>conectar-se</span>.</h2><p>No Ensino Fundamental, unimos o ensino de qualidade à tecnologia: os alunos usam <strong>notebooks</strong> em atividades pedagógicas que tornam o aprendizado mais ativo, interativo e conectado ao mundo de hoje — sempre com mediação dos professores.</p></div>
+        <div className="sec-head"><span className="eyebrow">Tecnologia no Ensino Fundamental</span><h2>Aprender também é <span style={{ color: "#1b84ff" }}>conectar-se</span></h2><p>No Ensino Fundamental, unimos o ensino de qualidade à tecnologia: os alunos usam <strong>notebooks</strong> em atividades pedagógicas que tornam o aprendizado mais ativo, interativo e conectado ao mundo de hoje — sempre com mediação dos professores.</p></div>
         <div className="tec-grid">
           <div className="tec-photo"><img src={asset("tec-1.webp")} alt="Alunos usando notebook em sala" loading="lazy" decoding="async" /></div>
           <div className="tec-photo"><img src={asset("tec-4.webp")} alt="Turma do Fundamental com notebooks" loading="lazy" decoding="async" /></div>
@@ -116,7 +116,7 @@ export default function Metodologia() {
       </div>
 
       <div className="cda-panel reveal">
-        <div className="sec-head"><span className="eyebrow">Material didático</span><h2>Materiais de excelência, alinhados à BNCC.</h2><p>A metodologia ProRaiz conta com materiais exclusivos e atualizados, desenvolvidos por professores atuantes para estimular o aprendizado significativo e o protagonismo do aluno.</p></div>
+        <div className="sec-head"><span className="eyebrow">Material didático</span><h2>Materiais de excelência, alinhados à BNCC</h2><p>A metodologia ProRaiz conta com materiais exclusivos e atualizados, desenvolvidos por professores atuantes para estimular o aprendizado significativo e o protagonismo do aluno.</p></div>
         <div className="sistema-chips">
           <span className="seg-chip"><Icon name="comment" size={11} /> Linguagem acessível e envolvente</span>
           <span className="seg-chip"><Icon name="globe" size={11} /> Conteúdos conectados à realidade</span>
@@ -127,7 +127,7 @@ export default function Metodologia() {
       </div>
 
       <div className="cda-panel tight tinted reveal">
-        <div className="sec-head"><span className="eyebrow">Pilares que sustentam a proposta</span><h2>A base de tudo que fazemos.</h2></div>
+        <div className="sec-head"><span className="eyebrow">Pilares que sustentam a proposta</span><h2>A base de tudo que fazemos</h2></div>
         <div className="valores cols-5">
           {PILARES5.map((v, i) => (
             <div className={"valor" + (v.gold ? " gold" : "")} key={i}>
@@ -140,7 +140,7 @@ export default function Metodologia() {
       </div>
 
       <div className="cta-band reveal">
-        <h2>Mais que uma metodologia, um compromisso com a vida.</h2>
+        <h2>Mais que uma metodologia, um compromisso com a vida</h2>
         <p>Na CDA, o ProRaiz fortalece nossa missão de formar alunos preparados para aprender, conviver, escolher e transformar o mundo com consciência e empatia.</p>
         <div className="cta-actions">
           <button className="btn-white" onClick={contact}><Icon name="calendar-check" size={16} /> Conheça nossa escola</button>

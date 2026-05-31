@@ -12,7 +12,7 @@ function Hero() {
       <div className="hero-content">
         <div className="hero-left">
           <span className="mini-title">HÁ 15 ANOS</span>
-          <h1>Família e escola<span className="script-line"> sonham juntas.</span></h1>
+          <h1>Família e escola<span className="script-line"> sonham juntas</span></h1>
           <p>
             Acreditamos que a educação vai muito além do ensino.<br />
             É sobre <strong>acolher</strong>, <strong>inspirar</strong> e <strong>transformar vidas</strong><br />
@@ -62,7 +62,7 @@ function Proposito() {
     <section className="proposito reveal" id="proposito">
       <div className="proposito-left">
         <span className="proposito-mini">EDUCAÇÃO COM PROPÓSITO</span>
-        <h2>Um jeito de aprender<br />que respeita a infância.</h2>
+        <h2>Um jeito de aprender<br />que respeita a infância</h2>
         <p>Aprender acontece com afeto, escuta e vivências significativas. Valorizamos a infância como uma fase de descobertas, autonomia e construção de vínculos.</p>
         <button className="proposito-button" onClick={() => navigate("/sobre")}>Conheça nossa proposta</button>
       </div>
@@ -87,7 +87,7 @@ function Segmentos() {
       <div className="segmentos-header">
         <div>
           <span className="segmentos-mini">NOSSOS SEGMENTOS</span>
-          <h2>Caminhos de aprendizado<br />para cada fase da infância.</h2>
+          <h2>Caminhos de aprendizado<br />para cada fase da infância</h2>
         </div>
         <p>Da descoberta aos novos desafios, nossos segmentos acompanham cada fase da infância com acolhimento, propósito e experiências que despertam o aprender.</p>
       </div>
@@ -121,7 +121,7 @@ function Vivencias() {
   return (
     <section className="vivencias reveal" id="vivencias">
       <span className="vivencias-mini">VIVÊNCIAS QUE TRANSFORMAM</span>
-      <h2>Experiências que despertam<br />habilidades <span className="script-accent">para a vida.</span></h2>
+      <h2>Experiências que despertam<br />habilidades <span className="script-accent">para a vida</span></h2>
       <p className="vivencias-sub">Mais do que atividades, vivências que <strong>estimulam talentos</strong>, <strong>desenvolvem competências</strong> e tornam o <strong>aprendizado mais significativo.</strong></p>
       <div className="vivencias-grid">
         {vivs.map((v, i) => (
@@ -149,7 +149,7 @@ function Espaco() {
     <section className="espaco reveal" id="espaco">
       <div className="espaco-left">
         <span className="espaco-mini">NOSSO ESPAÇO</span>
-        <h2>Ambientes pensados<br />para <span className="azul-accent">acolher, explorar</span><br />e crescer.</h2>
+        <h2>Ambientes pensados<br />para <span className="azul-accent">acolher, explorar</span><br />e crescer</h2>
         <p>Cada espaço da CDA é preparado para proporcionar segurança, conforto e experiências que fazem parte do desenvolvimento infantil.</p>
         <button className="espaco-ver-mais-btn" onClick={() => navigate("/espacos")}>Conheça todos os nossos espaços →</button>
       </div>
@@ -183,7 +183,7 @@ function Depoimentos() {
     <section className="depoimentos reveal" id="depoimentos">
       <div className="depo-head">
         <span className="mini-title">O QUE AS FAMÍLIAS DIZEM</span>
-        <h2>Histórias de quem confia na CDA.</h2>
+        <h2>Histórias de quem confia na CDA</h2>
         <p>Quem vive a escola todos os dias é quem melhor conta o que somos.</p>
       </div>
       <div className="depo-track">
@@ -215,7 +215,7 @@ function Conexao() {
       <div className="conexao-foto"><img src={asset("conexao.webp")} alt="Professora e alunos CDA" decoding="async" /></div>
       <div className="conexao-content">
         <span className="conexao-mini">CONEXÃO QUE TRANSFORMA</span>
-        <h2>Educação construída<br />com <span className="conexao-destaque-azul">carinho, escuta</span><br />e <span className="conexao-destaque-azul">presença</span> diária.</h2>
+        <h2>Educação construída<br />com <span className="conexao-destaque-azul">carinho, escuta</span><br />e <span className="conexao-destaque-azul">presença</span> diária</h2>
         <p>Acreditamos que a parceria entre escola e família é essencial para que cada criança se desenvolva com segurança, autonomia e confiança.</p>
         <div className="conexao-features">
           {feats.map((f, i) => (
@@ -244,7 +244,7 @@ function FachadaBand() {
       <img src={asset("fachada.webp")} alt="Fachada da Escola CDA" decoding="async" />
       <div className="fachada-band-overlay">
         <span className="fb-eyebrow">Venha nos conhecer</span>
-        <h2>A sua próxima escolha começa com uma visita.</h2>
+        <h2>A sua próxima escolha começa com uma visita</h2>
         <p>Conheça de perto a estrutura, o acolhimento e o cuidado que fazem da CDA um segundo lar há 15 anos.</p>
       </div>
     </section>
@@ -278,7 +278,7 @@ function DiarioBand() {
     <section className="diario-band reveal">
       <div className="diario-band-left">
         <img className="diario-logo" src={asset("diarioescola-logo.webp")} alt="Diário Escola" />
-        <h2>Você acompanha tudo, <span>todos os dias.</span></h2>
+        <h2>Você acompanha tudo, <span>todos os dias</span></h2>
         <p>Recados, fotos e a rotina do seu filho direto no celular — em tempo real, pelo app Diário Escola.</p>
       </div>
       <div className="diario-grid">

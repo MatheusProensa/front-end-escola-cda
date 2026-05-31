@@ -35,7 +35,7 @@ export default function Sobre() {
     <Layout>
       <section className="page-hero reveal">
         <span className="eyebrow">Sobre a escola</span>
-        <h1>Há 15 anos sonhando junto com as <span className="script">famílias.</span></h1>
+        <h1>Há 15 anos sonhando junto com as <span className="script">famílias</span></h1>
         <p>Mais que uma escola, somos uma comunidade que acredita na educação como um ato de afeto, propósito e parceria — para formar crianças felizes e preparadas para a vida.</p>
       </section>
 
@@ -46,14 +46,14 @@ export default function Sobre() {
         </div>
         <div className="fr-body">
           <span className="eyebrow">Quem somos</span>
-          <h3>Uma história construída com afeto.</h3>
+          <h3>Uma história construída com afeto</h3>
           <p>Tudo começou como "Carinha de Anjo" — um lugar pensado para acolher cada criança com afeto, segurança e propósito, ao lado das famílias. Em 15 anos nos tornamos a Escola CDA: crescemos em espaços, vivências e estrutura, mas mantivemos intacto o que nos move — o cuidado humano com a infância.</p>
           <p>Acreditamos que aprender acontece com escuta, vínculo e experiências que marcam. É assim, todos os dias, que transformamos vidas.</p>
         </div>
       </div>
 
       <div className="cda-panel reveal">
-        <div className="sec-head"><span className="eyebrow">15 anos de caminhada</span><h2>Nossa linha do tempo.</h2><p>De "Carinha de Anjo" à Escola CDA — cada fase carregou o mesmo cuidado com a infância.</p></div>
+        <div className="sec-head"><span className="eyebrow">15 anos de caminhada</span><h2>Nossa linha do tempo</h2><p>De "Carinha de Anjo" à Escola CDA — cada fase carregou o mesmo cuidado com a infância.</p></div>
         <div className="tl-hint"><i className="fa-solid fa-arrow-right-long"></i> Arraste para percorrer os 15 anos</div>
         <div className="tl-track">
           {TL.map(([cap, img], i) => (
@@ -70,7 +70,7 @@ export default function Sobre() {
       </div>
 
       <div className="cda-panel reveal">
-        <div className="sec-head"><span className="eyebrow">No que acreditamos</span><h2>Valores que guiam cada dia.</h2></div>
+        <div className="sec-head"><span className="eyebrow">No que acreditamos</span><h2>Valores que guiam cada dia</h2></div>
         <div className="valores">
           {VALORES.map((v, i) => (
             <div className={"valor" + (v.gold ? " gold" : "")} key={i}>
@@ -89,7 +89,7 @@ export default function Sobre() {
         </div>
         <div className="fr-body">
           <span className="eyebrow">Comer bem também é cuidar</span>
-          <h3>Comida de verdade, feita com carinho.</h3>
+          <h3>Comida de verdade, feita com carinho</h3>
           <p>Comida de verdade, feita na escola e com acompanhamento nutricional. Sem industrializados — priorizamos alimentos naturais e o que colhemos na nossa própria horta.</p>
           <div className="cda-list">
             <div className="li"><div className="li-ic"><Icon name="utensils" size={12} /></div><div><strong>Refeições ao longo do dia</strong><span>Fruta e almoço pela manhã; fruta e lanche à tarde. No Ensino Fundamental, o lanche.</span></div></div>
@@ -100,7 +100,7 @@ export default function Sobre() {
       </div>
 
       <div className="cta-band reveal">
-        <h2>Venha fazer parte da nossa história.</h2>
+        <h2>Venha fazer parte da nossa história</h2>
         <p>Agende uma visita e descubra por que tantas famílias confiam na CDA há 15 anos.</p>
         <div className="cta-actions">
           <Link className="btn-white" to="/matriculas"><Icon name="calendar-check" size={16} /> Quero conhecer</Link>
