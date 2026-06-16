@@ -1,20 +1,16 @@
-# Logs
-logs
-*.log
-npm-debug.log*
+# ─── Sistema operacional ─────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
+# ─── Editores / IDEs ──────────────────────────────────────────────────────────
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
+.nova/
 *.suo
-*.ntvs*
-*.njsproj
-*.sln
 *.sw?
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
