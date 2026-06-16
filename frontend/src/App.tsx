@@ -23,6 +23,7 @@ import EditarVivencias from "./admin/pages/EditarVivencias";
 import EditarEspacos from "./admin/pages/EditarEspacos";
 import EditarSobre from "./admin/pages/EditarSobre";
 import AdminMomentos from "./admin/pages/Momentos";
+import AdminMatriculas from "./admin/pages/AdminMatriculas";
 import Contato from "./admin/pages/Contato";
 import Configuracoes from "./admin/pages/Configuracoes";
 
@@ -67,6 +68,7 @@ function AdminArea() {
         <Route path="espacos" element={guard(<EditarEspacos />)} />
         <Route path="sobre" element={guard(<EditarSobre />)} />
         <Route path="momentos" element={guard(<AdminMomentos />)} />
+        <Route path="matriculas" element={guard(<AdminMatriculas />)} />
         <Route path="contato" element={guard(<Contato />)} />
         <Route path="configuracoes" element={guard(<Configuracoes />)} />
         <Route index element={<Navigate to="/admin/login" replace />} />

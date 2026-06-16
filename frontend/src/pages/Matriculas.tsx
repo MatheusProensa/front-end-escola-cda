@@ -1,14 +1,43 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon, Layout, WPP, usePageMeta } from "../components/site";
+import { api, API_CONFIGURED } from "../lib/api";
 
 const MAP = "https://www.google.com/maps?q=R.+Jos%C3%A9+Manhago,+194+-+Camobi,+Santa+Maria+-+RS&output=embed";
 
 function MatriculaForm() {
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState("");
   const [f, setF] = useState({ resp: "", crianca: "", idade: "", seg: "", tel: "", msg: "" });
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setF((s) => ({ ...s, [k]: e.target.value }));
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErro("");
+    setLoading(true);
+    try {
+      if (API_CONFIGURED) {
+        await api("/api/matriculas", {
+          method: "POST",
+          body: JSON.stringify({
+            responsavel: f.resp,
+            whatsapp: f.tel,
+            nome_crianca: f.crianca,
+            idade_crianca: f.idade,
+            segmento: f.seg,
+            mensagem: f.msg,
+          }),
+        });
+      }
+      setSent(true);
+    } catch {
+      setErro("Não foi possível enviar. Tente novamente ou fale pelo WhatsApp.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (sent) {
     return (
@@ -23,10 +52,11 @@ function MatriculaForm() {
     );
   }
   return (
-    <form className="contato-form" onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
+    <form className="contato-form" onSubmit={submit}>
       <span className="eyebrow">Formulário de interesse</span>
       <h3 style={{ marginTop: 8 }}>Vamos conversar?</h3>
       <p>Preencha os dados e nossa equipe entra em contato para agendar uma visita acolhedora.</p>
+      {erro && <div className="cda-field-erro"><Icon name="circle-exclamation" size={14} /> {erro}</div>}
       <div className="form-grid">
         <div className="cda-field"><label htmlFor="resp">Responsável</label><input id="resp" type="text" placeholder="Seu nome" value={f.resp} onChange={set("resp")} required /></div>
         <div className="cda-field"><label htmlFor="tel">WhatsApp</label><input id="tel" type="tel" placeholder="(55) 9 0000-0000" value={f.tel} onChange={set("tel")} required /></div>
@@ -45,7 +75,9 @@ function MatriculaForm() {
         </select>
       </div>
       <div className="cda-field"><label htmlFor="msg">Mensagem (opcional)</label><textarea id="msg" placeholder="Conte um pouco sobre o que você procura…" value={f.msg} onChange={set("msg")}></textarea></div>
-      <button type="submit" className="primary-btn" style={{ width: "100%", marginTop: 4 }}>Quero falar com a escola</button>
+      <button type="submit" className="primary-btn" style={{ width: "100%", marginTop: 4 }} disabled={loading}>
+        {loading ? <><Icon name="spinner" size={15} /> Enviando…</> : "Quero falar com a escola"}
+      </button>
     </form>
   );
 }

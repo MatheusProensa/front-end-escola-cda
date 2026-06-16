@@ -1,18 +1,72 @@
+import { useEffect, useState } from "react";
 import AdminShell from "../AdminShell";
 import { SaveBar, useToast, ImgSlot } from "../ui";
 import { asset } from "../../lib/assets";
+import { api, API_CONFIGURED } from "../../lib/api";
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 
-const PILARES: [string, string][] = [
-  ["Acolhimento que abraça", "Ambiente seguro, afetivo e cheio de empatia."],
-  ["Ensino que desenvolve", "Aprendizagem significativa para a vida toda."],
-  ["Valores que inspiram", "Incentivamos autonomia, respeito e responsabilidade."],
-  ["Parceria que transforma", "Família e escola juntas no mesmo propósito."],
+type Hero = { selo: string; titulo: string; destaque: string; texto: string };
+type Pilar = { titulo: string; descricao: string };
+type Diario = { titulo: string; texto: string; recursos: string };
+
+const DEFAULT_HERO: Hero = {
+  selo: "HÁ 15 ANOS",
+  titulo: "Família e escola",
+  destaque: "sonham juntas.",
+  texto: "Acreditamos que a educação vai muito além do ensino. É sobre acolher, inspirar e transformar vidas para construir um futuro melhor.",
+};
+const DEFAULT_PILARES: Pilar[] = [
+  { titulo: "Acolhimento que abraça", descricao: "Ambiente seguro, afetivo e cheio de empatia." },
+  { titulo: "Ensino que desenvolve", descricao: "Aprendizagem significativa para a vida toda." },
+  { titulo: "Valores que inspiram", descricao: "Incentivamos autonomia, respeito e responsabilidade." },
+  { titulo: "Parceria que transforma", descricao: "Família e escola juntas no mesmo propósito." },
 ];
+const DEFAULT_DIARIO: Diario = {
+  titulo: "Você acompanha tudo, todos os dias",
+  texto: "Recados, fotos e a rotina do seu filho direto no celular — em tempo real, pelo app Diário Escola.",
+  recursos: "Agenda diária\nRecados\nMural & álbuns\nMedicamentos\nCalendário & presença\nEm tempo real",
+};
 
 export default function EditarHome() {
   const [toast, toastNode] = useToast();
+  const [saving, setSaving] = useState(false);
+  const [hero, setHero] = useState<Hero>(DEFAULT_HERO);
+  const [pilares, setPilares] = useState<Pilar[]>(DEFAULT_PILARES);
+  const [diario, setDiario] = useState<Diario>(DEFAULT_DIARIO);
+
+  useEffect(() => {
+    if (!API_CONFIGURED) return;
+    api<{ hero?: Hero; pilares?: Pilar[]; diario?: Diario }>("/api/conteudo/home")
+      .then((data) => {
+        if (data.hero) setHero(data.hero);
+        if (data.pilares) setPilares(data.pilares);
+        if (data.diario) setDiario(data.diario);
+      })
+      .catch(() => {});
+  }, []);
+
+  const setPilar = (i: number, k: keyof Pilar, v: string) =>
+    setPilares((prev) => prev.map((p, idx) => idx === i ? { ...p, [k]: v } : p));
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      if (API_CONFIGURED) {
+        await Promise.all([
+          api("/api/admin/conteudo/home/hero", { method: "PUT", body: JSON.stringify(hero) }),
+          api("/api/admin/conteudo/home/pilares", { method: "PUT", body: JSON.stringify(pilares) }),
+          api("/api/admin/conteudo/home/diario", { method: "PUT", body: JSON.stringify(diario) }),
+        ]);
+      }
+      toast("Home publicada com sucesso!");
+    } catch {
+      toast("Erro ao salvar. Tente novamente.", true);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <AdminShell active="home" title="Editar — Home" subtitle="Página inicial do site" logoSrc={logo()}>
       <div className="adm-page-head">
@@ -26,13 +80,13 @@ export default function EditarHome() {
           <div className="adm-card">
             <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-star"></i></div><h3>Destaque (Hero)</h3></div>
             <label className="adm-form-label">Selo (acima do título)</label>
-            <input className="adm-text" defaultValue="HÁ 15 ANOS" />
+            <input className="adm-text" value={hero.selo} onChange={(e) => setHero((h) => ({ ...h, selo: e.target.value }))} />
             <div className="adm-grid-fields">
-              <div><label className="adm-form-label">Título</label><input className="adm-text" defaultValue="Família e escola" /></div>
-              <div><label className="adm-form-label">Destaque manuscrito</label><input className="adm-text" defaultValue="sonham juntas." /></div>
+              <div><label className="adm-form-label">Título</label><input className="adm-text" value={hero.titulo} onChange={(e) => setHero((h) => ({ ...h, titulo: e.target.value }))} /></div>
+              <div><label className="adm-form-label">Destaque manuscrito</label><input className="adm-text" value={hero.destaque} onChange={(e) => setHero((h) => ({ ...h, destaque: e.target.value }))} /></div>
             </div>
             <label className="adm-form-label">Texto de apoio</label>
-            <textarea className="adm-textarea" defaultValue={"Acreditamos que a educação vai muito além do ensino. É sobre acolher, inspirar e transformar vidas para construir um futuro melhor."}></textarea>
+            <textarea className="adm-textarea" value={hero.texto} onChange={(e) => setHero((h) => ({ ...h, texto: e.target.value }))}></textarea>
             <label className="adm-form-label">Imagem de fundo do destaque</label>
             <ImgSlot src={asset("bg-home.webp")} label="Hero" ratio="16/7" />
           </div>
@@ -40,29 +94,29 @@ export default function EditarHome() {
           <div className="adm-card">
             <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-grip"></i></div><h3>Pilares</h3></div>
             <p className="hint">Os quatro pilares exibidos logo abaixo do destaque.</p>
-            {PILARES.map((p, i) => (
+            {pilares.map((p, i) => (
               <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 12, marginBottom: 12 }}>
-                <input className="adm-text" defaultValue={p[0]} />
-                <input className="adm-text" defaultValue={p[1]} />
+                <input className="adm-text" value={p.titulo} onChange={(e) => setPilar(i, "titulo", e.target.value)} />
+                <input className="adm-text" value={p.descricao} onChange={(e) => setPilar(i, "descricao", e.target.value)} />
               </div>
             ))}
           </div>
 
           <div className="adm-card">
             <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-mobile-screen-button"></i></div><h3>Diário Escola (faixa)</h3></div>
-            <p className="hint">Faixa compacta do app, exibida antes da seção “Conexão que transforma”.</p>
+            <p className="hint">Faixa compacta do app, exibida antes da seção "Conexão que transforma".</p>
             <label className="adm-form-label">Título</label>
-            <input className="adm-text" defaultValue="Você acompanha tudo, todos os dias" />
+            <input className="adm-text" value={diario.titulo} onChange={(e) => setDiario((d) => ({ ...d, titulo: e.target.value }))} />
             <label className="adm-form-label">Texto</label>
-            <textarea className="adm-textarea" defaultValue="Recados, fotos e a rotina do seu filho direto no celular — em tempo real, pelo app Diário Escola."></textarea>
+            <textarea className="adm-textarea" value={diario.texto} onChange={(e) => setDiario((d) => ({ ...d, texto: e.target.value }))}></textarea>
             <label className="adm-form-label">Recursos (um por linha)</label>
-            <textarea className="adm-textarea" defaultValue={"Agenda diária\nRecados\nMural & álbuns\nMedicamentos\nCalendário & presença\nEm tempo real"}></textarea>
+            <textarea className="adm-textarea" value={diario.recursos} onChange={(e) => setDiario((d) => ({ ...d, recursos: e.target.value }))}></textarea>
           </div>
 
           <div className="adm-card">
             <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-comment-dots"></i></div><h3>Depoimentos</h3></div>
-            <p className="hint">8 depoimentos de famílias publicados no carrossel da Home.</p>
-            <button className="adm-btn adm-btn-ghost adm-btn-sm"><i className="fa-solid fa-pen"></i> Gerenciar depoimentos (8)</button>
+            <p className="hint">Depoimentos de famílias publicados no carrossel da Home.</p>
+            <button className="adm-btn adm-btn-ghost adm-btn-sm"><i className="fa-solid fa-pen"></i> Gerenciar depoimentos</button>
           </div>
         </div>
 
@@ -78,13 +132,18 @@ export default function EditarHome() {
           <div className="adm-card">
             <h3 style={{ fontSize: 15 }}>Status</h3>
             <div className="adm-status-row"><span>Situação</span><b style={{ color: "#1f9d57" }}>Publicado</b></div>
-            <div className="adm-status-row"><span>Última edição</span><b>Há 2 dias</b></div>
-            <div className="adm-status-row"><span>Por</span><b>Equipe CDA</b></div>
           </div>
+          {!API_CONFIGURED && (
+            <div className="adm-card" style={{ background: "#fffbeb", border: "1px solid #fde68a" }}>
+              <p style={{ fontSize: 12.5, color: "#92400e", margin: 0, lineHeight: 1.6 }}>
+                <i className="fa-solid fa-triangle-exclamation"></i> Modo demo — alterações não são salvas no banco.
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
-      <SaveBar onSave={() => toast("Home publicada com sucesso!")} />
+      <SaveBar onSave={save} saving={saving} />
       {toastNode}
     </AdminShell>
   );

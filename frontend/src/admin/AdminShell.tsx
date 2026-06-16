@@ -1,6 +1,7 @@
-import { useState, type ReactNode } from "react";
+import { useState, useEffect, useRef, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./auth";
+import { api, API_CONFIGURED } from "../lib/api";
 import "./admin.css";
 
 /* Navegação do painel */
@@ -13,8 +14,9 @@ const NAV_MAIN: [string, string, string, string][] = [
   ["/admin/espacos", "Espaços", "image", "espacos"],
   ["/admin/sobre", "Sobre", "book-open", "sobre"],
 ];
-const NAV_GERIR: [string, string, string, string, string?][] = [
-  ["/admin/momentos", "Momentos", "camera-retro", "momentos", "3"],
+const NAV_GERIR: [string, string, string, string][] = [
+  ["/admin/momentos", "Momentos", "camera-retro", "momentos"],
+  ["/admin/matriculas", "Matrículas", "envelope-open-text", "matriculas"],
   ["/admin/contato", "Contato", "address-book", "contato"],
   ["/admin/configuracoes", "Configurações", "gear", "configuracoes"],
 ];
@@ -43,10 +45,9 @@ function Sidebar({ active, open, onClose, logoSrc }: { active: string; open: boo
 
         <div className="adm-side-label">Gerir</div>
         <nav className="adm-nav">
-          {NAV_GERIR.map(([to, label, icon, key, count]) => (
+          {NAV_GERIR.map(([to, label, icon, key]) => (
             <Link key={key} to={to} className={active === key ? "active" : ""} onClick={onClose}>
               <i className={"fa-solid fa-" + icon}></i>{label}
-              {count ? <span className="count">{count}</span> : null}
             </Link>
           ))}
         </nav>
@@ -66,6 +67,22 @@ function Sidebar({ active, open, onClose, logoSrc }: { active: string; open: boo
 }
 
 function Topbar({ title, subtitle, onBurger }: { title: string; subtitle: string; onBurger: () => void }) {
+  const { user } = useAuth();
+  const [novasMatriculas, setNovasMatriculas] = useState(0);
+  const fetched = useRef(false);
+
+  useEffect(() => {
+    if (fetched.current || !API_CONFIGURED) return;
+    fetched.current = true;
+    api<{ status: string }[]>("/api/admin/matriculas")
+      .then((data) => setNovasMatriculas(data.filter((m) => m.status === "novo").length))
+      .catch(() => {});
+  }, []);
+
+  const initials = user?.nome
+    ? user.nome.split(" ").map((n: string) => n[0]).slice(0, 2).join("").toUpperCase()
+    : "CDA";
+
   return (
     <header className="adm-top">
       <button className="adm-burger" onClick={onBurger} aria-label="Menu"><i className="fa-solid fa-bars"></i></button>
@@ -79,12 +96,15 @@ function Topbar({ title, subtitle, onBurger }: { title: string; subtitle: string
           <input placeholder="Buscar conteúdo…" />
         </div>
         <button className="adm-icon-btn" aria-label="Ajuda"><i className="fa-regular fa-circle-question"></i></button>
-        <button className="adm-icon-btn" aria-label="Notificações"><i className="fa-regular fa-bell"></i><span className="dot"></span></button>
+        <Link to="/admin/matriculas" className="adm-icon-btn" aria-label="Matrículas" style={{ position: "relative", display: "inline-flex" }}>
+          <i className="fa-regular fa-envelope"></i>
+          {novasMatriculas > 0 && <span className="dot" style={{ position: "absolute", top: 6, right: 6 }}></span>}
+        </Link>
         <div className="adm-user">
-          <div className="adm-avatar">CD</div>
+          <div className="adm-avatar">{initials}</div>
           <div className="adm-user-meta">
-            <strong>Equipe CDA</strong>
-            <span>Administradora</span>
+            <strong>{user?.nome ?? "Equipe CDA"}</strong>
+            <span>Administrador</span>
           </div>
         </div>
       </div>

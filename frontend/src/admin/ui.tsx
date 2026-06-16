@@ -2,25 +2,33 @@ import { useEffect, useState } from "react";
 
 /* Helpers de UI reutilizáveis do painel */
 
-// Toast de confirmação
-export function useToast(): [(m: string) => void, React.ReactNode] {
-  const [msg, setMsg] = useState("");
-  const toast = (m: string) => { setMsg(m); window.setTimeout(() => setMsg(""), 2600); };
+// Toast de confirmação ou erro
+export function useToast(): [(m: string, err?: boolean) => void, React.ReactNode] {
+  const [state, setState] = useState<{ msg: string; err: boolean } | null>(null);
+  const toast = (m: string, err = false) => {
+    setState({ msg: m, err });
+    window.setTimeout(() => setState(null), 2600);
+  };
   const node = (
-    <div className={"adm-toast" + (msg ? " show" : "")}><i className="fa-solid fa-circle-check"></i>{msg}</div>
+    <div className={"adm-toast" + (state ? " show" : "") + (state?.err ? " err" : "")}>
+      <i className={"fa-solid " + (state?.err ? "fa-circle-exclamation" : "fa-circle-check")}></i>
+      {state?.msg}
+    </div>
   );
   return [toast, node];
 }
 
 // Barra de salvar / publicar
-export function SaveBar({ onSave }: { onSave: () => void }) {
+export function SaveBar({ onSave, saving }: { onSave: () => void; saving?: boolean }) {
   return (
     <div className="adm-savebar">
       <div className="msg"><i className="fa-solid fa-circle-info"></i> Alterações ainda não publicadas</div>
       <div className="sp">
-        <button className="adm-btn adm-btn-ghost adm-btn-sm">Descartar</button>
-        <button className="adm-btn adm-btn-primary adm-btn-sm" style={{ width: "auto" }} onClick={onSave}>
-          <i className="fa-solid fa-cloud-arrow-up"></i> Salvar e publicar
+        <button className="adm-btn adm-btn-ghost adm-btn-sm" disabled={saving}>Descartar</button>
+        <button className="adm-btn adm-btn-primary adm-btn-sm" style={{ width: "auto" }} onClick={onSave} disabled={saving}>
+          {saving
+            ? <><i className="fa-solid fa-spinner fa-spin"></i> Salvando…</>
+            : <><i className="fa-solid fa-cloud-arrow-up"></i> Salvar e publicar</>}
         </button>
       </div>
     </div>
@@ -46,9 +54,9 @@ export function Toggle({ on }: { on?: boolean }) {
 }
 
 // Número com contagem animada
-export function CountNum({ value }: { value: string }) {
+export function CountNum({ value }: { value: string | number }) {
   const [n, setN] = useState(0);
-  const num = parseInt(value, 10);
+  const num = typeof value === "number" ? value : parseInt(value, 10);
   useEffect(() => {
     if (isNaN(num)) return;
     let raf = 0;

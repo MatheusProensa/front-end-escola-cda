@@ -44,6 +44,22 @@ class AuthController extends Controller
         ]);
     }
 
+    // PUT /api/admin/perfil — atualiza nome e/ou senha do usuário logado
+    public function updatePerfil(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'nome'     => 'sometimes|string|max:100',
+            'password' => 'sometimes|string|min:8',
+        ]);
+
+        $user = $request->user();
+        if (isset($data['nome'])) $user->name = $data['nome'];
+        if (isset($data['password'])) $user->password = $data['password'];
+        $user->save();
+
+        return response()->json(['nome' => $user->name, 'email' => $user->email]);
+    }
+
     // POST /api/logout — revoga o token atual
     public function logout(Request $request): JsonResponse
     {

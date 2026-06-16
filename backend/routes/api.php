@@ -42,8 +42,9 @@ Route::get('/albuns/{album}', [AlbumController::class, 'show']);
 */
 Route::middleware('auth:sanctum')->group(function () {
 
-    // Usuário logado e logout
+    // Usuário logado, atualização de perfil e logout
     Route::get('/user', [AuthController::class, 'user']);
+    Route::put('/admin/perfil', [AuthController::class, 'updatePerfil']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // Grupo /admin/*

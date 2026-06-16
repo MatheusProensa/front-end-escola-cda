@@ -1,23 +1,13 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AdminShell from "../AdminShell";
 import { CountNum } from "../ui";
 import { asset } from "../../lib/assets";
+import { api, API_CONFIGURED } from "../../lib/api";
+import { useAuth } from "../auth";
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 
-const STATS = [
-  { ic: "image", tone: "ic-blue", num: "248", lbl: "Imagens no site", trend: "+12", up: true },
-  { ic: "calendar-days", tone: "ic-gold", num: "3", lbl: "Eventos ativos", trend: "Próx. 14/06", up: false },
-  { ic: "file-lines", tone: "ic-violet", num: "9", lbl: "Páginas publicadas", trend: "100% no ar", up: true },
-  { ic: "pen-to-square", tone: "ic-green", num: "17", lbl: "Edições este mês", trend: "+5", up: true },
-];
-const ATIV = [
-  { ic: "image", tone: "ic-blue", a: "Foto atualizada", b: " na galeria de Espaços", when: "Há 2 horas · Equipe CDA" },
-  { ic: "calendar-days", tone: "ic-gold", a: "Novo evento", b: " “Festa Junina 2026” criado", when: "Ontem · Equipe CDA" },
-  { ic: "pen-to-square", tone: "ic-green", a: "Texto do Hero", b: " da Home editado", when: "Há 2 dias · Equipe CDA" },
-  { ic: "palette", tone: "ic-violet", a: "Vivência", b: " “Culinária Afetiva” atualizada", when: "Há 3 dias · Equipe CDA" },
-  { ic: "address-book", tone: "ic-blue", a: "WhatsApp de contato", b: " atualizado", when: "Há 5 dias · Equipe CDA" },
-];
 const PAGINAS: [string, string, string, string, string][] = [
   ["house", "Home", "Hero, pilares, depoimentos", "pub", "/admin/home"],
   ["layer-group", "Segmentos", "Infantil (com berçário), Fundamental, Contraturno", "pub", "/admin/segmentos"],
@@ -27,17 +17,62 @@ const PAGINAS: [string, string, string, string, string][] = [
   ["book-open", "Sobre", "História, linha do tempo, valores", "pub", "/admin/sobre"],
 ];
 
+type Matricula = { status: string };
+type Album = { id: number };
+
 export default function Dashboard() {
+  const { user } = useAuth();
+  const [matriculas, setMatriculas] = useState<Matricula[]>([]);
+  const [totalAlbuns, setTotalAlbuns] = useState(0);
+  const [loadingStats, setLoadingStats] = useState(true);
+
+  useEffect(() => {
+    if (!API_CONFIGURED) { setLoadingStats(false); return; }
+    Promise.all([
+      api<Matricula[]>("/api/admin/matriculas").catch(() => [] as Matricula[]),
+      api<Album[]>("/api/admin/albuns").catch(() => [] as Album[]),
+    ]).then(([mats, albuns]) => {
+      setMatriculas(mats);
+      setTotalAlbuns(albuns.length);
+    }).finally(() => setLoadingStats(false));
+  }, []);
+
+  const novas = matriculas.filter((m) => m.status === "novo").length;
+  const emContato = matriculas.filter((m) => m.status === "em_contato").length;
+
+  const stats = API_CONFIGURED
+    ? [
+        { ic: "envelope-open-text", tone: "ic-blue", num: novas, lbl: "Matrículas novas", trend: novas > 0 ? `+${novas} aguardando` : "Em dia" as string, up: novas > 0 },
+        { ic: "comments", tone: "ic-gold", num: emContato, lbl: "Em contato", trend: `${matriculas.length} total`, up: false },
+        { ic: "images", tone: "ic-violet", num: totalAlbuns, lbl: "Álbuns publicados", trend: "Na página Momentos", up: false },
+        { ic: "file-lines", tone: "ic-green", num: 9, lbl: "Páginas publicadas", trend: "100% no ar", up: true },
+      ]
+    : [
+        { ic: "envelope-open-text", tone: "ic-blue", num: 0, lbl: "Matrículas novas", trend: "Modo demo", up: false },
+        { ic: "comments", tone: "ic-gold", num: 0, lbl: "Em contato", trend: "Modo demo", up: false },
+        { ic: "images", tone: "ic-violet", num: 0, lbl: "Álbuns publicados", trend: "Modo demo", up: false },
+        { ic: "file-lines", tone: "ic-green", num: 9, lbl: "Páginas publicadas", trend: "100% no ar", up: true },
+      ];
+
   return (
-    <AdminShell active="dashboard" title="Olá, Equipe CDA 👋" subtitle="Veja o que está acontecendo com o site da escola." logoSrc={logo()}>
+    <AdminShell active="dashboard" title={`Olá, ${user?.nome?.split(" ")[0] ?? "Equipe CDA"} 👋`} subtitle="Veja o que está acontecendo com o site da escola." logoSrc={logo()}>
+
+      {!API_CONFIGURED && (
+        <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 10, padding: "12px 16px", marginBottom: 20, fontSize: 13, color: "#92400e" }}>
+          <i className="fa-solid fa-triangle-exclamation"></i> Painel em <strong>modo demo</strong> — configure <code>VITE_API_URL</code> no Vercel para conectar ao backend.
+        </div>
+      )}
+
       <div className="adm-stats">
-        {STATS.map((s, i) => (
+        {stats.map((s, i) => (
           <div className="adm-stat" key={i}>
             <div className="adm-stat-top">
               <div className={"adm-stat-ic " + s.tone}><i className={"fa-solid fa-" + s.ic}></i></div>
               <span className={"adm-trend " + (s.up ? "up" : "flat")}>{s.trend}</span>
             </div>
-            <div className="adm-stat-num"><CountNum value={s.num} /></div>
+            <div className="adm-stat-num">
+              {loadingStats ? <span style={{ fontSize: 14, color: "var(--adm-ink-3)" }}>—</span> : <CountNum value={s.num} />}
+            </div>
             <div className="adm-stat-lbl">{s.lbl}</div>
           </div>
         ))}
@@ -46,16 +81,27 @@ export default function Dashboard() {
       <div className="adm-grid-2">
         <div className="adm-panel">
           <div className="adm-panel-head">
-            <div><h3>Atividades recentes</h3><p>O que a equipe alterou ultimamente</p></div>
-            <button className="adm-btn adm-btn-ghost adm-btn-sm">Ver tudo</button>
+            <div><h3>Matrículas recentes</h3><p>Solicitações enviadas pelo site</p></div>
+            <Link className="adm-btn adm-btn-ghost adm-btn-sm" to="/admin/matriculas">Ver todas</Link>
           </div>
           <div className="adm-panel-body">
-            {ATIV.map((a, i) => (
-              <div className="adm-activity" key={i}>
-                <div className={"av " + a.tone}><i className={"fa-solid fa-" + a.ic}></i></div>
-                <div className="tx"><p><b>{a.a}</b>{a.b}</p><span>{a.when}</span></div>
-              </div>
-            ))}
+            {!API_CONFIGURED ? (
+              <p style={{ padding: "12px 18px", fontSize: 13, color: "var(--adm-ink-3)" }}>Conecte o backend para ver as matrículas.</p>
+            ) : loadingStats ? (
+              <p style={{ padding: "12px 18px", fontSize: 13, color: "var(--adm-ink-3)" }}>Carregando…</p>
+            ) : matriculas.length === 0 ? (
+              <p style={{ padding: "12px 18px", fontSize: 13, color: "var(--adm-ink-3)" }}>Nenhuma solicitação ainda.</p>
+            ) : (
+              matriculas.slice(0, 5).map((m: any, i: number) => (
+                <div className="adm-activity" key={i}>
+                  <div className="av ic-blue"><i className="fa-solid fa-user"></i></div>
+                  <div className="tx">
+                    <p><b>{m.responsavel}</b> — {m.segmento}</p>
+                    <span>{m.status === "novo" ? "Novo" : m.status === "em_contato" ? "Em contato" : m.status} · {m.whatsapp}</span>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -78,16 +124,17 @@ export default function Dashboard() {
 
       <div className="adm-grid-2" style={{ gridTemplateColumns: "1fr 1fr" }}>
         <div className="adm-panel">
-          <div className="adm-panel-head"><div><h3>Próximos eventos</h3><p>Agenda publicada no site</p></div><Link className="adm-btn adm-btn-ghost adm-btn-sm" to="/admin/momentos">Gerir</Link></div>
+          <div className="adm-panel-head">
+            <div><h3>Álbuns de fotos</h3><p>Galeria de momentos da escola</p></div>
+            <Link className="adm-btn adm-btn-ghost adm-btn-sm" to="/admin/momentos">Gerir</Link>
+          </div>
           <div className="adm-panel-body" style={{ padding: "14px 18px 18px" }}>
-            <div className="adm-evt" style={{ marginBottom: 10 }}>
-              <div className="date"><div className="d">14</div><div className="m">Jun</div></div>
-              <div className="info"><h4>Festa Junina 2026</h4><p>Arraiá da CDA com as famílias.</p></div>
-            </div>
-            <div className="adm-evt" style={{ margin: 0 }}>
-              <div className="date"><div className="d">28</div><div className="m">Jun</div></div>
-              <div className="info"><h4>Reunião de Pais</h4><p>Encontro do 2º bimestre.</p></div>
-            </div>
+            <p style={{ fontSize: 13, color: "var(--adm-ink-3)", margin: 0 }}>
+              {loadingStats ? "Carregando…" : `${totalAlbuns} álbum${totalAlbuns !== 1 ? "s" : ""} publicado${totalAlbuns !== 1 ? "s" : ""} na página Momentos.`}
+            </p>
+            <Link className="adm-btn adm-btn-ghost adm-btn-sm" style={{ marginTop: 14, width: "fit-content" }} to="/admin/momentos">
+              <i className="fa-solid fa-plus"></i> Novo álbum
+            </Link>
           </div>
         </div>
 
