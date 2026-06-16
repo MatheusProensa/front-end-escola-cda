@@ -90,9 +90,7 @@ php artisan migrate --seed   # cria tabelas + usuário admin padrão
 php artisan serve            # http://localhost:8000
 ```
 
-**Credenciais padrão do admin:**
-- Email: `equipe@escolacda.com.br`
-- Senha: `cda@2025` *(altere antes de ir para produção)*
+**Credenciais do admin** são configuradas via variáveis de ambiente no servidor.
 
 ---
 
