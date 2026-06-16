@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon, Layout, WPP, usePageMeta } from "../components/site";
-import { api, API_CONFIGURED } from "../lib/api";
+import { supabase, API_CONFIGURED } from "../lib/supabase";
 
 const MAP = "https://www.google.com/maps?q=R.+Jos%C3%A9+Manhago,+194+-+Camobi,+Santa+Maria+-+RS&output=embed";
 
@@ -19,17 +19,15 @@ function MatriculaForm() {
     setLoading(true);
     try {
       if (API_CONFIGURED) {
-        await api("/api/matriculas", {
-          method: "POST",
-          body: JSON.stringify({
-            responsavel: f.resp,
-            whatsapp: f.tel,
-            nome_crianca: f.crianca,
-            idade_crianca: f.idade,
-            segmento: f.seg,
-            mensagem: f.msg,
-          }),
+        const { error } = await supabase.from("matriculas").insert({
+          responsavel: f.resp,
+          whatsapp: f.tel,
+          nome_crianca: f.crianca,
+          idade_crianca: f.idade,
+          segmento: f.seg,
+          mensagem: f.msg,
         });
+        if (error) throw error;
       }
       setSent(true);
     } catch {

@@ -3,7 +3,7 @@ import AdminShell from "../AdminShell";
 import { SaveBar, useToast, Toggle } from "../ui";
 import { asset } from "../../lib/assets";
 import { useAuth } from "../auth";
-import { api, API_CONFIGURED } from "../../lib/api";
+import { supabase, API_CONFIGURED } from "../../lib/supabase";
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 
@@ -29,9 +29,11 @@ export default function Configuracoes() {
     setSaving(true);
     try {
       if (API_CONFIGURED) {
-        const body: Record<string, string> = { nome };
-        if (senha) body.password = senha;
-        await api("/api/admin/perfil", { method: "PUT", body: JSON.stringify(body) });
+        const { error } = await supabase.auth.updateUser({
+          data: { nome },
+          ...(senha ? { password: senha } : {}),
+        });
+        if (error) throw error;
       }
       toast("Configurações salvas!");
       setSenha("");

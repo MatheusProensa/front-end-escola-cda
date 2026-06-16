@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { asset } from "../../lib/assets";
 import { useAuth } from "../auth";
-import { ApiError } from "../../lib/api";
+import { ApiError } from "../../lib/supabase";
 import "../admin.css";
 
 export default function Login() {

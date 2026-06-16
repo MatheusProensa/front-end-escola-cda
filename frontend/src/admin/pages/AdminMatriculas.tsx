@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import AdminShell from "../AdminShell";
 import { useToast } from "../ui";
 import { asset } from "../../lib/assets";
-import { api, API_CONFIGURED } from "../../lib/api";
+import { supabase, API_CONFIGURED } from "../../lib/supabase";
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 
@@ -37,24 +37,24 @@ export default function AdminMatriculas() {
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState("todos");
 
-  const load = () => {
+  const load = async () => {
     if (!API_CONFIGURED) { setLoading(false); return; }
-    api<Matricula[]>("/api/admin/matriculas")
-      .then(setMatriculas)
-      .catch(() => toast("Erro ao carregar matrículas.", true))
-      .finally(() => setLoading(false));
+    const { data, error } = await supabase.from("matriculas").select("*").order("created_at", { ascending: false });
+    if (error) toast("Erro ao carregar matrículas.", true);
+    else setMatriculas(data as Matricula[]);
+    setLoading(false);
   };
 
   useEffect(() => { load(); }, []);
 
   const updateStatus = async (id: number, status: string) => {
-    try {
-      await api(`/api/admin/matriculas/${id}/status`, { method: "PUT", body: JSON.stringify({ status }) });
-      setMatriculas((prev) => prev.map((m) => m.id === id ? { ...m, status: status as Matricula["status"] } : m));
-      toast("Status atualizado!");
-    } catch {
+    const { error } = await supabase.from("matriculas").update({ status }).eq("id", id);
+    if (error) {
       toast("Erro ao atualizar.", true);
+      return;
     }
+    setMatriculas((prev) => prev.map((m) => m.id === id ? { ...m, status: status as Matricula["status"] } : m));
+    toast("Status atualizado!");
   };
 
   const filtradas = filtro === "todos" ? matriculas : matriculas.filter((m) => m.status === filtro);

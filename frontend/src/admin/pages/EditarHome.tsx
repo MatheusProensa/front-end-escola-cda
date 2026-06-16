@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import AdminShell from "../AdminShell";
 import { SaveBar, useToast, ImgSlot } from "../ui";
 import { asset } from "../../lib/assets";
-import { api, API_CONFIGURED } from "../../lib/api";
+import { supabase, API_CONFIGURED } from "../../lib/supabase";
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 
@@ -37,13 +37,13 @@ export default function EditarHome() {
 
   useEffect(() => {
     if (!API_CONFIGURED) return;
-    api<{ hero?: Hero; pilares?: Pilar[]; diario?: Diario }>("/api/conteudo/home")
-      .then((data) => {
-        if (data.hero) setHero(data.hero);
-        if (data.pilares) setPilares(data.pilares);
-        if (data.diario) setDiario(data.diario);
-      })
-      .catch(() => {});
+    supabase.from("page_content").select("secao, dados").eq("pagina", "home")
+      .then(({ data }) => {
+        const porSecao = Object.fromEntries((data ?? []).map((r) => [r.secao, r.dados]));
+        if (porSecao.hero) setHero(porSecao.hero as Hero);
+        if (porSecao.pilares) setPilares(porSecao.pilares as Pilar[]);
+        if (porSecao.diario) setDiario(porSecao.diario as Diario);
+      });
   }, []);
 
   const setPilar = (i: number, k: keyof Pilar, v: string) =>
@@ -53,11 +53,12 @@ export default function EditarHome() {
     setSaving(true);
     try {
       if (API_CONFIGURED) {
-        await Promise.all([
-          api("/api/admin/conteudo/home/hero", { method: "PUT", body: JSON.stringify(hero) }),
-          api("/api/admin/conteudo/home/pilares", { method: "PUT", body: JSON.stringify(pilares) }),
-          api("/api/admin/conteudo/home/diario", { method: "PUT", body: JSON.stringify(diario) }),
-        ]);
+        const { error } = await supabase.from("page_content").upsert([
+          { pagina: "home", secao: "hero", dados: hero },
+          { pagina: "home", secao: "pilares", dados: pilares },
+          { pagina: "home", secao: "diario", dados: diario },
+        ], { onConflict: "pagina,secao" });
+        if (error) throw error;
       }
       toast("Home publicada com sucesso!");
     } catch {

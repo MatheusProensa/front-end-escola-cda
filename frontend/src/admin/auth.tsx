@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { api, getToken, setToken, API_CONFIGURED } from "../lib/api";
+import { supabase, API_CONFIGURED, ApiError } from "../lib/supabase";
 
 export type AdminUser = { nome: string; email: string } | null;
 
@@ -14,60 +14,55 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType>(null!);
 export const useAuth = () => useContext(AuthContext);
 
+const DEMO_TOKEN_KEY = "cda_demo_token";
+
+function toAdminUser(supaUser: { email?: string; user_metadata?: { nome?: string } } | null): AdminUser {
+  if (!supaUser) return null;
+  return { nome: supaUser.user_metadata?.nome || "Equipe CDA", email: supaUser.email || "" };
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AdminUser>(null);
   const [loading, setLoading] = useState(true);
 
-  // Ao carregar: se houver token, valida a sessão
   useEffect(() => {
-    (async () => {
-      if (!API_CONFIGURED) {
-        // modo demo (sem backend): logado se houver token salvo
-        setUser(getToken() ? { nome: "Equipe CDA", email: "equipe@escolacda.com.br" } : null);
-        setLoading(false);
-        return;
-      }
-      if (!getToken()) {
-        setLoading(false);
-        return;
-      }
-      try {
-        // 🔌 Laravel/Sanctum: rota protegida que devolve o usuário logado
-        const u = await api<AdminUser>("/api/user");
-        setUser(u);
-      } catch {
-        setToken(null);
-      } finally {
-        setLoading(false);
-      }
-    })();
+    if (!API_CONFIGURED) {
+      // modo demo (sem backend): logado se houver token salvo
+      setUser(localStorage.getItem(DEMO_TOKEN_KEY) ? { nome: "Equipe CDA", email: "equipe@escolacda.com.br" } : null);
+      setLoading(false);
+      return;
+    }
+
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(toAdminUser(data.session?.user ?? null));
+      setLoading(false);
+    });
+
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(toAdminUser(session?.user ?? null));
+    });
+    return () => sub.subscription.unsubscribe();
   }, []);
 
   const login = async (email: string, senha: string) => {
     if (!API_CONFIGURED) {
       // modo demo: aceita qualquer credencial
-      setToken("demo-token");
+      localStorage.setItem(DEMO_TOKEN_KEY, "1");
       setUser({ nome: "Equipe CDA", email });
       return;
     }
-    // 🔌 Laravel/Sanctum (token): POST /api/login → { token, user }
-    // No backend: $token = $user->createToken('painel')->plainTextToken;
-    const data = await api<{ token: string; user: AdminUser }>("/api/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password: senha }),
-    });
-    setToken(data.token);
-    setUser(data.user);
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password: senha });
+    if (error) throw new ApiError("E-mail ou senha incorretos.");
+    setUser(toAdminUser(data.user));
   };
 
   const logout = async () => {
-    try {
-      // 🔌 Laravel/Sanctum: revoga o token atual
-      if (API_CONFIGURED && getToken()) await api("/api/logout", { method: "POST" });
-    } catch {
-      /* ignora erro de logout */
+    if (!API_CONFIGURED) {
+      localStorage.removeItem(DEMO_TOKEN_KEY);
+      setUser(null);
+      return;
     }
-    setToken(null);
+    await supabase.auth.signOut();
     setUser(null);
   };
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import AdminShell from "../AdminShell";
 import { SaveBar, useToast } from "../ui";
 import { asset } from "../../lib/assets";
-import { api, API_CONFIGURED } from "../../lib/api";
+import { supabase, API_CONFIGURED } from "../../lib/supabase";
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 
@@ -33,9 +33,8 @@ export default function Contato() {
 
   useEffect(() => {
     if (!API_CONFIGURED) return;
-    api<Partial<Settings>>("/api/configuracoes")
-      .then((data) => setFields((prev) => ({ ...prev, ...data })))
-      .catch(() => {});
+    supabase.from("site_settings").select("*").eq("id", 1).single()
+      .then(({ data }) => { if (data) setFields((prev) => ({ ...prev, ...data })); });
   }, []);
 
   const set = (k: keyof Settings) => (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -45,10 +44,8 @@ export default function Contato() {
     setSaving(true);
     try {
       if (API_CONFIGURED) {
-        await api("/api/admin/configuracoes", {
-          method: "PUT",
-          body: JSON.stringify(fields),
-        });
+        const { error } = await supabase.from("site_settings").update(fields).eq("id", 1);
+        if (error) throw error;
       }
       toast("Contatos atualizados!");
     } catch {

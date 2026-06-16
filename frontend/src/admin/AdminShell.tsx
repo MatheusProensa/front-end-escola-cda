@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./auth";
-import { api, API_CONFIGURED } from "../lib/api";
+import { supabase, API_CONFIGURED } from "../lib/supabase";
 import "./admin.css";
 
 /* Navegação do painel */
@@ -74,9 +74,11 @@ function Topbar({ title, subtitle, onBurger }: { title: string; subtitle: string
   useEffect(() => {
     if (fetched.current || !API_CONFIGURED) return;
     fetched.current = true;
-    api<{ status: string }[]>("/api/admin/matriculas")
-      .then((data) => setNovasMatriculas(data.filter((m) => m.status === "novo").length))
-      .catch(() => {});
+    supabase
+      .from("matriculas")
+      .select("status")
+      .eq("status", "novo")
+      .then(({ data }) => setNovasMatriculas(data?.length ?? 0));
   }, []);
 
   const initials = user?.nome

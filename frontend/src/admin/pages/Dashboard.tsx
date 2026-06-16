@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import AdminShell from "../AdminShell";
 import { CountNum } from "../ui";
 import { asset } from "../../lib/assets";
-import { api, API_CONFIGURED } from "../../lib/api";
+import { supabase, API_CONFIGURED } from "../../lib/supabase";
 import { useAuth } from "../auth";
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
@@ -29,11 +29,11 @@ export default function Dashboard() {
   useEffect(() => {
     if (!API_CONFIGURED) { setLoadingStats(false); return; }
     Promise.all([
-      api<Matricula[]>("/api/admin/matriculas").catch(() => [] as Matricula[]),
-      api<Album[]>("/api/admin/albuns").catch(() => [] as Album[]),
-    ]).then(([mats, albuns]) => {
-      setMatriculas(mats);
-      setTotalAlbuns(albuns.length);
+      supabase.from("matriculas").select("status, responsavel, whatsapp, segmento").order("created_at", { ascending: false }),
+      supabase.from("albuns").select("id"),
+    ]).then(([matsRes, albunsRes]) => {
+      setMatriculas((matsRes.data as Matricula[]) ?? []);
+      setTotalAlbuns((albunsRes.data as Album[])?.length ?? 0);
     }).finally(() => setLoadingStats(false));
   }, []);
 
