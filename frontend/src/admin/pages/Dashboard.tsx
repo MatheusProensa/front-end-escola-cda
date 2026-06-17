@@ -19,11 +19,35 @@ const PAGINAS: [string, string, string, string, string][] = [
 
 type Matricula = { status: string; responsavel?: string; segmento?: string; whatsapp?: string };
 type Album = { id: number };
+type Edicao = { id: number; tabela: string; operacao: "insert" | "update" | "delete"; registro_id: string | null; created_at: string };
+
+const TABELA_LABEL: Record<string, string> = {
+  site_settings: "Configurações de contato",
+  page_content: "Conteúdo do site",
+  depoimentos: "Depoimentos",
+  albuns: "Álbuns",
+  fotos: "Fotos",
+  matriculas: "Matrículas",
+};
+const OPERACAO_LABEL: Record<string, string> = { insert: "criou", update: "editou", delete: "excluiu" };
+const OPERACAO_ICONE: Record<string, string> = { insert: "plus", update: "pen", delete: "trash" };
+const OPERACAO_COR: Record<string, string> = { insert: "ic-green", update: "ic-blue", delete: "ic-rose" };
+
+function formatarTempoRelativo(iso: string) {
+  const diffMin = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  if (diffMin < 1) return "agora mesmo";
+  if (diffMin < 60) return `há ${diffMin} min`;
+  const diffH = Math.round(diffMin / 60);
+  if (diffH < 24) return `há ${diffH}h`;
+  return `há ${Math.round(diffH / 24)}d`;
+}
 
 export default function Dashboard() {
   const { user } = useAuth();
   const [matriculas, setMatriculas] = useState<Matricula[]>([]);
   const [totalAlbuns, setTotalAlbuns] = useState(0);
+  const [edicoes, setEdicoes] = useState<Edicao[]>([]);
+  const [visitantes, setVisitantes] = useState<number | null>(null);
   const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
@@ -31,10 +55,25 @@ export default function Dashboard() {
     Promise.all([
       supabase.from("matriculas").select("status, responsavel, whatsapp, segmento").order("created_at", { ascending: false }),
       supabase.from("albuns").select("id"),
-    ]).then(([matsRes, albunsRes]) => {
+      supabase.from("historico_edicoes").select("id, tabela, operacao, registro_id, created_at").order("created_at", { ascending: false }).limit(5),
+    ]).then(([matsRes, albunsRes, edicoesRes]) => {
       setMatriculas((matsRes.data as Matricula[]) ?? []);
       setTotalAlbuns((albunsRes.data as Album[])?.length ?? 0);
+      setEdicoes((edicoesRes.data as Edicao[]) ?? []);
     }).finally(() => setLoadingStats(false));
+
+    supabase.auth.getSession().then(async ({ data }) => {
+      const token = data.session?.access_token;
+      if (!token) return;
+      try {
+        const resp = await fetch(`/api/analytics?dias=7`, { headers: { Authorization: `Bearer ${token}` } });
+        if (!resp.ok) return;
+        const json = await resp.json();
+        setVisitantes(json.totais?.usuarios ?? 0);
+      } catch {
+        // estatísticas são complementares — se falhar, o resto do dashboard continua normal
+      }
+    });
   }, []);
 
   const novas = matriculas.filter((m) => m.status === "novo").length;
@@ -45,13 +84,13 @@ export default function Dashboard() {
         { ic: "envelope-open-text", tone: "ic-blue", num: novas, lbl: "Matrículas novas", trend: novas > 0 ? `+${novas} aguardando` : "Em dia" as string, up: novas > 0 },
         { ic: "comments", tone: "ic-gold", num: emContato, lbl: "Em contato", trend: `${matriculas.length} total`, up: false },
         { ic: "images", tone: "ic-violet", num: totalAlbuns, lbl: "Álbuns publicados", trend: "Na página Momentos", up: false },
-        { ic: "file-lines", tone: "ic-green", num: 9, lbl: "Páginas publicadas", trend: "100% no ar", up: true },
+        { ic: "chart-line", tone: "ic-green", num: visitantes ?? 0, lbl: "Visitantes (7 dias)", trend: "Tráfego do site", up: true },
       ]
     : [
         { ic: "envelope-open-text", tone: "ic-blue", num: 0, lbl: "Matrículas novas", trend: "Modo demo", up: false },
         { ic: "comments", tone: "ic-gold", num: 0, lbl: "Em contato", trend: "Modo demo", up: false },
         { ic: "images", tone: "ic-violet", num: 0, lbl: "Álbuns publicados", trend: "Modo demo", up: false },
-        { ic: "file-lines", tone: "ic-green", num: 9, lbl: "Páginas publicadas", trend: "100% no ar", up: true },
+        { ic: "chart-line", tone: "ic-green", num: 0, lbl: "Visitantes (7 dias)", trend: "Modo demo", up: false },
       ];
 
   return (
@@ -118,6 +157,34 @@ export default function Dashboard() {
                 </Link>
               ))}
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="adm-grid-2" style={{ gridTemplateColumns: "1fr" }}>
+        <div className="adm-panel">
+          <div className="adm-panel-head">
+            <div><h3>Últimas edições</h3><p>Atividade recente no painel</p></div>
+            <Link className="adm-btn adm-btn-ghost adm-btn-sm" to="/admin/historico">Ver histórico</Link>
+          </div>
+          <div className="adm-panel-body">
+            {!API_CONFIGURED ? (
+              <p style={{ padding: "12px 18px", fontSize: 13, color: "var(--adm-ink-3)" }}>Conecte o backend para ver o histórico.</p>
+            ) : loadingStats ? (
+              <p style={{ padding: "12px 18px", fontSize: 13, color: "var(--adm-ink-3)" }}>Carregando…</p>
+            ) : edicoes.length === 0 ? (
+              <p style={{ padding: "12px 18px", fontSize: 13, color: "var(--adm-ink-3)" }}>Nenhuma edição registrada ainda.</p>
+            ) : (
+              edicoes.map((e) => (
+                <div className="adm-activity" key={e.id}>
+                  <div className={"av " + OPERACAO_COR[e.operacao]}><i className={"fa-solid fa-" + OPERACAO_ICONE[e.operacao]}></i></div>
+                  <div className="tx">
+                    <p>Alguém <b>{OPERACAO_LABEL[e.operacao]}</b> em {TABELA_LABEL[e.tabela] ?? e.tabela}</p>
+                    <span>{formatarTempoRelativo(e.created_at)}</span>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

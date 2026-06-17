@@ -454,6 +454,7 @@ button { font-family: inherit; }
 .ic-gold { background: var(--adm-gold-soft); color: var(--adm-amber); }
 .ic-green { background: var(--adm-green-soft); color: var(--adm-green); }
 .ic-violet { background: var(--adm-violet-soft); color: var(--adm-violet); }
+.ic-rose { background: #fdeaea; color: var(--adm-rose); }
 .adm-trend { font-size: 12px; font-weight: 800; padding: 4px 9px; border-radius: 999px; }
 .adm-trend.up { color: var(--adm-green); background: var(--adm-green-soft); }
 .adm-trend.flat { color: var(--adm-ink-3); background: var(--adm-surface-2); }
