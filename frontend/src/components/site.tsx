@@ -7,8 +7,46 @@ import {
 } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { asset } from "../lib/assets";
+import { supabase, API_CONFIGURED } from "../lib/supabase";
 
+// WhatsApp padrão (fallback). O valor real vem das configurações editáveis no painel.
 export const WPP = "https://wa.me/555532177947";
+
+/* ───────────── Configurações do site (editáveis no painel) ───────────── */
+export type SiteSettings = {
+  whatsapp: string;
+  telefone: string;
+  wpp_link: string;
+  endereco: string;
+  horario: string;
+  instagram: string;
+  facebook: string;
+};
+
+export const DEFAULT_SETTINGS: SiteSettings = {
+  whatsapp: "(55) 3217-7947",
+  telefone: "(55) 3217-7947",
+  wpp_link: WPP,
+  endereco: "R. José Manhago, 194 - Camobi, Santa Maria - RS",
+  horario: "Segunda a Sexta, 7h às 18h",
+  instagram: "@escolacda.sm",
+  facebook: "/escolacda.sm",
+};
+
+// Normaliza o handle do Instagram (@nome) para uma URL clicável.
+export function instagramUrl(handle: string): string {
+  if (!handle) return "https://www.instagram.com/escolacda.sm/";
+  if (handle.startsWith("http")) return handle;
+  return "https://www.instagram.com/" + handle.replace(/^@/, "").replace(/^\//, "");
+}
+export function facebookUrl(handle: string): string {
+  if (!handle) return "https://www.facebook.com/escolacda.sm";
+  if (handle.startsWith("http")) return handle;
+  return "https://www.facebook.com/" + handle.replace(/^\//, "");
+}
+
+const SettingsCtx = createContext<SiteSettings>(DEFAULT_SETTINGS);
+export const useSettings = () => useContext(SettingsCtx);
 
 // Título + descrição únicos por página (SEO em SPA)
 export function usePageMeta(title: string, description?: string) {
@@ -38,12 +76,24 @@ export const useContact = () => useContext(ContactCtx);
 
 export function ContactProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
+  const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SETTINGS);
+
+  useEffect(() => {
+    if (!API_CONFIGURED) return;
+    let alive = true;
+    supabase.from("site_settings").select("*").eq("id", 1).single()
+      .then(({ data }) => { if (alive && data) setSettings((s) => ({ ...s, ...data })); });
+    return () => { alive = false; };
+  }, []);
+
   return (
-    <ContactCtx.Provider value={() => navigate("/matriculas")}>
-      {children}
-      <AccessibilityBar />
-      <WhatsAppFloat />
-    </ContactCtx.Provider>
+    <SettingsCtx.Provider value={settings}>
+      <ContactCtx.Provider value={() => navigate("/matriculas")}>
+        {children}
+        <AccessibilityBar />
+        <WhatsAppFloat />
+      </ContactCtx.Provider>
+    </SettingsCtx.Provider>
   );
 }
 
@@ -150,6 +200,8 @@ export function Footer() {
     ["Aulas extras", "/vivencias"],
   ];
   const contact = useContact();
+  const s = useSettings();
+  const telHref = "tel:+" + s.telefone.replace(/\D/g, "");
   return (
     <footer className="footer" id="footer">
       <div className="footer-inner">
@@ -157,9 +209,9 @@ export function Footer() {
           <img src={asset("logo-cda-15anos-semborda.webp")} alt="Escola CDA" className="footer-logo" />
           <p>Há 15 anos formando crianças com afeto, propósito e experiências que transformam vidas e fortalecem famílias.</p>
           <div className="footer-social">
-            <a href="https://www.instagram.com/escolacda.sm/" target="_blank" rel="noreferrer" aria-label="Instagram"><Icon name="instagram" brand size={16} /></a>
-            <a href="https://www.facebook.com/escolacda.sm" target="_blank" rel="noreferrer" aria-label="Facebook"><Icon name="facebook-f" brand size={16} /></a>
-            <a href={WPP} target="_blank" rel="noreferrer" aria-label="WhatsApp"><Icon name="whatsapp" brand size={16} /></a>
+            <a href={instagramUrl(s.instagram)} target="_blank" rel="noreferrer" aria-label="Instagram"><Icon name="instagram" brand size={16} /></a>
+            <a href={facebookUrl(s.facebook)} target="_blank" rel="noreferrer" aria-label="Facebook"><Icon name="facebook-f" brand size={16} /></a>
+            <a href={s.wpp_link} target="_blank" rel="noreferrer" aria-label="WhatsApp"><Icon name="whatsapp" brand size={16} /></a>
           </div>
         </div>
         <div className="footer-col">
@@ -172,10 +224,10 @@ export function Footer() {
         </div>
         <div className="footer-contact">
           <h4>Contato</h4>
-          <div className="footer-contact-item"><Icon name="location-dot" color="#f0b400" size={14} /><span>R. José Manhago, 194 - Camobi, Santa Maria - RS</span></div>
-          <div className="footer-contact-item"><Icon name="phone" color="#f0b400" size={14} /><a href="tel:+555532177947">(55) 3217-7947</a></div>
-          <div className="footer-contact-item"><Icon name="whatsapp" brand color="#f0b400" size={14} /><a href={WPP} target="_blank" rel="noreferrer">(55) 3217-7947</a></div>
-          <div className="footer-contact-item"><Icon name="clock|r" color="#f0b400" size={14} /><span>Seg a Sex: 7h às 18h</span></div>
+          <div className="footer-contact-item"><Icon name="location-dot" color="#f0b400" size={14} /><span>{s.endereco}</span></div>
+          <div className="footer-contact-item"><Icon name="phone" color="#f0b400" size={14} /><a href={telHref}>{s.telefone}</a></div>
+          <div className="footer-contact-item"><Icon name="whatsapp" brand color="#f0b400" size={14} /><a href={s.wpp_link} target="_blank" rel="noreferrer">{s.whatsapp}</a></div>
+          <div className="footer-contact-item"><Icon name="clock|r" color="#f0b400" size={14} /><span>{s.horario}</span></div>
         </div>
       </div>
       <div className="footer-bottom">
@@ -264,8 +316,9 @@ export function AccessibilityBar() {
 
 /* ───────────── WhatsApp flutuante ───────────── */
 export function WhatsAppFloat() {
+  const s = useSettings();
   return (
-    <a className="whatsapp-float" href={WPP} target="_blank" rel="noopener noreferrer" aria-label="Falar com a escola no WhatsApp">
+    <a className="whatsapp-float" href={s.wpp_link} target="_blank" rel="noopener noreferrer" aria-label="Falar com a escola no WhatsApp">
       <Icon name="whatsapp" brand size={22} /><span>Falar com a escola</span>
     </a>
   );

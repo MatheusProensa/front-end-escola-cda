@@ -1,9 +1,36 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon, Navbar, Footer, useReveal, useContact, usePageMeta } from "../components/site";
 import { asset } from "../lib/assets";
+import { usePageContent, section } from "../lib/content";
+import { supabase, API_CONFIGURED } from "../lib/supabase";
+
+type HeroData = { selo: string; titulo: string; destaque: string; texto: string };
+type PilarData = { titulo: string; descricao: string };
+type DiarioData = { titulo: string; texto: string; recursos: string };
+
+const HERO_DEFAULT: HeroData = {
+  selo: "HÁ 15 ANOS",
+  titulo: "Família e escola",
+  destaque: "sonham juntas",
+  texto: "Acreditamos que a educação vai muito além do ensino. É sobre acolher, inspirar e transformar vidas para construir um futuro melhor.",
+};
+const PILARES_ICONS = ["hand-holding-heart", "graduation-cap", "star", "handshake-angle"];
+const PILARES_TONES = ["blue", "gold", "blue", "gold"];
+const PILARES_DEFAULT: PilarData[] = [
+  { titulo: "Acolhimento que abraça", descricao: "Ambiente seguro, afetivo e cheio de empatia." },
+  { titulo: "Ensino que desenvolve", descricao: "Aprendizagem significativa para a vida toda." },
+  { titulo: "Valores que inspiram", descricao: "Incentivamos autonomia, respeito e responsabilidade." },
+  { titulo: "Parceria que transforma", descricao: "Família e escola juntas no mesmo propósito." },
+];
+const DIARIO_DEFAULT: DiarioData = {
+  titulo: "Você acompanha tudo, todos os dias",
+  texto: "Recados, fotos e a rotina do seu filho direto no celular — em tempo real, pelo app Diário Escola.",
+  recursos: "Agenda diária\nRecados\nMural & álbuns\nMedicamentos\nCalendário & presença\nEm tempo real",
+};
 
 /* ───────────── Hero ───────────── */
-function Hero() {
+function Hero({ data }: { data: HeroData }) {
   const contact = useContact();
   const navigate = useNavigate();
   return (
@@ -11,13 +38,9 @@ function Hero() {
       <Navbar />
       <div className="hero-content">
         <div className="hero-left">
-          <span className="mini-title">HÁ 15 ANOS</span>
-          <h1>Família e escola<span className="script-line"> sonham juntas</span></h1>
-          <p>
-            Acreditamos que a educação vai muito além do ensino.<br />
-            É sobre <strong>acolher</strong>, <strong>inspirar</strong> e <strong>transformar vidas</strong><br />
-            para construir um futuro melhor.
-          </p>
+          <span className="mini-title">{data.selo}</span>
+          <h1>{data.titulo}<span className="script-line"> {data.destaque}</span></h1>
+          <p>{data.texto}</p>
           <div className="hero-buttons">
             <button className="primary-btn" onClick={contact}>Falar com a escola</button>
             <button className="secondary-btn" onClick={() => navigate("/sobre")}>Conhecer a escola</button>
@@ -30,13 +53,13 @@ function Hero() {
 }
 
 /* ───────────── Pilares ───────────── */
-function Pillars() {
-  const items = [
-    { icon: "hand-holding-heart", tone: "blue", t: ["Acolhimento", "que abraça"], p: "Ambiente seguro, afetivo e cheio de empatia." },
-    { icon: "graduation-cap", tone: "gold", t: ["Ensino que", "desenvolve"], p: "Aprendizagem significativa para a vida toda." },
-    { icon: "star", tone: "blue", t: ["Valores que", "inspiram"], p: "Incentivamos autonomia, respeito e responsabilidade." },
-    { icon: "handshake-angle", tone: "gold", t: ["Parceria que", "transforma"], p: "Família e escola juntas no mesmo propósito." },
-  ];
+function Pillars({ pilares }: { pilares: PilarData[] }) {
+  const items = pilares.map((p, i) => ({
+    icon: PILARES_ICONS[i] || "star",
+    tone: PILARES_TONES[i] || "blue",
+    titulo: p.titulo,
+    p: p.descricao,
+  }));
   return (
     <section className="cards reveal">
       {items.map((it, i) => (
@@ -46,7 +69,7 @@ function Pillars() {
             <div className={"card-icon " + it.tone}><Icon name={it.icon} size={28} /></div>
           </div>
           <div className="card-text">
-            <h3>{it.t[0]}<br />{it.t[1]}</h3>
+            <h3>{it.titulo}</h3>
             <p>{it.p}</p>
           </div>
         </div>
@@ -168,17 +191,37 @@ function Espaco() {
 }
 
 /* ───────────── Depoimentos ───────────── */
+type Depo = { txt: string; name: string; ini: string; heart: boolean };
+const DEPOS_DEFAULT: Depo[] = [
+  { txt: "Confiamos na escola CDA para deixar nossa filha desde 1 ano e 3 meses. Hoje a Mariah está com 5 anos e permanecemos fazendo parte da escola. O cuidado e carinho faz toda a diferença, além de uma proposta pedagógica rica e diversificada.", name: "Pais da Mariah B.", ini: "M", heart: false },
+  { txt: "Temos plena confiança na escolinha e fico super tranquila enquanto o Otto está na escola. A CDA faz parte do desenvolvimento do nosso filho — e o principal é que ele adora a escola e todos os profissionais que trabalham nela!", name: "Pais do Otto B.", ini: "O", heart: false },
+  { txt: "Confiamos plenamente na educação e no cuidado que a CDA oferece. Todo ambiente é pensado no melhor para as crianças, e temos certeza de que a Laura está numa escola capacitada. Só temos a agradecer!", name: "Pais da Laura L.", ini: "L", heart: false },
+  { txt: "Confiamos no trabalho da CDA pelo diálogo sempre próximo com a família, pela valorização da brincadeira e dos interesses das crianças.", name: "Pais da Giovanna Z.", ini: "G", heart: false },
+  { txt: "Parabéns pelo excelente trabalho que fazem, pelo carinho e amor com que conduzem o dia a dia dos nossos filhos. O resultado é esse: crianças felizes e confiantes para desenvolver a autonomia e suas habilidades!", name: "Família CDA", ini: "", heart: true },
+  { txt: "Parabéns pra essa escola que faz parte do início escolar dos meus filhos e que tenho muito carinho e confiança! Indico para todos que conheço. Profissionais sempre atenciosos e dedicados — moram em nosso coração!", name: "Mãe de alunos", ini: "", heart: true },
+  { txt: "Parabéns, escola CDA! Dedicação, carinho, respeito e responsabilidade junto a um ensino de qualidade!", name: "Gilmar", ini: "G", heart: false },
+  { txt: "Melhor escola — e melhor escolha que fizemos!", name: "Flávia Pedrosa", ini: "F", heart: false },
+];
+
 function Depoimentos() {
-  const depos = [
-    { txt: "Confiamos na escola CDA para deixar nossa filha desde 1 ano e 3 meses. Hoje a Mariah está com 5 anos e permanecemos fazendo parte da escola. O cuidado e carinho faz toda a diferença, além de uma proposta pedagógica rica e diversificada.", name: "Pais da Mariah B.", ini: "M", heart: false },
-    { txt: "Temos plena confiança na escolinha e fico super tranquila enquanto o Otto está na escola. A CDA faz parte do desenvolvimento do nosso filho — e o principal é que ele adora a escola e todos os profissionais que trabalham nela!", name: "Pais do Otto B.", ini: "O", heart: false },
-    { txt: "Confiamos plenamente na educação e no cuidado que a CDA oferece. Todo ambiente é pensado no melhor para as crianças, e temos certeza de que a Laura está numa escola capacitada. Só temos a agradecer!", name: "Pais da Laura L.", ini: "L", heart: false },
-    { txt: "Confiamos no trabalho da CDA pelo diálogo sempre próximo com a família, pela valorização da brincadeira e dos interesses das crianças.", name: "Pais da Giovanna Z.", ini: "G", heart: false },
-    { txt: "Parabéns pelo excelente trabalho que fazem, pelo carinho e amor com que conduzem o dia a dia dos nossos filhos. O resultado é esse: crianças felizes e confiantes para desenvolver a autonomia e suas habilidades!", name: "Família CDA", ini: "", heart: true },
-    { txt: "Parabéns pra essa escola que faz parte do início escolar dos meus filhos e que tenho muito carinho e confiança! Indico para todos que conheço. Profissionais sempre atenciosos e dedicados — moram em nosso coração!", name: "Mãe de alunos", ini: "", heart: true },
-    { txt: "Parabéns, escola CDA! Dedicação, carinho, respeito e responsabilidade junto a um ensino de qualidade!", name: "Gilmar", ini: "G", heart: false },
-    { txt: "Melhor escola — e melhor escolha que fizemos!", name: "Flávia Pedrosa", ini: "F", heart: false },
-  ];
+  const [depos, setDepos] = useState<Depo[]>(DEPOS_DEFAULT);
+
+  useEffect(() => {
+    if (!API_CONFIGURED) return;
+    let alive = true;
+    supabase.from("depoimentos").select("nome, texto").eq("ativo", true).order("ordem")
+      .then(({ data }) => {
+        if (!alive || !data || data.length === 0) return;
+        setDepos(data.map((d: { nome: string; texto: string }) => ({
+          txt: d.texto,
+          name: d.nome,
+          ini: (d.nome || "").trim().charAt(0).toUpperCase(),
+          heart: !(d.nome || "").trim(),
+        })));
+      });
+    return () => { alive = false; };
+  }, []);
+
   return (
     <section className="depoimentos reveal" id="depoimentos">
       <div className="depo-head">
@@ -265,29 +308,26 @@ function EspacoConvite() {
 }
 
 /* ─────────────── Diário Escola (faixa compacta) ─────────────── */
-function DiarioBand() {
-  const feats = [
-    { icon: "book", t: "Agenda diária" },
-    { icon: "comment-dots", gold: true, t: "Recados" },
-    { icon: "images", t: "Mural & álbuns" },
-    { icon: "kit-medical", gold: true, t: "Medicamentos" },
-    { icon: "calendar-check", t: "Calendário & presença" },
-    { icon: "bolt", gold: true, t: "Em tempo real" },
-  ];
+const DIARIO_ICONS = ["book", "comment-dots", "images", "kit-medical", "calendar-check", "bolt"];
+function DiarioBand({ data }: { data: DiarioData }) {
+  const recursos = data.recursos.split("\n").map((s) => s.trim()).filter(Boolean);
   return (
     <section className="diario-band reveal">
       <div className="diario-band-left">
         <img className="diario-logo" src={asset("diarioescola-logo.webp")} alt="Diário Escola" />
-        <h2>Você acompanha tudo, <span>todos os dias</span></h2>
-        <p>Recados, fotos e a rotina do seu filho direto no celular — em tempo real, pelo app Diário Escola.</p>
+        <h2>{data.titulo}</h2>
+        <p>{data.texto}</p>
       </div>
       <div className="diario-grid">
-        {feats.map((f, i) => (
-          <div className={"diario-feat" + (f.gold ? " gold" : "")} key={i}>
-            <div className="di-ic"><Icon name={f.icon} color={f.gold ? "#f0b400" : "#0b82f6"} size={16} /></div>
-            {f.t}
-          </div>
-        ))}
+        {recursos.map((t, i) => {
+          const gold = i % 2 === 1;
+          return (
+            <div className={"diario-feat" + (gold ? " gold" : "")} key={i}>
+              <div className="di-ic"><Icon name={DIARIO_ICONS[i] || "circle-check"} color={gold ? "#f0b400" : "#0b82f6"} size={16} /></div>
+              {t}
+            </div>
+          );
+        })}
       </div>
     </section>
   );
@@ -296,10 +336,14 @@ function DiarioBand() {
 export default function Home() {
   usePageMeta("Escola CDA — Educação infantil e fundamental em Santa Maria/RS", "Há 15 anos acolhendo, inspirando e transformando vidas com afeto e propósito. Educação infantil e ensino fundamental em Santa Maria/RS.");
   useReveal();
+  const { sec } = usePageContent("home");
+  const hero = section<HeroData>(sec, "hero", HERO_DEFAULT);
+  const pilares = section<PilarData[]>(sec, "pilares", PILARES_DEFAULT);
+  const diario = section<DiarioData>(sec, "diario", DIARIO_DEFAULT);
   return (
     <div className="app">
-      <Hero />
-      <Pillars />
+      <Hero data={hero} />
+      <Pillars pilares={pilares} />
       <Proposito />
       <Segmentos />
       <Vivencias />
@@ -307,7 +351,7 @@ export default function Home() {
       <EspacoConvite />
       <Espaco />
       <Depoimentos />
-      <DiarioBand />
+      <DiarioBand data={diario} />
       <Conexao />
       <Footer />
     </div>

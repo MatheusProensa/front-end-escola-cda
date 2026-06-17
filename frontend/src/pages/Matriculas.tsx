@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Icon, Layout, WPP, usePageMeta } from "../components/site";
+import { Icon, Layout, usePageMeta, useSettings } from "../components/site";
 import { supabase, API_CONFIGURED } from "../lib/supabase";
 
 const MAP = "https://www.google.com/maps?q=R.+Jos%C3%A9+Manhago,+194+-+Camobi,+Santa+Maria+-+RS&output=embed";
 
 function MatriculaForm() {
+  const s = useSettings();
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState("");
@@ -44,7 +45,7 @@ function MatriculaForm() {
           <div className="cda-success-ic"><Icon name="heart" color="#fff" size={26} /></div>
           <h3>Recebemos com carinho!</h3>
           <p>Obrigado{f.resp ? ", " + f.resp.split(" ")[0] : ""}. Em breve a equipe da CDA entra em contato para agendar sua visita.</p>
-          <a className="cda-modal-wpp" href={WPP} target="_blank" rel="noreferrer"><Icon name="whatsapp" brand size={16} /> Adiantar pelo WhatsApp</a>
+          <a className="cda-modal-wpp" href={s.wpp_link} target="_blank" rel="noreferrer"><Icon name="whatsapp" brand size={16} /> Adiantar pelo WhatsApp</a>
         </div>
       </div>
     );
@@ -81,15 +82,16 @@ function MatriculaForm() {
 }
 
 type Info = { icon: string; brand?: boolean; wpp?: boolean; t: string; v: string; href?: string };
-const INFO: Info[] = [
-  { icon: "location-dot", t: "Endereço", v: "R. José Manhago, 194 - Camobi, Santa Maria - RS" },
-  { icon: "whatsapp", brand: true, wpp: true, t: "WhatsApp", v: "(55) 3217-7947", href: WPP },
-  { icon: "phone", t: "Telefone", v: "(55) 3217-7947", href: "tel:+555532177947" },
-  { icon: "clock|r", t: "Horário", v: "Segunda a Sexta, 7h às 18h" },
-];
 
 export default function Matriculas() {
   usePageMeta("Matrículas Abertas — Escola CDA, Santa Maria/RS", "Matrículas abertas na Escola CDA. Agende uma visita, conheça a escola e fale com a gente pelo WhatsApp.");
+  const s = useSettings();
+  const INFO: Info[] = [
+    { icon: "location-dot", t: "Endereço", v: s.endereco },
+    { icon: "whatsapp", brand: true, wpp: true, t: "WhatsApp", v: s.whatsapp, href: s.wpp_link },
+    { icon: "phone", t: "Telefone", v: s.telefone, href: "tel:+" + s.telefone.replace(/\D/g, "") },
+    { icon: "clock|r", t: "Horário", v: s.horario },
+  ];
   return (
     <Layout>
       <section className="page-hero reveal">
@@ -115,7 +117,7 @@ export default function Matriculas() {
               <div className="ic" style={{ background: "rgba(255,255,255,0.16)", color: "#fff" }}><Icon name="calendar-check" color="#fff" size={19} /></div>
               <div>
                 <strong style={{ color: "#fff" }}>Prefere visitar?</strong>
-                <a href={WPP} target="_blank" rel="noreferrer" style={{ color: "rgba(255,255,255,0.9)" }}>Agende uma visita pelo WhatsApp →</a>
+                <a href={s.wpp_link} target="_blank" rel="noreferrer" style={{ color: "rgba(255,255,255,0.9)" }}>Agende uma visita pelo WhatsApp →</a>
               </div>
             </div>
           </div>
@@ -130,7 +132,7 @@ export default function Matriculas() {
         <h2>Venha conhecer a CDA de perto</h2>
         <p>Agende uma visita e sinta o acolhimento de uma escola que acolhe, desenvolve e transforma há 15 anos.</p>
         <div className="cta-actions">
-          <a className="btn-white" href={WPP} target="_blank" rel="noreferrer"><Icon name="whatsapp" brand size={16} /> Falar no WhatsApp</a>
+          <a className="btn-white" href={s.wpp_link} target="_blank" rel="noreferrer"><Icon name="whatsapp" brand size={16} /> Falar no WhatsApp</a>
           <Link className="btn-ghost" to="/sobre"><Icon name="arrow-right" size={15} /> Conhecer a escola</Link>
         </div>
       </div>
