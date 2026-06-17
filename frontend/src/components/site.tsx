@@ -57,6 +57,8 @@ export function usePageMeta(title: string, description?: string) {
       if (!m) { m = document.createElement("meta"); m.setAttribute("name", "description"); document.head.appendChild(m); }
       m.setAttribute("content", description);
     }
+    const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+    gtag?.("event", "page_view", { page_title: title, page_location: window.location.href, page_path: window.location.pathname });
   }, [title, description]);
 }
 
