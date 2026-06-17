@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Layout, usePageMeta, useSettings, instagramUrl } from "../components/site";
-import { asset } from "../lib/assets";
 import { supabase, API_CONFIGURED } from "../lib/supabase";
 
 type Foto = { thumb: string; full: string };
@@ -10,33 +9,15 @@ type UAlbum = {
   titulo: string;
   capa: string;
   date: string;
-  kind: "db" | "bundled";
-  dbId?: number;
-  dir?: string;
+  dbId: number;
   count?: number;
 };
-
-// Álbuns padrão (fotos embutidas) — usados quando ainda não há álbuns no banco.
-const BUNDLED: UAlbum[] = [
-  { key: "aniversario-15", capa: asset("aniversario-15.webp"), titulo: "Aniversário da Escola CDA — 15 anos", date: "31 de Março · 2026", dir: "eventos/aniversario-15/", count: 132, kind: "bundled" },
-  { key: "feira-do-livro", capa: asset("feira-livro-pro.webp"), titulo: "Feira do Livro", date: "11 de Abril · 2026", dir: "eventos/feira-do-livro/", count: 7, kind: "bundled" },
-  { key: "festa-familia-1sem", capa: asset("eventos/festa-familia-1sem/032.webp"), titulo: "Festa da Família — 1º semestre", date: "09 de Maio · 2026", dir: "eventos/festa-familia-1sem/", count: 45, kind: "bundled" },
-];
 
 const MESES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 function dataLabel(iso: string): string {
   const d = new Date(iso);
   if (isNaN(d.getTime())) return "";
   return `${String(d.getDate()).padStart(2, "0")} de ${MESES[d.getMonth()]} · ${d.getFullYear()}`;
-}
-
-// fotos de um álbum embutido (miniatura -t.webp + grande .webp)
-function fotosBundled(a: UAlbum): Foto[] {
-  if (!a.dir || !a.count) return [];
-  return Array.from({ length: a.count }, (_, i) => {
-    const id = String(i + 1).padStart(3, "0");
-    return { thumb: asset(a.dir + id + "-t.webp"), full: asset(a.dir + id + ".webp") };
-  });
 }
 
 function Lightbox({ fotos, index, onClose, onNav }: { fotos: Foto[]; index: number; onClose: () => void; onNav: (i: number) => void }) {
@@ -62,12 +43,11 @@ function Lightbox({ fotos, index, onClose, onNav }: { fotos: Foto[]; index: numb
 }
 
 function AlbumModal({ album, onClose }: { album: UAlbum; onClose: () => void }) {
-  const [fotos, setFotos] = useState<Foto[]>(album.kind === "bundled" ? fotosBundled(album) : []);
-  const [carregando, setCarregando] = useState(album.kind === "db");
+  const [fotos, setFotos] = useState<Foto[]>([]);
+  const [carregando, setCarregando] = useState(true);
   const [lb, setLb] = useState<number | null>(null);
 
   useEffect(() => {
-    if (album.kind !== "db" || album.dbId == null) return;
     let alive = true;
     supabase.from("fotos").select("url").eq("album_id", album.dbId).order("id")
       .then(({ data }) => {
@@ -124,7 +104,7 @@ function AlbumModal({ album, onClose }: { album: UAlbum; onClose: () => void }) 
 export default function Momentos() {
   usePageMeta("Momentos — Festas e eventos | Escola CDA", "Reviva festas, encontros e celebrações que marcam a vida das crianças e famílias da Escola CDA.");
   const s = useSettings();
-  const [albuns, setAlbuns] = useState<UAlbum[]>(BUNDLED);
+  const [albuns, setAlbuns] = useState<UAlbum[]>([]);
   const [aberto, setAberto] = useState<UAlbum | null>(null);
   const fechar = useCallback(() => setAberto(null), []);
 
@@ -133,7 +113,7 @@ export default function Momentos() {
     let alive = true;
     (async () => {
       const { data: albs } = await supabase.from("albuns").select("*").eq("publicado", true).order("created_at", { ascending: false });
-      if (!alive || !albs || albs.length === 0) return; // sem álbuns no banco → mantém os padrão
+      if (!alive || !albs || albs.length === 0) return;
       const ids = albs.map((a: { id: number }) => a.id);
       const { data: fs } = await supabase.from("fotos").select("album_id").in("album_id", ids);
       const cont: Record<number, number> = {};
@@ -142,10 +122,9 @@ export default function Momentos() {
         key: "db-" + a.id,
         dbId: a.id,
         titulo: a.titulo,
-        capa: a.capa_url || asset("aniversario-15.webp"),
+        capa: a.capa_url || "",
         date: dataLabel(a.created_at),
         count: cont[a.id] || 0,
-        kind: "db" as const,
       })));
     })();
     return () => { alive = false; };
@@ -160,21 +139,27 @@ export default function Momentos() {
       </section>
 
       <div className="cda-panel reveal">
-        <div className="momentos-grid">
-          {albuns.map((a) => {
-            const n = a.count || 0;
-            return (
-              <button className="album" key={a.key} onClick={() => setAberto(a)}>
-                <img src={a.capa} alt={a.titulo} loading="lazy" decoding="async" />
-                <div className="album-body">
-                  {a.date && <span className="album-date"><i className="fa-regular fa-calendar"></i> {a.date}</span>}
-                  <h3>{a.titulo}</h3>
-                  <span className="count"><i className="fa-regular fa-images"></i> {n > 0 ? `Ver galeria · ${n} fotos` : "Ver galeria"}</span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
+        {albuns.length > 0 ? (
+          <div className="momentos-grid">
+            {albuns.map((a) => {
+              const n = a.count || 0;
+              return (
+                <button className="album" key={a.key} onClick={() => setAberto(a)}>
+                  <img src={a.capa} alt={a.titulo} loading="lazy" decoding="async" />
+                  <div className="album-body">
+                    {a.date && <span className="album-date"><i className="fa-regular fa-calendar"></i> {a.date}</span>}
+                    <h3>{a.titulo}</h3>
+                    <span className="count"><i className="fa-regular fa-images"></i> {n > 0 ? `Ver galeria · ${n} fotos` : "Ver galeria"}</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="album-empty-note">
+            <i className="fa-solid fa-camera-retro"></i> Novos álbuns em breve.
+          </div>
+        )}
       </div>
 
       <div className="cta-band reveal">
