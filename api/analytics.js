@@ -60,6 +60,16 @@ async function rodarRelatorio(token, propertyId, corpo) {
   return resp.json();
 }
 
+async function rodarRelatorioTempoReal(token, propertyId, corpo) {
+  const resp = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify(corpo),
+  });
+  if (!resp.ok) throw new Error("Erro na API do Google Analytics (tempo real): " + (await resp.text()));
+  return resp.json();
+}
+
 // Confirma que quem está chamando é o admin logado (mesmo e-mail usado nas políticas do Supabase).
 async function verificarAdmin(req) {
   const auth = req.headers.authorization || "";
@@ -93,19 +103,31 @@ module.exports = async (req, res) => {
 
     const dias = Math.min(90, Math.max(1, parseInt(req.query.dias, 10) || 28));
     const dateRanges = [{ startDate: `${dias}daysAgo`, endDate: "today" }];
+    const dateRangesAnterior = [{ startDate: `${dias * 2}daysAgo`, endDate: `${dias + 1}daysAgo` }];
+    const metricasTotais = [
+      { name: "activeUsers" },
+      { name: "sessions" },
+      { name: "screenPageViews" },
+      { name: "averageSessionDuration" },
+      { name: "bounceRate" },
+    ];
     const token = await obterTokenAcesso();
 
-    const [totais, paginas, eventos, dispositivos] = await Promise.all([
-      rodarRelatorio(token, propertyId, {
-        dateRanges,
-        metrics: [
-          { name: "activeUsers" },
-          { name: "sessions" },
-          { name: "screenPageViews" },
-          { name: "averageSessionDuration" },
-          { name: "bounceRate" },
-        ],
-      }),
+    const [
+      totais,
+      totaisAnterior,
+      paginas,
+      eventos,
+      dispositivos,
+      origens,
+      novosVsRecorrentes,
+      localizacao,
+      serieTemporal,
+      funilMatriculas,
+      tempoReal,
+    ] = await Promise.all([
+      rodarRelatorio(token, propertyId, { dateRanges, metrics: metricasTotais }),
+      rodarRelatorio(token, propertyId, { dateRanges: dateRangesAnterior, metrics: metricasTotais }),
       rodarRelatorio(token, propertyId, {
         dateRanges,
         dimensions: [{ name: "pagePath" }],
@@ -126,22 +148,74 @@ module.exports = async (req, res) => {
         metrics: [{ name: "activeUsers" }],
         orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
       }),
+      rodarRelatorio(token, propertyId, {
+        dateRanges,
+        dimensions: [{ name: "sessionDefaultChannelGroup" }],
+        metrics: [{ name: "sessions" }],
+        orderBys: [{ metric: { metricName: "sessions" }, desc: true }],
+        limit: 8,
+      }),
+      rodarRelatorio(token, propertyId, {
+        dateRanges,
+        dimensions: [{ name: "newVsReturning" }],
+        metrics: [{ name: "activeUsers" }],
+        orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
+      }),
+      rodarRelatorio(token, propertyId, {
+        dateRanges,
+        dimensions: [{ name: "city" }],
+        metrics: [{ name: "activeUsers" }],
+        orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
+        limit: 8,
+      }),
+      rodarRelatorio(token, propertyId, {
+        dateRanges,
+        dimensions: [{ name: "date" }],
+        metrics: [{ name: "activeUsers" }, { name: "sessions" }, { name: "screenPageViews" }],
+        orderBys: [{ dimension: { dimensionName: "date" } }],
+      }),
+      rodarRelatorio(token, propertyId, {
+        dateRanges,
+        dimensions: [{ name: "pagePath" }],
+        metrics: [{ name: "screenPageViews" }],
+        dimensionFilter: { filter: { fieldName: "pagePath", stringFilter: { matchType: "EXACT", value: "/matriculas" } } },
+      }),
+      rodarRelatorioTempoReal(token, propertyId, { metrics: [{ name: "activeUsers" }] }),
     ]);
 
-    const valoresTotais = linhas(totais)[0]?.metricValues?.map((m) => Number(m.value)) || [0, 0, 0, 0, 0];
+    const extrairTotais = (relatorio) => {
+      const v = linhas(relatorio)[0]?.metricValues?.map((m) => Number(m.value)) || [0, 0, 0, 0, 0];
+      return { usuarios: v[0], sessoes: v[1], visualizacoes: v[2], duracaoMediaSeg: v[3], taxaRejeicao: v[4] };
+    };
+
+    const visualizacoesMatriculas = linhas(funilMatriculas)[0]?.metricValues?.[0]?.value
+      ? Number(linhas(funilMatriculas)[0].metricValues[0].value)
+      : 0;
+    const eventosLista = linhas(eventos).map((r) => ({ nome: r.dimensionValues[0].value, total: Number(r.metricValues[0].value) }));
+    const matriculasEnviadas = eventosLista.find((e) => e.nome === "matricula_enviada")?.total ?? 0;
 
     res.status(200).json({
       periodo: dias,
-      totais: {
-        usuarios: valoresTotais[0],
-        sessoes: valoresTotais[1],
-        visualizacoes: valoresTotais[2],
-        duracaoMediaSeg: valoresTotais[3],
-        taxaRejeicao: valoresTotais[4],
-      },
+      totais: extrairTotais(totais),
+      totaisAnterior: extrairTotais(totaisAnterior),
       paginas: linhas(paginas).map((r) => ({ caminho: r.dimensionValues[0].value, visualizacoes: Number(r.metricValues[0].value) })),
-      eventos: linhas(eventos).map((r) => ({ nome: r.dimensionValues[0].value, total: Number(r.metricValues[0].value) })),
+      eventos: eventosLista,
       dispositivos: linhas(dispositivos).map((r) => ({ categoria: r.dimensionValues[0].value, usuarios: Number(r.metricValues[0].value) })),
+      origens: linhas(origens).map((r) => ({ canal: r.dimensionValues[0].value, sessoes: Number(r.metricValues[0].value) })),
+      novosVsRecorrentes: linhas(novosVsRecorrentes).map((r) => ({ tipo: r.dimensionValues[0].value, usuarios: Number(r.metricValues[0].value) })),
+      localizacao: linhas(localizacao).map((r) => ({ cidade: r.dimensionValues[0].value, usuarios: Number(r.metricValues[0].value) })),
+      serieTemporal: linhas(serieTemporal).map((r) => ({
+        data: r.dimensionValues[0].value,
+        usuarios: Number(r.metricValues[0].value),
+        sessoes: Number(r.metricValues[1].value),
+        visualizacoes: Number(r.metricValues[2].value),
+      })),
+      funil: {
+        visualizacoesMatriculas,
+        matriculasEnviadas,
+        taxaConversao: visualizacoesMatriculas ? (matriculasEnviadas / visualizacoesMatriculas) * 100 : 0,
+      },
+      usuariosAgora: Number(linhas(tempoReal)[0]?.metricValues?.[0]?.value || 0),
     });
   } catch (e) {
     res.status(500).json({ error: e instanceof Error ? e.message : "Erro desconhecido." });
