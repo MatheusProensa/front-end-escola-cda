@@ -67,10 +67,19 @@ function Sidebar({ active, open, onClose, logoSrc }: { active: string; open: boo
   );
 }
 
+const DICAS = [
+  "Edite os campos e clique fora (ou em \"Salvar\") para gravar as alterações.",
+  "A barra \"Alterações não publicadas\" só aparece quando há algo pendente de salvar.",
+  "Use a \"Pré-visualização\" para ver como o conteúdo vai aparecer no site antes de publicar.",
+  "Em Matrículas, clique no status para mudar o andamento do contato com a família.",
+];
+
 function Topbar({ title, subtitle, onBurger }: { title: string; subtitle: string; onBurger: () => void }) {
   const { user } = useAuth();
   const [novasMatriculas, setNovasMatriculas] = useState(0);
   const fetched = useRef(false);
+  const [showHelp, setShowHelp] = useState(false);
+  const helpRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (fetched.current || !API_CONFIGURED) return;
@@ -81,6 +90,15 @@ function Topbar({ title, subtitle, onBurger }: { title: string; subtitle: string
       .eq("status", "novo")
       .then(({ data }) => setNovasMatriculas(data?.length ?? 0));
   }, []);
+
+  useEffect(() => {
+    if (!showHelp) return;
+    const onClick = (e: MouseEvent) => {
+      if (helpRef.current && !helpRef.current.contains(e.target as Node)) setShowHelp(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [showHelp]);
 
   const initials = user?.nome
     ? user.nome.split(" ").map((n: string) => n[0]).slice(0, 2).join("").toUpperCase()
@@ -98,18 +116,28 @@ function Topbar({ title, subtitle, onBurger }: { title: string; subtitle: string
           <i className="fa-solid fa-magnifying-glass"></i>
           <input placeholder="Buscar conteúdo…" />
         </div>
-        <button className="adm-icon-btn" aria-label="Ajuda"><i className="fa-regular fa-circle-question"></i></button>
+        <div ref={helpRef} style={{ position: "relative" }}>
+          <button className="adm-icon-btn" aria-label="Ajuda" onClick={() => setShowHelp((v) => !v)}><i className="fa-regular fa-circle-question"></i></button>
+          {showHelp && (
+            <div className="adm-help-pop">
+              <h4>Dicas rápidas</h4>
+              <ul>
+                {DICAS.map((d, i) => <li key={i}>{d}</li>)}
+              </ul>
+            </div>
+          )}
+        </div>
         <Link to="/admin/matriculas" className="adm-icon-btn" aria-label="Matrículas" style={{ position: "relative", display: "inline-flex" }}>
           <i className="fa-regular fa-envelope"></i>
           {novasMatriculas > 0 && <span className="dot" style={{ position: "absolute", top: 6, right: 6 }}></span>}
         </Link>
-        <div className="adm-user">
+        <Link to="/admin/configuracoes" className="adm-user">
           <div className="adm-avatar">{initials}</div>
           <div className="adm-user-meta">
             <strong>{user?.nome ?? "Equipe CDA"}</strong>
             <span>Administrador</span>
           </div>
-        </div>
+        </Link>
       </div>
     </header>
   );
