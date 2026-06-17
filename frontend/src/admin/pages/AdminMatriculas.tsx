@@ -92,40 +92,42 @@ export default function AdminMatriculas() {
             ) : filtradas.length === 0 ? (
               <div style={{ padding: 40, textAlign: "center", color: "var(--adm-ink-3)" }}>Nenhuma solicitação encontrada.</div>
             ) : (
-              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-                <thead>
-                  <tr style={{ background: "var(--adm-bg)", borderBottom: "1px solid var(--adm-line)" }}>
-                    {["Responsável", "WhatsApp", "Criança", "Segmento", "Status", ""].map((h, i) => (
-                      <th key={i} style={{ padding: "10px 16px", textAlign: "left", fontWeight: 600, color: "var(--adm-ink-2)", fontSize: 12 }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtradas.map((m) => (
-                    <tr key={m.id} style={{ borderBottom: "1px solid var(--adm-line-soft)" }}>
-                      <td style={{ padding: "12px 16px", fontWeight: 600 }}>{m.responsavel}</td>
-                      <td style={{ padding: "12px 16px" }}>
-                        <a href={`https://wa.me/55${m.whatsapp.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" style={{ color: "#25d366" }}>
-                          <i className="fa-brands fa-whatsapp"></i> {m.whatsapp}
-                        </a>
-                      </td>
-                      <td style={{ padding: "12px 16px" }}>{m.nome_crianca ? `${m.nome_crianca}${m.idade_crianca ? `, ${m.idade_crianca}` : ""}` : "—"}</td>
-                      <td style={{ padding: "12px 16px" }}>{m.segmento}</td>
-                      <td style={{ padding: "12px 16px" }}>
-                        <select value={m.status} onChange={(e) => updateStatus(m.id, e.target.value)}
-                          style={{ border: `1px solid ${STATUS_COLOR[m.status]}`, color: STATUS_COLOR[m.status], background: "transparent", borderRadius: 6, padding: "3px 8px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
-                          {Object.entries(STATUS_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-                        </select>
-                      </td>
-                      <td style={{ padding: "12px 16px" }}>
-                        {m.mensagem && (
-                          <button className="adm-mini-btn" title={m.mensagem}><i className="fa-regular fa-comment"></i></button>
-                        )}
-                      </td>
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", minWidth: 640, borderCollapse: "collapse", fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ background: "var(--adm-bg)", borderBottom: "1px solid var(--adm-line)" }}>
+                      {["Responsável", "WhatsApp", "Criança", "Segmento", "Status", ""].map((h, i) => (
+                        <th key={i} style={{ padding: "10px 16px", textAlign: "left", fontWeight: 600, color: "var(--adm-ink-2)", fontSize: 12, whiteSpace: "nowrap" }}>{h}</th>
+                      ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {filtradas.map((m) => (
+                      <tr key={m.id} style={{ borderBottom: "1px solid var(--adm-line-soft)" }}>
+                        <td style={{ padding: "12px 16px", fontWeight: 600, whiteSpace: "nowrap" }}>{m.responsavel}</td>
+                        <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                          <a href={`https://wa.me/55${m.whatsapp.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" style={{ color: "#25d366" }}>
+                            <i className="fa-brands fa-whatsapp"></i> {m.whatsapp}
+                          </a>
+                        </td>
+                        <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>{m.nome_crianca ? `${m.nome_crianca}${m.idade_crianca ? `, ${m.idade_crianca}` : ""}` : "—"}</td>
+                        <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>{m.segmento}</td>
+                        <td style={{ padding: "12px 16px" }}>
+                          <select value={m.status} onChange={(e) => updateStatus(m.id, e.target.value)}
+                            style={{ border: `1px solid ${STATUS_COLOR[m.status]}`, color: STATUS_COLOR[m.status], background: "transparent", borderRadius: 6, padding: "3px 8px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+                            {Object.entries(STATUS_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                          </select>
+                        </td>
+                        <td style={{ padding: "12px 16px" }}>
+                          {m.mensagem && (
+                            <button className="adm-mini-btn" title={m.mensagem}><i className="fa-regular fa-comment"></i></button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         </>
