@@ -15,11 +15,12 @@ type Props = {
   titulo: string;     // título da tela do admin
   subtitulo: string;  // subtítulo da tela do admin
   verNoSite: string;  // rota pública para "Ver no site"
+  extra?: React.ReactNode; // blocos extras (ex.: galeria) abaixo do cabeçalho
 };
 
 // Editor do cabeçalho (intro) de uma página pública. Salva de verdade no banco
 // e o site reflete a alteração imediatamente.
-export default function EditarPagina({ pagina, active, icone, titulo, subtitulo, verNoSite }: Props) {
+export default function EditarPagina({ pagina, active, icone, titulo, subtitulo, verNoSite, extra }: Props) {
   const [toast, toastNode] = useToast();
   const { sec, loading } = usePageContent(pagina);
   const [intro, setIntro] = useState<Intro>(INTROS[pagina]);
@@ -65,6 +66,7 @@ export default function EditarPagina({ pagina, active, icone, titulo, subtitulo,
             <label className="adm-form-label">Texto de apoio</label>
             <textarea className="adm-textarea" value={intro.texto} onChange={set("texto")}></textarea>
           </div>
+          {extra}
         </div>
 
         <div className="adm-side-panel">

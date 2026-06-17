@@ -3,25 +3,8 @@ import { Link } from "react-router-dom";
 import { Icon, Layout, useContact, usePageMeta } from "../components/site";
 import { PageHero } from "../components/PageHero";
 import { asset } from "../lib/assets";
-
-// Galeria: áreas externas primeiro (grama → britas → areia → quadra → horta),
-// transição pela entrada coberta, depois os ambientes internos.
-const GAL = [
-  { img: "jardim.webp", t: "Pátio", d: "Áreas verdes para brincar, respirar e conviver.", cls: "w2 h2", pos: "center 40%" },
-  { img: "patio-area.webp", t: "Convivência", d: "Pátio arborizado para brincar e conviver ao ar livre." },
-  { img: "patio.webp", t: "Parque", d: "Parque ao ar livre com playground e natureza.", cls: "w2" },
-  { img: "recreio.webp", t: "Britas", d: "Brincar livre ao ar livre, do jeito da infância.", cls: "w2" },
-  { img: "areia.webp", t: "Areia", d: "Areia e balanço para explorar e imaginar.", cls: "w2 h2" },
-  { img: "quadra.webp", t: "Quadra", d: "Movimento, esporte e energia.", cls: "w2 h2", pos: "center 58%" },
-  { img: "horta.webp", t: "Horta", d: "Plantar, cuidar e aprender com a natureza.", cls: "w2 h2", pos: "center 72%", ar: "3 / 4" },
-  { img: "coberto.webp", t: "Entrada", d: "Brincar protegido em qualquer dia.", cls: "w2 h2" },
-  { img: "biblioteca.webp", t: "Biblioteca", d: "Mundos para descobrir em cada página.", cls: "w2 h2" },
-  { img: "sala-aula.webp", t: "Salas de aula", d: "Ambientes preparados para acolher e aprender." },
-  { img: "laboratorio.webp", t: "Laboratório", d: "Ciência viva, mão na massa.", cls: "w2" },
-  { img: "refeitorio.webp", t: "Refeitório", d: "Alimentação cuidada, com carinho.", cls: "w2" },
-  { img: "solario.webp", t: "Solário", d: "Espaço macio e seguro para os pequenos.", cls: "w2 h2" },
-  { img: "convivencia.webp", t: "Banheiro E. Fundamental e PCD", d: "Pebolim e descanso entre uma atividade e outra.", cls: "w2" },
-];
+import { usePageContent, section } from "../lib/content";
+import { ESPACOS_GAL_DEFAULT, type GalFoto } from "../lib/galeria";
 
 const FEATS = [
   { icon: "shield-halved", t: "Segurança", p: "Ambientes seguros, pensados para o bem-estar dos alunos.", gold: false },
@@ -30,26 +13,26 @@ const FEATS = [
   { icon: "lightbulb", t: "Descobertas", p: "Lugares que inspiram aprendizagem e novas experiências.", gold: true },
 ];
 
-function GaleriaLightbox({ index, onClose, onNav }: { index: number; onClose: () => void; onNav: (i: number) => void }) {
+function GaleriaLightbox({ gal, index, onClose, onNav }: { gal: GalFoto[]; index: number; onClose: () => void; onNav: (i: number) => void }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") onNav((index + 1) % GAL.length);
-      if (e.key === "ArrowLeft") onNav((index - 1 + GAL.length) % GAL.length);
+      if (e.key === "ArrowRight") onNav((index + 1) % gal.length);
+      if (e.key === "ArrowLeft") onNav((index - 1 + gal.length) % gal.length);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [index, onClose, onNav]);
-  const g = GAL[index];
+  }, [index, gal.length, onClose, onNav]);
+  const g = gal[index];
   return (
     <div className="lb-backdrop" onClick={onClose}>
       <button className="lb-x" onClick={onClose} aria-label="Fechar">×</button>
-      <button className="lb-nav lb-prev" onClick={(e) => { e.stopPropagation(); onNav((index - 1 + GAL.length) % GAL.length); }} aria-label="Anterior"><i className="fa-solid fa-chevron-left"></i></button>
+      <button className="lb-nav lb-prev" onClick={(e) => { e.stopPropagation(); onNav((index - 1 + gal.length) % gal.length); }} aria-label="Anterior"><i className="fa-solid fa-chevron-left"></i></button>
       <figure className="lb-fig" onClick={(e) => e.stopPropagation()}>
-        <img className="lb-img" src={asset(g.img)} alt={g.t} />
+        <img className="lb-img" src={g.url} alt={g.titulo} />
       </figure>
-      <button className="lb-nav lb-next" onClick={(e) => { e.stopPropagation(); onNav((index + 1) % GAL.length); }} aria-label="Próxima"><i className="fa-solid fa-chevron-right"></i></button>
-      <span className="lb-count">{index + 1} / {GAL.length}</span>
+      <button className="lb-nav lb-next" onClick={(e) => { e.stopPropagation(); onNav((index + 1) % gal.length); }} aria-label="Próxima"><i className="fa-solid fa-chevron-right"></i></button>
+      <span className="lb-count">{index + 1} / {gal.length}</span>
     </div>
   );
 }
@@ -57,6 +40,8 @@ function GaleriaLightbox({ index, onClose, onNav }: { index: number; onClose: ()
 export default function Espacos() {
   usePageMeta("Nosso Espaço — Estrutura e energia solar | Escola CDA", "Ambientes pensados para acolher, explorar e crescer: biblioteca, quadra, pátio, horta e energia solar na Escola CDA, Santa Maria/RS.");
   const contact = useContact();
+  const { sec } = usePageContent("espacos");
+  const gal = section<GalFoto[]>(sec, "galeria", ESPACOS_GAL_DEFAULT);
   const [lb, setLb] = useState<number | null>(null);
   const fechar = useCallback(() => setLb(null), []);
   return (
@@ -69,9 +54,9 @@ export default function Espacos() {
 
       <div className="cda-panel reveal">
         <div className="galeria">
-          {GAL.map((g, i) => (
-            <button className={"gal " + (g.cls || "")} key={i} onClick={() => setLb(i)} aria-label={"Ampliar foto: " + g.t}>
-              <img src={asset(g.img)} alt={g.t} loading="lazy" decoding="async" style={{ ...(g.pos ? { objectPosition: g.pos } : {}), ...(g.ar ? { aspectRatio: g.ar, objectFit: "cover" } : {}) }} />
+          {gal.map((g, i) => (
+            <button className={"gal " + (g.cls || "")} key={i} onClick={() => setLb(i)} aria-label={"Ampliar foto: " + g.titulo}>
+              <img src={g.url} alt={g.titulo} loading="lazy" decoding="async" style={{ ...(g.pos ? { objectPosition: g.pos } : {}), ...(g.ar ? { aspectRatio: g.ar, objectFit: "cover" } : {}) }} />
               <span className="gal-zoom"><Icon name="expand" size={14} /></span>
             </button>
           ))}
@@ -117,7 +102,7 @@ export default function Espacos() {
         </div>
       </div>
 
-      {lb !== null && <GaleriaLightbox index={lb} onClose={fechar} onNav={setLb} />}
+      {lb !== null && <GaleriaLightbox gal={gal} index={lb} onClose={fechar} onNav={setLb} />}
     </Layout>
   );
 }

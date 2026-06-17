@@ -1,4 +1,5 @@
 import EditarPagina from "./EditarPagina";
+import GaleriaEspacos from "./GaleriaEspacos";
 
 export default function EditarEspacos() {
   return (
@@ -9,6 +10,7 @@ export default function EditarEspacos() {
       titulo="Espaços"
       subtitulo="Galeria de ambientes e energia solar"
       verNoSite="/espacos"
+      extra={<GaleriaEspacos />}
     />
   );
 }
