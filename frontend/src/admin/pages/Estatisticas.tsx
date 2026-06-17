@@ -33,6 +33,18 @@ const EVENTO_LABEL: Record<string, string> = {
   scroll: "Rolagem de página",
   click: "Cliques em links externos",
   file_download: "Download de arquivo",
+  user_engagement: "Tempo de interação na página",
+};
+
+const PAGINA_LABEL: Record<string, string> = {
+  "/": "Página inicial",
+  "/segmentos": "Segmentos",
+  "/vivencias": "Vivências",
+  "/metodologia": "Metodologia",
+  "/espacos": "Espaços",
+  "/momentos": "Momentos",
+  "/sobre": "Sobre",
+  "/matriculas": "Matrículas",
 };
 
 const DEVICE_LABEL: Record<string, string> = { mobile: "Celular", desktop: "Computador", tablet: "Tablet" };
@@ -49,7 +61,7 @@ const CANAL_LABEL: Record<string, string> = {
   "Unassigned": "Não identificado",
 };
 
-const TIPO_LABEL: Record<string, string> = { new: "Novos visitantes", returning: "Visitantes recorrentes" };
+const TIPO_LABEL: Record<string, string> = { new: "Novos visitantes", returning: "Visitantes recorrentes", "(not set)": "Não identificado" };
 
 const formatarDuracao = (seg: number) => {
   const m = Math.floor(seg / 60);
@@ -248,11 +260,7 @@ export default function Estatisticas() {
                   <p style={{ color: "var(--adm-ink-3)", fontSize: 13 }}>Nenhum dado no período.</p>
                 ) : (
                   <BarraLista
-                    itens={dados.paginas.map((p) => {
-                      const nome = p.caminho.replace(/^\//, "");
-                      const rotulo = !nome ? "Página inicial" : nome[0].toUpperCase() + nome.slice(1);
-                      return { rotulo, valor: p.visualizacoes };
-                    })}
+                    itens={dados.paginas.map((p) => ({ rotulo: PAGINA_LABEL[p.caminho] ?? p.caminho, valor: p.visualizacoes }))}
                     max={maxPagina}
                     render={(v) => `${v}`}
                   />
@@ -324,7 +332,7 @@ export default function Estatisticas() {
                   <p style={{ color: "var(--adm-ink-3)", fontSize: 13 }}>Nenhum dado no período.</p>
                 ) : (
                   <BarraLista
-                    itens={dados.localizacao.map((c) => ({ rotulo: c.cidade, valor: c.usuarios }))}
+                    itens={dados.localizacao.map((c) => ({ rotulo: c.cidade === "(not set)" ? "Não identificada" : c.cidade, valor: c.usuarios }))}
                     max={maxCidade}
                     render={(v) => `${v}`}
                   />
