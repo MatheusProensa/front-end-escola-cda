@@ -113,6 +113,12 @@ module.exports = async (req, res) => {
     ];
     const token = await obterTokenAcesso();
 
+    // Exclui qualquer acesso a /admin/* dos relatórios — métricas devem refletir
+    // só visitantes do site público, mesmo que dados antigos do painel ainda existam no GA.
+    const excluirAdmin = {
+      notExpression: { filter: { fieldName: "pagePath", stringFilter: { matchType: "BEGINS_WITH", value: "/admin" } } },
+    };
+
     const [
       totais,
       totaisAnterior,
@@ -126,15 +132,13 @@ module.exports = async (req, res) => {
       funilMatriculas,
       tempoReal,
     ] = await Promise.all([
-      rodarRelatorio(token, propertyId, { dateRanges, metrics: metricasTotais }),
-      rodarRelatorio(token, propertyId, { dateRanges: dateRangesAnterior, metrics: metricasTotais }),
+      rodarRelatorio(token, propertyId, { dateRanges, metrics: metricasTotais, dimensionFilter: excluirAdmin }),
+      rodarRelatorio(token, propertyId, { dateRanges: dateRangesAnterior, metrics: metricasTotais, dimensionFilter: excluirAdmin }),
       rodarRelatorio(token, propertyId, {
         dateRanges,
         dimensions: [{ name: "pagePath" }],
         metrics: [{ name: "screenPageViews" }],
-        dimensionFilter: {
-          notExpression: { filter: { fieldName: "pagePath", stringFilter: { matchType: "BEGINS_WITH", value: "/admin" } } },
-        },
+        dimensionFilter: excluirAdmin,
         orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
         limit: 10,
       }),
@@ -142,6 +146,7 @@ module.exports = async (req, res) => {
         dateRanges,
         dimensions: [{ name: "eventName" }],
         metrics: [{ name: "eventCount" }],
+        dimensionFilter: excluirAdmin,
         orderBys: [{ metric: { metricName: "eventCount" }, desc: true }],
         limit: 20,
       }),
@@ -149,12 +154,14 @@ module.exports = async (req, res) => {
         dateRanges,
         dimensions: [{ name: "deviceCategory" }],
         metrics: [{ name: "activeUsers" }],
+        dimensionFilter: excluirAdmin,
         orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
       }),
       rodarRelatorio(token, propertyId, {
         dateRanges,
         dimensions: [{ name: "sessionDefaultChannelGroup" }],
         metrics: [{ name: "sessions" }],
+        dimensionFilter: excluirAdmin,
         orderBys: [{ metric: { metricName: "sessions" }, desc: true }],
         limit: 8,
       }),
@@ -162,12 +169,14 @@ module.exports = async (req, res) => {
         dateRanges,
         dimensions: [{ name: "newVsReturning" }],
         metrics: [{ name: "activeUsers" }],
+        dimensionFilter: excluirAdmin,
         orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
       }),
       rodarRelatorio(token, propertyId, {
         dateRanges,
         dimensions: [{ name: "city" }],
         metrics: [{ name: "activeUsers" }],
+        dimensionFilter: excluirAdmin,
         orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
         limit: 8,
       }),
@@ -175,6 +184,7 @@ module.exports = async (req, res) => {
         dateRanges,
         dimensions: [{ name: "date" }],
         metrics: [{ name: "activeUsers" }, { name: "sessions" }, { name: "screenPageViews" }],
+        dimensionFilter: excluirAdmin,
         orderBys: [{ dimension: { dimensionName: "date" } }],
       }),
       rodarRelatorio(token, propertyId, {
