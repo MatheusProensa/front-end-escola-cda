@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Icon, Navbar, Footer, useReveal, useContact, usePageMeta } from "../components/site";
 import { asset } from "../lib/assets";
 import { usePageContent, section } from "../lib/content";
+import { HOME_PROPOSITO, HOME_CONEXAO, type Bloco } from "../lib/textos";
 import { supabase, API_CONFIGURED } from "../lib/supabase";
 
 type HeroData = { selo: string; titulo: string; destaque: string; texto: string };
@@ -79,18 +80,18 @@ function Pillars({ pilares }: { pilares: PilarData[] }) {
 }
 
 /* ───────────── Proposito ───────────── */
-function Proposito() {
+function Proposito({ data }: { data: Bloco }) {
   const navigate = useNavigate();
   return (
     <section className="proposito reveal" id="proposito">
       <div className="proposito-left">
-        <span className="proposito-mini">EDUCAÇÃO COM PROPÓSITO</span>
-        <h2>Um jeito de aprender<br />que respeita a infância</h2>
-        <p>Aprender acontece com afeto, escuta e vivências significativas. Valorizamos a infância como uma fase de descobertas, autonomia e construção de vínculos.</p>
+        <span className="proposito-mini">{data.eyebrow}</span>
+        <h2>{data.titulo}</h2>
+        <p>{data.p1}</p>
         <button className="proposito-button" onClick={() => navigate("/sobre")}>Conheça nossa proposta</button>
       </div>
       <div className="proposito-right">
-        <img src={asset("giovana.webp")} alt="Criança na escola CDA" decoding="async" />
+        <img src={data.img} alt="Criança na escola CDA" decoding="async" />
       </div>
     </section>
   );
@@ -246,7 +247,7 @@ function Depoimentos() {
 }
 
 /* ───────────── Conexão ───────────── */
-function Conexao() {
+function Conexao({ data }: { data: Bloco }) {
   const feats = [
     { icon: "user-group", t: "Acompanhamento próximo", p: "Olhar individual para cada aluno." },
     { icon: "heart", t: "Diálogo com as famílias", p: "Comunicação aberta, transparente e constante." },
@@ -255,11 +256,11 @@ function Conexao() {
   ];
   return (
     <section className="conexao reveal" id="conexao">
-      <div className="conexao-foto"><img src={asset("conexao.webp")} alt="Professora e alunos CDA" decoding="async" /></div>
+      <div className="conexao-foto"><img src={data.img} alt="Professora e alunos CDA" decoding="async" /></div>
       <div className="conexao-content">
-        <span className="conexao-mini">CONEXÃO QUE TRANSFORMA</span>
-        <h2>Educação construída<br />com <span className="conexao-destaque-azul">carinho, escuta</span><br />e <span className="conexao-destaque-azul">presença</span> diária</h2>
-        <p>Acreditamos que a parceria entre escola e família é essencial para que cada criança se desenvolva com segurança, autonomia e confiança.</p>
+        <span className="conexao-mini">{data.eyebrow}</span>
+        <h2>{data.titulo}</h2>
+        <p>{data.p1}</p>
         <div className="conexao-features">
           {feats.map((f, i) => (
             <div className="conexao-feature" key={i}>
@@ -340,11 +341,13 @@ export default function Home() {
   const hero = section<HeroData>(sec, "hero", HERO_DEFAULT);
   const pilares = section<PilarData[]>(sec, "pilares", PILARES_DEFAULT);
   const diario = section<DiarioData>(sec, "diario", DIARIO_DEFAULT);
+  const proposito = section<Bloco>(sec, "proposito", HOME_PROPOSITO);
+  const conexao = section<Bloco>(sec, "conexao", HOME_CONEXAO);
   return (
     <div className="app">
       <Hero data={hero} />
       <Pillars pilares={pilares} />
-      <Proposito />
+      <Proposito data={proposito} />
       <Segmentos />
       <Vivencias />
       <FachadaBand />
@@ -352,7 +355,7 @@ export default function Home() {
       <Espaco />
       <Depoimentos />
       <DiarioBand data={diario} />
-      <Conexao />
+      <Conexao data={conexao} />
       <Footer />
     </div>
   );

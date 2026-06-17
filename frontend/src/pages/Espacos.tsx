@@ -5,7 +5,10 @@ import { PageHero } from "../components/PageHero";
 import { asset } from "../lib/assets";
 import { usePageContent, section } from "../lib/content";
 import { ESPACOS_GAL_DEFAULT, type GalFoto } from "../lib/galeria";
-import { ESPACOS_FEATS, type Valor } from "../lib/listas";
+import { ESPACOS_FEATS, type Valor, type Lista } from "../lib/listas";
+import { ESPACOS_SOLAR, ESPACOS_SOLAR_ITENS, type Bloco } from "../lib/textos";
+
+const SOLAR_ICONS = ["solar-panel", "leaf", "piggy-bank"];
 
 function GaleriaLightbox({ gal, index, onClose, onNav }: { gal: GalFoto[]; index: number; onClose: () => void; onNav: (i: number) => void }) {
   useEffect(() => {
@@ -37,6 +40,8 @@ export default function Espacos() {
   const { sec } = usePageContent("espacos");
   const gal = section<GalFoto[]>(sec, "galeria", ESPACOS_GAL_DEFAULT);
   const feats = section<Valor[]>(sec, "feats", ESPACOS_FEATS);
+  const solar = section<Bloco>(sec, "solar", ESPACOS_SOLAR);
+  const solarItens = section<Lista[]>(sec, "solar_itens", ESPACOS_SOLAR_ITENS);
   const [lb, setLb] = useState<number | null>(null);
   const fechar = useCallback(() => setLb(null), []);
   return (
@@ -73,17 +78,17 @@ export default function Espacos() {
 
       <div className="feature-row flip reveal">
         <div className="fr-media">
-          <img src={asset("drone.webp")} alt="Painéis solares da Escola CDA" decoding="async" style={{ objectPosition: "88% center" }} />
-          <span className="fr-tag"><span className="dot"></span>Energia limpa</span>
+          <img src={solar.img} alt="Painéis solares da Escola CDA" decoding="async" style={{ objectPosition: "88% center" }} />
+          <span className="fr-tag"><span className="dot"></span>{solar.tag}</span>
         </div>
         <div className="fr-body">
-          <span className="eyebrow">Sustentabilidade</span>
-          <h3>Uma escola movida a energia solar</h3>
-          <p>Investimos em energia limpa porque cuidar da infância também é cuidar do futuro do planeta. Nossos painéis abastecem o dia a dia da escola e ainda viram aprendizado sobre consciência ambiental para as crianças.</p>
+          <span className="eyebrow">{solar.eyebrow}</span>
+          <h3>{solar.titulo}</h3>
+          <p>{solar.p1}</p>
           <div className="cda-list">
-            <div className="li"><div className="li-ic gold"><Icon name="solar-panel" size={12} /></div><div><strong>Energia limpa e renovável</strong><span>Painéis solares que reduzem o impacto ambiental.</span></div></div>
-            <div className="li"><div className="li-ic"><Icon name="leaf" size={12} /></div><div><strong>Consciência ambiental</strong><span>As crianças aprendem, na prática, a cuidar do planeta.</span></div></div>
-            <div className="li"><div className="li-ic gold"><Icon name="piggy-bank" size={12} /></div><div><strong>Recurso que volta pra educação</strong><span>A economia gerada é reinvestida no aprendizado.</span></div></div>
+            {solarItens.map((it, i) => (
+              <div className="li" key={i}><div className={"li-ic" + (i % 2 === 0 ? " gold" : "")}><Icon name={SOLAR_ICONS[i] || "check"} size={12} /></div><div><strong>{it.t}</strong><span>{it.d}</span></div></div>
+            ))}
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { PageHero } from "../components/PageHero";
 import { asset } from "../lib/assets";
 import { usePageContent, section } from "../lib/content";
 import { MET_DIMENSOES, MET_INFANTIL, MET_FUNDAMENTAL, MET_PILARES5, type Valor, type Lista } from "../lib/listas";
+import { MET_INTRO, MET_INFANTIL_BLOCO, MET_FUNDAMENTAL_BLOCO, type Bloco } from "../lib/textos";
 
 export default function Metodologia() {
   usePageMeta("Metodologia ProRaiz — Escola CDA, Santa Maria/RS", "A CDA adota a metodologia ProRaiz: formação integral que une aprendizado acadêmico e desenvolvimento socioemocional, alinhada à BNCC.");
@@ -13,20 +14,23 @@ export default function Metodologia() {
   const INFANTIL = section<Lista[]>(sec, "infantil", MET_INFANTIL);
   const FUNDAMENTAL = section<Lista[]>(sec, "fundamental", MET_FUNDAMENTAL);
   const PILARES5 = section<Valor[]>(sec, "pilares5", MET_PILARES5);
+  const intro = section<Bloco>(sec, "intro_bloco", MET_INTRO);
+  const infBloco = section<Bloco>(sec, "infantil_bloco", MET_INFANTIL_BLOCO);
+  const fundBloco = section<Bloco>(sec, "fundamental_bloco", MET_FUNDAMENTAL_BLOCO);
   return (
     <Layout>
       <PageHero pagina="metodologia" />
 
       <div className="feature-row reveal">
         <div className="fr-media">
-          <img src={asset("sala-aula.webp")} alt="Sala de aula da Escola CDA" decoding="async" />
-          <span className="fr-tag"><span className="dot"></span>Aprender por inteiro</span>
+          <img src={intro.img} alt="Sala de aula da Escola CDA" decoding="async" />
+          <span className="fr-tag"><span className="dot"></span>{intro.tag}</span>
         </div>
         <div className="fr-body">
           <img className="sistema-logo" style={{ margin: "0 0 16px" }} src={asset("proraiz-logo.webp")} alt="Sistema ProRaiz" />
-          <span className="eyebrow">Mais que conteúdo</span>
-          <h3>Um ensino que forma o intelecto, a cidadania e o emocional</h3>
-          <p>Trabalhamos habilidades, valores e competências que acompanham nossos alunos em cada escolha, relação e desafio da vida. É a integração entre emoção, razão e ação — uma jornada educativa com propósito e sentido.</p>
+          <span className="eyebrow">{intro.eyebrow}</span>
+          <h3>{intro.titulo}</h3>
+          <p>{intro.p1}</p>
         </div>
       </div>
 
@@ -45,13 +49,13 @@ export default function Metodologia() {
 
       <div className="feature-row reveal">
         <div className="fr-media">
-          <img src={asset("infantil-met.webp")} alt="Educação Infantil na CDA" decoding="async" style={{ objectPosition: "center 45%" }} />
-          <span className="fr-tag"><span className="dot"></span>Educação Infantil</span>
+          <img src={infBloco.img} alt="Educação Infantil na CDA" decoding="async" style={{ objectPosition: "center 45%" }} />
+          <span className="fr-tag"><span className="dot"></span>{infBloco.tag}</span>
         </div>
         <div className="fr-body">
-          <span className="eyebrow">Educação Infantil</span>
-          <h3>Descobrir, sentir e se expressar</h3>
-          <p>Na Educação Infantil, a proposta do ProRaiz é <strong>baseada em vivências</strong>, como recomenda a BNCC: a criança aprende por meio de interações e brincadeiras, vivendo experiências com significado e propósito.</p>
+          <span className="eyebrow">{infBloco.eyebrow}</span>
+          <h3>{infBloco.titulo}</h3>
+          <p>{infBloco.p1}</p>
           <div className="cda-list">
             {INFANTIL.map((it, i) => (
               <div className="li" key={i}><div className={"li-ic" + (i % 2 ? " gold" : "")}><Icon name="check" size={11} /></div><div><strong>{it.t}</strong><span>{it.d}</span></div></div>
@@ -62,13 +66,13 @@ export default function Metodologia() {
 
       <div className="feature-row flip reveal">
         <div className="fr-media">
-          <img src={asset("fundamental-met.webp")} alt="Ensino Fundamental na CDA" decoding="async" style={{ objectPosition: "center 40%" }} />
-          <span className="fr-tag"><span className="dot"></span>Ensino Fundamental</span>
+          <img src={fundBloco.img} alt="Ensino Fundamental na CDA" decoding="async" style={{ objectPosition: "center 40%" }} />
+          <span className="fr-tag"><span className="dot"></span>{fundBloco.tag}</span>
         </div>
         <div className="fr-body">
-          <span className="eyebrow">Ensino Fundamental</span>
-          <h3>Pensar, criar e transformar</h3>
-          <p>No Ensino Fundamental, o conhecimento se constrói <strong>por meio de trocas</strong> — com os colegas, com o mundo e com os objetos de aprendizagem. Partindo do que o aluno já sabe, o aprendizado se torna relevante e aplicável à vida.</p>
+          <span className="eyebrow">{fundBloco.eyebrow}</span>
+          <h3>{fundBloco.titulo}</h3>
+          <p>{fundBloco.p1}</p>
           <div className="cda-list">
             {FUNDAMENTAL.map((it, i) => (
               <div className="li" key={i}><div className={"li-ic" + (i % 2 ? " gold" : "")}><Icon name="check" size={11} /></div><div><strong>{it.t}</strong><span>{it.d}</span></div></div>

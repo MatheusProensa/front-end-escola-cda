@@ -3,6 +3,14 @@ import AdminShell from "../AdminShell";
 import { SaveBar, useToast, ImgSlot } from "../ui";
 import { asset } from "../../lib/assets";
 import { supabase, API_CONFIGURED } from "../../lib/supabase";
+import BlocoTexto from "./BlocoTexto";
+import { HOME_PROPOSITO, HOME_CONEXAO } from "../../lib/textos";
+
+const camposHomeBloco = [
+  { key: "eyebrow" as const, label: "Texto pequeno (acima do título)" },
+  { key: "titulo" as const, label: "Título" },
+  { key: "p1" as const, label: "Parágrafo", tipo: "textarea" as const },
+];
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 
@@ -119,6 +127,9 @@ export default function EditarHome() {
             <p className="hint">Depoimentos de famílias publicados no carrossel da Home.</p>
             <a className="adm-btn adm-btn-ghost adm-btn-sm" style={{ width: "fit-content" }} href="/admin/depoimentos"><i className="fa-solid fa-pen"></i> Gerenciar depoimentos</a>
           </div>
+
+          <BlocoTexto pagina="home" secao="proposito" titulo="Bloco: Educação com propósito" defaults={HOME_PROPOSITO} imagem campos={camposHomeBloco} hint="Seção com foto à direita, logo após os pilares." />
+          <BlocoTexto pagina="home" secao="conexao" titulo="Bloco: Conexão que transforma" defaults={HOME_CONEXAO} imagem campos={camposHomeBloco} hint="Seção perto do fim da página inicial." />
         </div>
 
         <div className="adm-side-panel">

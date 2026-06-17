@@ -1,30 +1,35 @@
 import { Link } from "react-router-dom";
 import { Icon, Layout, usePageMeta } from "../components/site";
 import { PageHero } from "../components/PageHero";
-import { asset } from "../lib/assets";
 import { usePageContent, section } from "../lib/content";
 import { SOBRE_TIMELINE_DEFAULT, type GalFoto } from "../lib/galeria";
-import { SOBRE_VALORES, type Valor } from "../lib/listas";
+import { SOBRE_VALORES, type Valor, type Lista } from "../lib/listas";
+import { SOBRE_HISTORIA, SOBRE_ALIMENTACAO, SOBRE_ALIMENTACAO_ITENS, type Bloco } from "../lib/textos";
+
+const ALIM_ICONS = ["utensils", "leaf", "ban"];
 
 export default function Sobre() {
   usePageMeta("Sobre a Escola CDA — 15 anos de história em Santa Maria/RS", "Há 15 anos sonhando junto com as famílias. Conheça a história, os valores e a proposta educacional da Escola CDA.");
   const { sec } = usePageContent("sobre");
   const tl = section<GalFoto[]>(sec, "timeline", SOBRE_TIMELINE_DEFAULT);
   const valores = section<Valor[]>(sec, "valores", SOBRE_VALORES);
+  const historia = section<Bloco>(sec, "historia", SOBRE_HISTORIA);
+  const alimentacao = section<Bloco>(sec, "alimentacao", SOBRE_ALIMENTACAO);
+  const alimItens = section<Lista[]>(sec, "alimentacao_itens", SOBRE_ALIMENTACAO_ITENS);
   return (
     <Layout>
       <PageHero pagina="sobre" />
 
       <div className="feature-row reveal">
         <div className="fr-media">
-          <img src={asset("nossa-historia.webp")} alt="Equipe da Escola CDA" decoding="async" style={{ objectPosition: "center 35%" }} />
-          <span className="fr-tag"><span className="dot"></span>Nossa história</span>
+          <img src={historia.img} alt="Equipe da Escola CDA" decoding="async" style={{ objectPosition: "center 35%" }} />
+          <span className="fr-tag"><span className="dot"></span>{historia.tag}</span>
         </div>
         <div className="fr-body">
-          <span className="eyebrow">Quem somos</span>
-          <h3>Uma história construída com afeto</h3>
-          <p>Tudo começou como "Carinha de Anjo" — um lugar pensado para acolher cada criança com afeto, segurança e propósito, ao lado das famílias. Em 15 anos nos tornamos a Escola CDA: crescemos em espaços, vivências e estrutura, mas mantivemos intacto o que nos move — o cuidado humano com a infância.</p>
-          <p>Acreditamos que aprender acontece com escuta, vínculo e experiências que marcam. É assim, todos os dias, que transformamos vidas.</p>
+          <span className="eyebrow">{historia.eyebrow}</span>
+          <h3>{historia.titulo}</h3>
+          <p>{historia.p1}</p>
+          {historia.p2 && <p>{historia.p2}</p>}
         </div>
       </div>
 
@@ -60,17 +65,17 @@ export default function Sobre() {
 
       <div className="feature-row reveal">
         <div className="fr-media">
-          <img src={asset("alimentacao.webp")} alt="Refeitório da Escola CDA" decoding="async" />
-          <span className="fr-tag"><span className="dot"></span>Alimentação saudável</span>
+          <img src={alimentacao.img} alt="Refeitório da Escola CDA" decoding="async" />
+          <span className="fr-tag"><span className="dot"></span>{alimentacao.tag}</span>
         </div>
         <div className="fr-body">
-          <span className="eyebrow">Comer bem também é cuidar</span>
-          <h3>Comida de verdade, feita com carinho</h3>
-          <p>Comida de verdade, feita na escola e com acompanhamento nutricional. Sem industrializados — priorizamos alimentos naturais e o que colhemos na nossa própria horta.</p>
+          <span className="eyebrow">{alimentacao.eyebrow}</span>
+          <h3>{alimentacao.titulo}</h3>
+          <p>{alimentacao.p1}</p>
           <div className="cda-list">
-            <div className="li"><div className="li-ic"><Icon name="utensils" size={12} /></div><div><strong>Refeições ao longo do dia</strong><span>Fruta e almoço pela manhã; fruta e lanche à tarde. No Ensino Fundamental, o lanche.</span></div></div>
-            <div className="li"><div className="li-ic gold"><Icon name="leaf" size={12} /></div><div><strong>Da horta para a mesa</strong><span>Parte das hortaliças e temperos vem da nossa própria horta.</span></div></div>
-            <div className="li"><div className="li-ic"><Icon name="ban" size={12} /></div><div><strong>Sem industrializados</strong><span>Receitas feitas na escola; nos berçários, sem sal e açúcar.</span></div></div>
+            {alimItens.map((it, i) => (
+              <div className="li" key={i}><div className={"li-ic" + (i % 2 ? " gold" : "")}><Icon name={ALIM_ICONS[i] || "check"} size={12} /></div><div><strong>{it.t}</strong><span>{it.d}</span></div></div>
+            ))}
           </div>
         </div>
       </div>
