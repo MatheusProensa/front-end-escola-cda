@@ -82,7 +82,7 @@ async function verificarAdmin(req) {
   });
   if (!resp.ok) return false;
   const usuario = await resp.json();
-  return usuario && usuario.email === "escolacdasm@gmail.com";
+  return usuario && usuario.email === "sm.escolacda@gmail.com";
 }
 
 const linhas = (relatorio) => relatorio.rows || [];

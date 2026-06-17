@@ -8,12 +8,12 @@ create policy "fotos: leitura pública"
 
 create policy "fotos: upload admin"
   on storage.objects for insert
-  with check ( bucket_id = 'fotos' and (auth.jwt() ->> 'email') = 'escolacdasm@gmail.com' );
+  with check ( bucket_id = 'fotos' and (auth.jwt() ->> 'email') = 'sm.escolacda@gmail.com' );
 
 create policy "fotos: atualização admin"
   on storage.objects for update
-  using ( bucket_id = 'fotos' and (auth.jwt() ->> 'email') = 'escolacdasm@gmail.com' );
+  using ( bucket_id = 'fotos' and (auth.jwt() ->> 'email') = 'sm.escolacda@gmail.com' );
 
 create policy "fotos: remoção admin"
   on storage.objects for delete
-  using ( bucket_id = 'fotos' and (auth.jwt() ->> 'email') = 'escolacdasm@gmail.com' );
+  using ( bucket_id = 'fotos' and (auth.jwt() ->> 'email') = 'sm.escolacda@gmail.com' );
