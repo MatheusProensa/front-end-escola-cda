@@ -132,6 +132,9 @@ module.exports = async (req, res) => {
         dateRanges,
         dimensions: [{ name: "pagePath" }],
         metrics: [{ name: "screenPageViews" }],
+        dimensionFilter: {
+          notExpression: { filter: { fieldName: "pagePath", stringFilter: { matchType: "BEGINS_WITH", value: "/admin" } } },
+        },
         orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
         limit: 10,
       }),
