@@ -71,7 +71,10 @@ create policy "fotos: remoção admin" on fotos
 -- ============================================================
 drop policy if exists "matriculas: leitura autenticada" on matriculas;
 drop policy if exists "matriculas: atualização autenticada" on matriculas;
+drop policy if exists "matriculas: remoção admin" on matriculas;
 create policy "matriculas: leitura admin" on matriculas
   for select using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 create policy "matriculas: atualização admin" on matriculas
   for update using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
+create policy "matriculas: remoção admin" on matriculas
+  for delete using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');

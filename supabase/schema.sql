@@ -163,6 +163,9 @@ create policy "matriculas: leitura autenticada" on matriculas
 create policy "matriculas: atualização autenticada" on matriculas
   for update using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
+create policy "matriculas: remoção admin" on matriculas
+  for delete using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
+
 -- ============================================================
 -- conteúdo inicial da Home (hero, pilares, diário)
 -- ============================================================
