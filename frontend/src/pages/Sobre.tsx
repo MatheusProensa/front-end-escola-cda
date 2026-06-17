@@ -4,20 +4,13 @@ import { PageHero } from "../components/PageHero";
 import { asset } from "../lib/assets";
 import { usePageContent, section } from "../lib/content";
 import { SOBRE_TIMELINE_DEFAULT, type GalFoto } from "../lib/galeria";
-
-const VALORES = [
-  { icon: "hand-holding-heart", t: "Acolhimento", p: "Cada criança é recebida com afeto, escuta e respeito ao seu tempo.", gold: false },
-  { icon: "seedling", t: "Respeito à infância", p: "Valorizamos o brincar e o descobrir como caminhos legítimos de aprender.", gold: true },
-  { icon: "brain", t: "Desenvolvimento integral", p: "Cuidamos do cognitivo, do emocional e do social, de forma equilibrada.", gold: false },
-  { icon: "user-group", t: "Parceria com a família", p: "Escola e família caminham juntas, em diálogo aberto e constante.", gold: true },
-  { icon: "lightbulb", t: "Autonomia", p: "Incentivamos a confiança, a responsabilidade e a iniciativa.", gold: false },
-  { icon: "star", t: "Propósito", p: "Educamos para a vida, com sentido, valores e olhar para o futuro.", gold: true },
-];
+import { SOBRE_VALORES, type Valor } from "../lib/listas";
 
 export default function Sobre() {
   usePageMeta("Sobre a Escola CDA — 15 anos de história em Santa Maria/RS", "Há 15 anos sonhando junto com as famílias. Conheça a história, os valores e a proposta educacional da Escola CDA.");
   const { sec } = usePageContent("sobre");
   const tl = section<GalFoto[]>(sec, "timeline", SOBRE_TIMELINE_DEFAULT);
+  const valores = section<Valor[]>(sec, "valores", SOBRE_VALORES);
   return (
     <Layout>
       <PageHero pagina="sobre" />
@@ -55,7 +48,7 @@ export default function Sobre() {
       <div className="cda-panel reveal">
         <div className="sec-head"><span className="eyebrow">No que acreditamos</span><h2>Valores que guiam cada dia</h2></div>
         <div className="valores">
-          {VALORES.map((v, i) => (
+          {valores.map((v, i) => (
             <div className={"valor" + (v.gold ? " gold" : "")} key={i}>
               <div className="v-ic"><Icon name={v.icon} color="#fff" size={22} /></div>
               <h3>{v.t}</h3>

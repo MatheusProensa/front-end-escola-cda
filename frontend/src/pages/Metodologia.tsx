@@ -2,36 +2,17 @@ import { Link } from "react-router-dom";
 import { Icon, Layout, useContact, usePageMeta } from "../components/site";
 import { PageHero } from "../components/PageHero";
 import { asset } from "../lib/assets";
-
-const PILARES = [
-  { icon: "hand-holding-heart", gold: false, t: "Inteligência emocional", p: "Cuidamos das emoções e dos vínculos, desenvolvendo empatia, autoconhecimento e autorregulação." },
-  { icon: "lightbulb", gold: true, t: "Protagonismo e autonomia", p: "Incentivamos a criança a tomar decisões, assumir responsabilidades e construir confiança em si mesma." },
-  { icon: "comments", gold: false, t: "Pensamento crítico e argumentação", p: "Estimulamos o diálogo, a escuta ativa e a construção de ideias com respeito, clareza e propósito." },
-];
-
-const INFANTIL = [
-  ["Aprendizagem criativa", "Atividades que desenvolvem o conhecimento pela criatividade, reflexão e interação, contemplando os cinco campos de experiências da BNCC."],
-  ["Desenvolvimento socioemocional", "Ludicidade, comunicação e cooperação: a criança se conhece, constrói sua identidade e fortalece emoções e empatia."],
-  ["Educação ambiental", "Investigar, explorar e observar para criar hábitos de cuidado e respeito — entender que todos somos natureza."],
-];
-const FUNDAMENTAL = [
-  ["Construção por trocas", "O aluno aprende na interação com os colegas, com o mundo e com os objetos de aprendizagem."],
-  ["Conhecimento que faz sentido", "Partindo do que o aluno já sabe, um aprendizado relevante e aplicável à sua vida."],
-  ["Raciocínio e autonomia", "A problematização e a organização do pensamento despertam curiosidade e reflexão."],
-  ["Leitura crítica do mundo", "Capacidade de interagir criticamente com diferentes fontes de informação, conforme a BNCC."],
-];
-
-const PILARES5 = [
-  { icon: "seedling", gold: false, t: "Aprendizagem significativa", p: "Um saber que se conecta com a vida real e com o mundo do aluno." },
-  { icon: "users", gold: true, t: "Formação humana", p: "Valores, ética, empatia e respeito como base de todas as relações." },
-  { icon: "leaf", gold: false, t: "Consciência ambiental", p: "Cuidado e responsabilidade com o planeta e com o outro." },
-  { icon: "wand-magic-sparkles", gold: true, t: "Inovação com propósito", p: "Tecnologia e criatividade a serviço de uma educação mais humana." },
-  { icon: "hand-holding-heart", gold: false, t: "Parceria com a família", p: "Juntos na missão de educar, acolher e transformar." },
-];
+import { usePageContent, section } from "../lib/content";
+import { MET_DIMENSOES, MET_INFANTIL, MET_FUNDAMENTAL, MET_PILARES5, type Valor, type Lista } from "../lib/listas";
 
 export default function Metodologia() {
   usePageMeta("Metodologia ProRaiz — Escola CDA, Santa Maria/RS", "A CDA adota a metodologia ProRaiz: formação integral que une aprendizado acadêmico e desenvolvimento socioemocional, alinhada à BNCC.");
   const contact = useContact();
+  const { sec } = usePageContent("metodologia");
+  const PILARES = section<Valor[]>(sec, "dimensoes", MET_DIMENSOES);
+  const INFANTIL = section<Lista[]>(sec, "infantil", MET_INFANTIL);
+  const FUNDAMENTAL = section<Lista[]>(sec, "fundamental", MET_FUNDAMENTAL);
+  const PILARES5 = section<Valor[]>(sec, "pilares5", MET_PILARES5);
   return (
     <Layout>
       <PageHero pagina="metodologia" />
@@ -72,8 +53,8 @@ export default function Metodologia() {
           <h3>Descobrir, sentir e se expressar</h3>
           <p>Na Educação Infantil, a proposta do ProRaiz é <strong>baseada em vivências</strong>, como recomenda a BNCC: a criança aprende por meio de interações e brincadeiras, vivendo experiências com significado e propósito.</p>
           <div className="cda-list">
-            {INFANTIL.map(([t, d], i) => (
-              <div className="li" key={i}><div className={"li-ic" + (i % 2 ? " gold" : "")}><Icon name="check" size={11} /></div><div><strong>{t}</strong><span>{d}</span></div></div>
+            {INFANTIL.map((it, i) => (
+              <div className="li" key={i}><div className={"li-ic" + (i % 2 ? " gold" : "")}><Icon name="check" size={11} /></div><div><strong>{it.t}</strong><span>{it.d}</span></div></div>
             ))}
           </div>
         </div>
@@ -89,8 +70,8 @@ export default function Metodologia() {
           <h3>Pensar, criar e transformar</h3>
           <p>No Ensino Fundamental, o conhecimento se constrói <strong>por meio de trocas</strong> — com os colegas, com o mundo e com os objetos de aprendizagem. Partindo do que o aluno já sabe, o aprendizado se torna relevante e aplicável à vida.</p>
           <div className="cda-list">
-            {FUNDAMENTAL.map(([t, d], i) => (
-              <div className="li" key={i}><div className={"li-ic" + (i % 2 ? " gold" : "")}><Icon name="check" size={11} /></div><div><strong>{t}</strong><span>{d}</span></div></div>
+            {FUNDAMENTAL.map((it, i) => (
+              <div className="li" key={i}><div className={"li-ic" + (i % 2 ? " gold" : "")}><Icon name="check" size={11} /></div><div><strong>{it.t}</strong><span>{it.d}</span></div></div>
             ))}
           </div>
         </div>

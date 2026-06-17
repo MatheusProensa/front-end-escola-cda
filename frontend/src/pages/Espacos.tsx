@@ -5,13 +5,7 @@ import { PageHero } from "../components/PageHero";
 import { asset } from "../lib/assets";
 import { usePageContent, section } from "../lib/content";
 import { ESPACOS_GAL_DEFAULT, type GalFoto } from "../lib/galeria";
-
-const FEATS = [
-  { icon: "shield-halved", t: "Segurança", p: "Ambientes seguros, pensados para o bem-estar dos alunos.", gold: false },
-  { icon: "heart", t: "Acolhimento", p: "Espaços que recebem com carinho e humanização.", gold: true },
-  { icon: "seedling", t: "Natureza", p: "Áreas verdes que despertam curiosidade e cuidado.", gold: false },
-  { icon: "lightbulb", t: "Descobertas", p: "Lugares que inspiram aprendizagem e novas experiências.", gold: true },
-];
+import { ESPACOS_FEATS, type Valor } from "../lib/listas";
 
 function GaleriaLightbox({ gal, index, onClose, onNav }: { gal: GalFoto[]; index: number; onClose: () => void; onNav: (i: number) => void }) {
   useEffect(() => {
@@ -42,6 +36,7 @@ export default function Espacos() {
   const contact = useContact();
   const { sec } = usePageContent("espacos");
   const gal = section<GalFoto[]>(sec, "galeria", ESPACOS_GAL_DEFAULT);
+  const feats = section<Valor[]>(sec, "feats", ESPACOS_FEATS);
   const [lb, setLb] = useState<number | null>(null);
   const fechar = useCallback(() => setLb(null), []);
   return (
@@ -66,7 +61,7 @@ export default function Espacos() {
       <div className="cda-panel tight reveal">
         <div className="sec-head"><span className="eyebrow">Por dentro de cada espaço</span><h2>Feitos para o bem-estar de cada criança</h2></div>
         <div className="valores cols-4">
-          {FEATS.map((f, i) => (
+          {feats.map((f, i) => (
             <div className={"valor" + (f.gold ? " gold" : "")} key={i}>
               <div className="v-ic"><Icon name={f.icon} color="#fff" size={22} /></div>
               <h3>{f.t}</h3>

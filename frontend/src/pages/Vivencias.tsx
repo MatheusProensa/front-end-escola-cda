@@ -1,50 +1,17 @@
 import { Link } from "react-router-dom";
 import { Icon, Layout, useContact, usePageMeta } from "../components/site";
 import { PageHero } from "../components/PageHero";
-import { asset } from "../lib/assets";
+import { usePageContent, section } from "../lib/content";
+import { VIV_TARDE, VIV_MANHA, VIV_EXTRAS, imgUrl, type Viv } from "../lib/listas";
 
-type Viv = { img?: string; icon: string; gold?: boolean; t: string; p: string; pos?: string; fit?: string };
 type Grupo = { eyebrow: string; titulo: string; intro: string; itens: Viv[] };
 
-const GRUPOS: Grupo[] = [
-  {
-    eyebrow: "Turno da tarde",
-    titulo: "Especializadas",
-    intro: "Aulas que fazem parte da rotina e ampliam o repertório de corpo, ritmo e movimento.",
-    itens: [
-      { img: "musica.webp", icon: "music", gold: true, t: "Musicalização", p: "Sensibilidade, criatividade e expressão através da música e do ritmo.", pos: "center 88%" },
-      { img: "capoeira.webp", icon: "hand-fist", t: "Capoeira", p: "Disciplina, respeito, coordenação e consciência corporal em movimento.", pos: "center 42%" },
-      { icon: "person-running", gold: true, t: "Educação Física", p: "Movimento, esquema corporal, coordenação e o prazer de praticar esportes.", img: "edfisica.webp", pos: "center 52%" },
-    ],
-  },
-  {
-    eyebrow: "Turno da manhã",
-    titulo: "Oficinas",
-    intro: "No contraturno, oficinas que despertam talentos, valores e novas descobertas a cada dia.",
-    itens: [
-      { img: "ambiental.webp", icon: "leaf", t: "Educação Ambiental", p: "Conexão com a natureza para formar cidadãos conscientes e responsáveis — conduzida pela professora da turma." },
-      { img: "culinaria.webp", icon: "utensils", gold: true, t: "Culinária Afetiva", p: "Com a nutricionista: autonomia, saúde e afeto ao aprender com as mãos.", pos: "center 100%" },
-      { icon: "face-smile", t: "Educação Socioemocional", p: "Empatia, autoconhecimento e relações saudáveis — desenvolvida pela professora da turma.", img: "socioemocional.webp", pos: "center 35%" },
-      { icon: "hands-asl-interpreting", gold: true, t: "Libras", p: "Com a educadora especial: primeiros contatos com a Língua Brasileira de Sinais para incluir e conectar.", img: "libras.webp", pos: "center 32%" },
-    ],
-  },
-  {
-    eyebrow: "Parcerias da escola",
-    titulo: "Aulas extras",
-    intro: "Atividades opcionais em parceria, para a família escolher o que mais combina com a criança.",
-    itens: [
-      { icon: "helmet-safety", t: "Bombeiro Mirim", p: "Disciplina, coragem e cidadania com noções de prevenção e segurança.", img: "bombeiromirim.webp", pos: "center 75%" },
-      { icon: "shoe-prints", gold: true, t: "Ballet", p: "Postura, leveza e expressão: o corpo que aprende a dançar com graça." },
-      { icon: "user-ninja", t: "Taekwondo", p: "Foco, respeito e autocontrole através da arte marcial." },
-    ],
-  },
-];
-
 function VivCard({ v }: { v: Viv }) {
+  const src = imgUrl(v.img);
   return (
-    <div className={"viv-card" + (v.fit === "contain" ? " contain" : "")}>
-      {v.img ? (
-        <img src={asset(v.img)} alt={v.t} decoding="async" style={v.pos ? { objectPosition: v.pos } : undefined} />
+    <div className="viv-card">
+      {src ? (
+        <img src={src} alt={v.t} decoding="async" style={v.pos ? { objectPosition: v.pos } : undefined} />
       ) : (
         <div className="viv-noimg"><Icon name={v.icon} color="rgba(255,255,255,0.15)" size={92} /></div>
       )}
@@ -60,6 +27,12 @@ function VivCard({ v }: { v: Viv }) {
 export default function Vivencias() {
   usePageMeta("Vivências — Especializadas, Oficinas e Aulas extras | Escola CDA", "Musicalização, capoeira, educação ambiental, culinária e mais: vivências que despertam talentos e valores na Escola CDA.");
   const contact = useContact();
+  const { sec } = usePageContent("vivencias");
+  const GRUPOS: Grupo[] = [
+    { eyebrow: "Turno da tarde", titulo: "Especializadas", intro: "Aulas que fazem parte da rotina e ampliam o repertório de corpo, ritmo e movimento.", itens: section<Viv[]>(sec, "grupo_tarde", VIV_TARDE) },
+    { eyebrow: "Turno da manhã", titulo: "Oficinas", intro: "No contraturno, oficinas que despertam talentos, valores e novas descobertas a cada dia.", itens: section<Viv[]>(sec, "grupo_manha", VIV_MANHA) },
+    { eyebrow: "Parcerias da escola", titulo: "Aulas extras", intro: "Atividades opcionais em parceria, para a família escolher o que mais combina com a criança.", itens: section<Viv[]>(sec, "grupo_extras", VIV_EXTRAS) },
+  ];
   return (
     <Layout>
       <PageHero pagina="vivencias" />
