@@ -3,28 +3,8 @@ import { Link } from "react-router-dom";
 import { Icon, Layout, useContact, usePageMeta } from "../components/site";
 import { PageHero } from "../components/PageHero";
 import { asset } from "../lib/assets";
-
-// Galerias "rolo de fotos" — ordem embaralhada p/ cenas não se repetirem em sequência
-const G_INFANTIL = [
-  "gal-infantil-9.webp","gal-infantil-4.webp","gal-infantil-12.webp","gal-infantil-1.webp","gal-infantil-6.webp",
-  "gal-infantil-8.webp","gal-infantil-10.webp","gal-infantil-5.webp","gal-infantil-13.webp","gal-infantil-2.webp",
-  "gal-infantil-7.webp","gal-infantil-11.webp","gal-infantil-3.webp","gal-infantil-14.webp",
-];
-const G_FUNDAMENTAL = [
-  "gal-fundamental-2.webp","gal-fundamental-7.webp","gal-fundamental-17.webp","gal-fundamental-5.webp","gal-fundamental-11.webp",
-  "gal-fundamental-14.webp","gal-fundamental-1.webp","gal-fundamental-9.webp","gal-fundamental-12.webp","gal-fundamental-3.webp",
-  "gal-fundamental-8.webp","gal-fundamental-18.webp","gal-fundamental-6.webp","gal-fundamental-16.webp","gal-fundamental-4.webp",
-  "gal-fundamental-10.webp","gal-fundamental-15.webp","gal-fundamental-13.webp",
-];
-const G_BERCARIO = [
-  "gal-bercario-1.webp","gal-bercario-7.webp","gal-bercario-3.webp","gal-bercario-9.webp","gal-bercario-5.webp",
-  "gal-bercario-11.webp","gal-bercario-2.webp","gal-bercario-8.webp","gal-bercario-4.webp","gal-bercario-10.webp",
-  "gal-bercario-6.webp","gal-bercario-12.webp",
-];
-const GALERIAS: Record<string, { eyebrow: string; title: string; imgs: string[] }> = {
-  infantil: { eyebrow: "Maternal e Pré-escola", title: "Brincar, criar e descobrir", imgs: G_INFANTIL },
-  fundamental: { eyebrow: "Anos iniciais", title: "Momentos do Ensino Fundamental", imgs: G_FUNDAMENTAL },
-};
+import { usePageContent, section } from "../lib/content";
+import { SEG_INFANTIL_DEFAULT, SEG_FUNDAMENTAL_DEFAULT, SEG_BERCARIO_DEFAULT, type GalFoto } from "../lib/galeria";
 
 // arrastar com o mouse (drag-to-scroll) no carrossel
 function useDragScroll() {
@@ -51,18 +31,18 @@ function useDragScroll() {
   return ref;
 }
 
-function Carrossel({ imgs, alt }: { imgs: string[]; alt: string }) {
+function Carrossel({ fotos, alt }: { fotos: GalFoto[]; alt: string }) {
   const ref = useDragScroll();
   return (
     <div className="seg-galeria-track" ref={ref}>
-      {imgs.map((src, i) => (
-        <div className="seg-galeria-item" key={i}><img src={asset(src)} alt={alt + " — foto " + (i + 1)} loading="lazy" decoding="async" draggable={false} /></div>
+      {fotos.map((f, i) => (
+        <div className="seg-galeria-item" key={i}><img src={f.url} alt={f.titulo || alt + " — foto " + (i + 1)} loading="lazy" decoding="async" draggable={false} /></div>
       ))}
     </div>
   );
 }
 
-function SegGaleria({ eyebrow, title, imgs }: { eyebrow: string; title: string; imgs: string[] }) {
+function SegGaleria({ eyebrow, title, fotos }: { eyebrow: string; title: string; fotos: GalFoto[] }) {
   return (
     <div className="seg-galeria reveal">
       <div className="seg-galeria-head">
@@ -70,12 +50,12 @@ function SegGaleria({ eyebrow, title, imgs }: { eyebrow: string; title: string; 
         <h3>{title}</h3>
         <span className="seg-galeria-hint"><Icon name="hand-pointer" size={13} /> Arraste para ver mais</span>
       </div>
-      <Carrossel imgs={imgs} alt={title} />
+      <Carrossel fotos={fotos} alt={title} />
     </div>
   );
 }
 
-function BercarioDestaque() {
+function BercarioDestaque({ fotos }: { fotos: GalFoto[] }) {
   return (
     <div className="bercario-band reveal">
       <div className="bercario-band-head">
@@ -85,7 +65,7 @@ function BercarioDestaque() {
         </div>
         <p>No berçário, cada bebê é acolhido com afeto e atenção individual. Cuidamos do sono, da alimentação e dos primeiros estímulos num ambiente seguro e cheio de carinho — onde a família fica tranquila e o bebê se sente em casa.</p>
       </div>
-      <Carrossel imgs={G_BERCARIO} alt="Berçário CDA" />
+      <Carrossel fotos={fotos} alt="Berçário CDA" />
     </div>
   );
 }
@@ -184,17 +164,23 @@ function Segment({ s, flip }: { s: Seg; flip: boolean }) {
 export default function Segmentos() {
   usePageMeta("Segmentos — Educação Infantil, Fundamental e Contraturno | Escola CDA", "Conheça os segmentos da Escola CDA: Educação Infantil, Ensino Fundamental e Contraturno, com proposta bilíngue e cuidado em cada fase.");
   const contact = useContact();
+  const { sec } = usePageContent("segmentos");
+  const galBercario = section<GalFoto[]>(sec, "galeria_bercario", SEG_BERCARIO_DEFAULT);
+  const galerias: Record<string, { eyebrow: string; title: string; fotos: GalFoto[] }> = {
+    infantil: { eyebrow: "Maternal e Pré-escola", title: "Brincar, criar e descobrir", fotos: section<GalFoto[]>(sec, "galeria_infantil", SEG_INFANTIL_DEFAULT) },
+    fundamental: { eyebrow: "Anos iniciais", title: "Momentos do Ensino Fundamental", fotos: section<GalFoto[]>(sec, "galeria_fundamental", SEG_FUNDAMENTAL_DEFAULT) },
+  };
   return (
     <Layout>
       <PageHero pagina="segmentos" />
 
       {SEGS.map((s, i) => {
-        const g = GALERIAS[s.key];
+        const g = galerias[s.key];
         return (
           <Fragment key={s.key}>
             <Segment s={s} flip={i % 2 === 1} />
-            {s.key === "infantil" && <BercarioDestaque />}
-            {g && <SegGaleria eyebrow={g.eyebrow} title={g.title} imgs={g.imgs} />}
+            {s.key === "infantil" && <BercarioDestaque fotos={galBercario} />}
+            {g && <SegGaleria eyebrow={g.eyebrow} title={g.title} fotos={g.fotos} />}
           </Fragment>
         );
       })}

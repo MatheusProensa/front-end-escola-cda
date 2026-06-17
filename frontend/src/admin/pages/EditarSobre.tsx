@@ -1,4 +1,6 @@
 import EditarPagina from "./EditarPagina";
+import GaleriaEditor from "./GaleriaEditor";
+import { SOBRE_TIMELINE_DEFAULT } from "../../lib/galeria";
 
 export default function EditarSobre() {
   return (
@@ -9,6 +11,16 @@ export default function EditarSobre() {
       titulo="Sobre a Escola"
       subtitulo="História, valores e linha do tempo"
       verNoSite="/sobre"
+      extra={
+        <GaleriaEditor
+          pagina="sobre"
+          secao="timeline"
+          titulo="Linha do tempo"
+          defaults={SOBRE_TIMELINE_DEFAULT}
+          legendas
+          hint="Cada foto é um ano/etapa da história. Escreva a frase no campo 'Legenda'. A ordem aqui é a ordem que aparece no site."
+        />
+      }
     />
   );
 }

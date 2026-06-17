@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { Icon, Layout, usePageMeta } from "../components/site";
 import { PageHero } from "../components/PageHero";
 import { asset } from "../lib/assets";
+import { usePageContent, section } from "../lib/content";
+import { SOBRE_TIMELINE_DEFAULT, type GalFoto } from "../lib/galeria";
 
 const VALORES = [
   { icon: "hand-holding-heart", t: "Acolhimento", p: "Cada criança é recebida com afeto, escuta e respeito ao seu tempo.", gold: false },
@@ -12,26 +14,10 @@ const VALORES = [
   { icon: "star", t: "Propósito", p: "Educamos para a vida, com sentido, valores e olhar para o futuro.", gold: true },
 ];
 
-const TL: [string, string][] = [
-  ["Onde tudo começou.", "timeline/t01.webp"],
-  ["Os primeiros passos, com propósito e dedicação.", "timeline/t02.webp"],
-  ["Um novo olhar, novos caminhos.", "timeline/t03.webp"],
-  ["Histórias que ganham vida nas páginas e nos encontros.", "timeline/t04.webp"],
-  ["Aprender também é brincar, viver e explorar.", "timeline/t05.webp"],
-  ["Experiências que ampliam o aprender.", "timeline/t06.webp"],
-  ["A emoção da primeira formatura.", "timeline/t07.webp"],
-  ["Crescimento que abre novos horizontes.", "timeline/t08.webp"],
-  ["Novas experiências e novas possibilidades.", "timeline/t09.webp"],
-  ["Seguimos crescendo com o mesmo propósito.", "timeline/t10.webp"],
-  ["Desafios que nos fizeram reinventar.", "timeline/t11.webp"],
-  ["Mesmo distantes, seguimos presentes.", "timeline/t12.webp"],
-  ["Novos projetos, novas formas de aprender.", "timeline/t13.webp"],
-  ["Um novo ciclo começa a ganhar forma.", "timeline/t14.webp"],
-  ["Crescemos em estrutura e serviços — e fortalecemos nossa essência.", "timeline/t15.webp"],
-];
-
 export default function Sobre() {
   usePageMeta("Sobre a Escola CDA — 15 anos de história em Santa Maria/RS", "Há 15 anos sonhando junto com as famílias. Conheça a história, os valores e a proposta educacional da Escola CDA.");
+  const { sec } = usePageContent("sobre");
+  const tl = section<GalFoto[]>(sec, "timeline", SOBRE_TIMELINE_DEFAULT);
   return (
     <Layout>
       <PageHero pagina="sobre" />
@@ -53,14 +39,14 @@ export default function Sobre() {
         <div className="sec-head"><span className="eyebrow">15 anos de caminhada</span><h2>Nossa linha do tempo</h2><p>De "Carinha de Anjo" à Escola CDA — cada fase carregou o mesmo cuidado com a infância.</p></div>
         <div className="tl-hint"><i className="fa-solid fa-arrow-right-long"></i> Arraste para percorrer os 15 anos</div>
         <div className="tl-track">
-          {TL.map(([cap, img], i) => (
+          {tl.map((f, i) => (
             <div className="tl-item" key={i}>
               <div className="tl-photo">
                 <span className="tl-num">{i + 1}</span>
-                <img src={asset(img)} alt={cap} loading="lazy" decoding="async" />
+                <img src={f.url} alt={f.descricao} loading="lazy" decoding="async" />
               </div>
               <div className="tl-rail"><span className="tl-dot"></span></div>
-              <div className="tl-cap">{cap}</div>
+              <div className="tl-cap">{f.descricao}</div>
             </div>
           ))}
         </div>
