@@ -228,8 +228,8 @@ button { font-family: inherit; }
   padding: 22px 16px;
   position: sticky;
   top: 0;
-  height: 100vh;
-  overflow-y: auto;
+  align-self: flex-start;
+  min-height: 100vh;
 }
 .adm-side-logo { display: flex; align-items: center; gap: 11px; padding: 6px 10px 22px; }
 .adm-side-logo img { height: 40px; }
