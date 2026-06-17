@@ -117,7 +117,7 @@ export default function EditarHome() {
           <div className="adm-card">
             <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-comment-dots"></i></div><h3>Depoimentos</h3></div>
             <p className="hint">Depoimentos de famílias publicados no carrossel da Home.</p>
-            <button className="adm-btn adm-btn-ghost adm-btn-sm"><i className="fa-solid fa-pen"></i> Gerenciar depoimentos</button>
+            <a className="adm-btn adm-btn-ghost adm-btn-sm" style={{ width: "fit-content" }} href="/admin/depoimentos"><i className="fa-solid fa-pen"></i> Gerenciar depoimentos</a>
           </div>
         </div>
 

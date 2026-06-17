@@ -1,26 +1,45 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Layout, usePageMeta } from "../components/site";
+import { Layout, usePageMeta, useSettings, instagramUrl } from "../components/site";
 import { asset } from "../lib/assets";
+import { supabase, API_CONFIGURED } from "../lib/supabase";
 
-type Album = { id: string; img: string; t: string; date: string; dir?: string; count?: number };
+type Foto = { thumb: string; full: string };
+type UAlbum = {
+  key: string;
+  titulo: string;
+  capa: string;
+  date: string;
+  kind: "db" | "bundled";
+  dbId?: number;
+  dir?: string;
+  count?: number;
+};
 
-const ALBUNS: Album[] = [
-  { id: "aniversario-15", img: "aniversario-15.webp", t: "Aniversário da Escola CDA — 15 anos", date: "31 de Março · 2026", dir: "eventos/aniversario-15/", count: 132 },
-  { id: "feira-do-livro", img: "feira-livro-pro.webp", t: "Feira do Livro", date: "11 de Abril · 2026", dir: "eventos/feira-do-livro/", count: 7 },
-  { id: "festa-familia-1sem", img: "eventos/festa-familia-1sem/032.webp", t: "Festa da Família — 1º semestre", date: "09 de Maio · 2026", dir: "eventos/festa-familia-1sem/", count: 45 },
+// Álbuns padrão (fotos embutidas) — usados quando ainda não há álbuns no banco.
+const BUNDLED: UAlbum[] = [
+  { key: "aniversario-15", capa: asset("aniversario-15.webp"), titulo: "Aniversário da Escola CDA — 15 anos", date: "31 de Março · 2026", dir: "eventos/aniversario-15/", count: 132, kind: "bundled" },
+  { key: "feira-do-livro", capa: asset("feira-livro-pro.webp"), titulo: "Feira do Livro", date: "11 de Abril · 2026", dir: "eventos/feira-do-livro/", count: 7, kind: "bundled" },
+  { key: "festa-familia-1sem", capa: asset("eventos/festa-familia-1sem/032.webp"), titulo: "Festa da Família — 1º semestre", date: "09 de Maio · 2026", dir: "eventos/festa-familia-1sem/", count: 45, kind: "bundled" },
 ];
 
-// gera os caminhos das fotos (miniatura -t.webp + grande .webp) de um álbum
-function fotosDe(album: Album): { thumb: string; full: string }[] {
-  if (!album.dir || !album.count) return [];
-  return Array.from({ length: album.count }, (_, i) => {
+const MESES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+function dataLabel(iso: string): string {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  return `${String(d.getDate()).padStart(2, "0")} de ${MESES[d.getMonth()]} · ${d.getFullYear()}`;
+}
+
+// fotos de um álbum embutido (miniatura -t.webp + grande .webp)
+function fotosBundled(a: UAlbum): Foto[] {
+  if (!a.dir || !a.count) return [];
+  return Array.from({ length: a.count }, (_, i) => {
     const id = String(i + 1).padStart(3, "0");
-    return { thumb: asset(album.dir + id + "-t.webp"), full: asset(album.dir + id + ".webp") };
+    return { thumb: asset(a.dir + id + "-t.webp"), full: asset(a.dir + id + ".webp") };
   });
 }
 
-function Lightbox({ fotos, index, onClose, onNav }: { fotos: { thumb: string; full: string }[]; index: number; onClose: () => void; onNav: (i: number) => void }) {
+function Lightbox({ fotos, index, onClose, onNav }: { fotos: Foto[]; index: number; onClose: () => void; onNav: (i: number) => void }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -42,9 +61,23 @@ function Lightbox({ fotos, index, onClose, onNav }: { fotos: { thumb: string; fu
   );
 }
 
-function AlbumModal({ album, onClose }: { album: Album; onClose: () => void }) {
-  const fotos = fotosDe(album);
+function AlbumModal({ album, onClose }: { album: UAlbum; onClose: () => void }) {
+  const [fotos, setFotos] = useState<Foto[]>(album.kind === "bundled" ? fotosBundled(album) : []);
+  const [carregando, setCarregando] = useState(album.kind === "db");
   const [lb, setLb] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (album.kind !== "db" || album.dbId == null) return;
+    let alive = true;
+    supabase.from("fotos").select("url").eq("album_id", album.dbId).order("id")
+      .then(({ data }) => {
+        if (!alive) return;
+        setFotos((data ?? []).map((f: { url: string }) => ({ thumb: f.url, full: f.url })));
+        setCarregando(false);
+      });
+    return () => { alive = false; };
+  }, [album]);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape" && lb === null) onClose(); };
     window.addEventListener("keydown", onKey);
@@ -53,10 +86,10 @@ function AlbumModal({ album, onClose }: { album: Album; onClose: () => void }) {
 
   return (
     <div className="album-modal-backdrop" onClick={onClose}>
-      <div className="album-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={album.t}>
+      <div className="album-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={album.titulo}>
         <div className="album-modal-head">
-          <span className="album-modal-date"><i className="fa-regular fa-calendar"></i> {album.date}</span>
-          <h2>{album.t}</h2>
+          {album.date && <span className="album-modal-date"><i className="fa-regular fa-calendar"></i> {album.date}</span>}
+          <h2>{album.titulo}</h2>
           {fotos.length > 0 && <span className="album-modal-sub">{fotos.length} fotos</span>}
           <button className="album-modal-x" onClick={onClose} aria-label="Fechar">×</button>
         </div>
@@ -77,7 +110,7 @@ function AlbumModal({ album, onClose }: { album: Album; onClose: () => void }) {
               ))}
             </div>
             <div className="album-empty-note">
-              <i className="fa-solid fa-camera-retro"></i> As fotos deste evento serão publicadas em breve.
+              <i className="fa-solid fa-camera-retro"></i> {carregando ? "Carregando fotos…" : "As fotos deste evento serão publicadas em breve."}
             </div>
           </>
         )}
@@ -90,8 +123,34 @@ function AlbumModal({ album, onClose }: { album: Album; onClose: () => void }) {
 
 export default function Momentos() {
   usePageMeta("Momentos — Festas e eventos | Escola CDA", "Reviva festas, encontros e celebrações que marcam a vida das crianças e famílias da Escola CDA.");
-  const [aberto, setAberto] = useState<Album | null>(null);
+  const s = useSettings();
+  const [albuns, setAlbuns] = useState<UAlbum[]>(BUNDLED);
+  const [aberto, setAberto] = useState<UAlbum | null>(null);
   const fechar = useCallback(() => setAberto(null), []);
+
+  useEffect(() => {
+    if (!API_CONFIGURED) return;
+    let alive = true;
+    (async () => {
+      const { data: albs } = await supabase.from("albuns").select("*").eq("publicado", true).order("created_at", { ascending: false });
+      if (!alive || !albs || albs.length === 0) return; // sem álbuns no banco → mantém os padrão
+      const ids = albs.map((a: { id: number }) => a.id);
+      const { data: fs } = await supabase.from("fotos").select("album_id").in("album_id", ids);
+      const cont: Record<number, number> = {};
+      (fs ?? []).forEach((f: { album_id: number }) => { cont[f.album_id] = (cont[f.album_id] || 0) + 1; });
+      setAlbuns(albs.map((a: { id: number; titulo: string; capa_url: string | null; created_at: string }) => ({
+        key: "db-" + a.id,
+        dbId: a.id,
+        titulo: a.titulo,
+        capa: a.capa_url || asset("aniversario-15.webp"),
+        date: dataLabel(a.created_at),
+        count: cont[a.id] || 0,
+        kind: "db" as const,
+      })));
+    })();
+    return () => { alive = false; };
+  }, []);
+
   return (
     <Layout>
       <section className="page-hero reveal">
@@ -102,14 +161,14 @@ export default function Momentos() {
 
       <div className="cda-panel reveal">
         <div className="momentos-grid">
-          {ALBUNS.map((a) => {
+          {albuns.map((a) => {
             const n = a.count || 0;
             return (
-              <button className="album" key={a.id} onClick={() => setAberto(a)}>
-                <img src={asset(a.img)} alt={a.t} loading="lazy" decoding="async" />
+              <button className="album" key={a.key} onClick={() => setAberto(a)}>
+                <img src={a.capa} alt={a.titulo} loading="lazy" decoding="async" />
                 <div className="album-body">
-                  <span className="album-date"><i className="fa-regular fa-calendar"></i> {a.date}</span>
-                  <h3>{a.t}</h3>
+                  {a.date && <span className="album-date"><i className="fa-regular fa-calendar"></i> {a.date}</span>}
+                  <h3>{a.titulo}</h3>
                   <span className="count"><i className="fa-regular fa-images"></i> {n > 0 ? `Ver galeria · ${n} fotos` : "Ver galeria"}</span>
                 </div>
               </button>
@@ -122,7 +181,7 @@ export default function Momentos() {
         <h2>Quer ver de perto o dia a dia da CDA?</h2>
         <p>Acompanhe nossos momentos no Instagram ou venha nos visitar — será um prazer receber a sua família.</p>
         <div className="cta-actions">
-          <a className="btn-white" href="https://www.instagram.com/escolacda.sm/" target="_blank" rel="noreferrer"><i className="fa-brands fa-instagram"></i> Seguir no Instagram</a>
+          <a className="btn-white" href={instagramUrl(s.instagram)} target="_blank" rel="noreferrer"><i className="fa-brands fa-instagram"></i> Seguir no Instagram</a>
           <Link className="btn-ghost" to="/matriculas"><i className="fa-solid fa-arrow-right"></i> Agendar visita</Link>
         </div>
       </div>

@@ -16,6 +16,7 @@ const NAV_MAIN: [string, string, string, string][] = [
 ];
 const NAV_GERIR: [string, string, string, string][] = [
   ["/admin/momentos", "Momentos", "camera-retro", "momentos"],
+  ["/admin/depoimentos", "Depoimentos", "comment-dots", "depoimentos"],
   ["/admin/matriculas", "Matrículas", "envelope-open-text", "matriculas"],
   ["/admin/contato", "Contato", "address-book", "contato"],
   ["/admin/configuracoes", "Configurações", "gear", "configuracoes"],
