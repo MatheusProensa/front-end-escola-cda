@@ -282,7 +282,7 @@ button { font-family: inherit; }
   border-radius: 0 0 var(--adm-r-lg) var(--adm-r-lg);
 }
 .adm-side-logo { display: flex; align-items: center; gap: 11px; padding: 4px 10px 24px; }
-.adm-side-logo img { height: 56px; }
+.adm-side-logo img { height: 76px; }
 .adm-side-logo .badge {
   margin-left: auto;
   font-size: 9.5px;
