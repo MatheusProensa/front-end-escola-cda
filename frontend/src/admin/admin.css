@@ -229,6 +229,7 @@ button { font-family: inherit; }
   position: sticky;
   top: 0;
   height: 100vh;
+  overflow-y: auto;
 }
 .adm-side-logo { display: flex; align-items: center; gap: 11px; padding: 6px 10px 22px; }
 .adm-side-logo img { height: 40px; }
