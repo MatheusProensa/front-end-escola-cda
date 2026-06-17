@@ -57,6 +57,17 @@ export default function AdminMatriculas() {
     toast("Status atualizado!");
   };
 
+  const excluir = async (id: number) => {
+    if (!window.confirm("Excluir esta solicitação de matrícula? Essa ação não pode ser desfeita.")) return;
+    const { error } = await supabase.from("matriculas").delete().eq("id", id);
+    if (error) {
+      toast("Erro ao excluir.", true);
+      return;
+    }
+    setMatriculas((prev) => prev.filter((m) => m.id !== id));
+    toast("Solicitação excluída.");
+  };
+
   const filtradas = filtro === "todos" ? matriculas : matriculas.filter((m) => m.status === filtro);
   const novas = matriculas.filter((m) => m.status === "novo").length;
 
@@ -119,9 +130,12 @@ export default function AdminMatriculas() {
                           </select>
                         </td>
                         <td style={{ padding: "12px 16px" }}>
-                          {m.mensagem && (
-                            <button className="adm-mini-btn" title={m.mensagem}><i className="fa-regular fa-comment"></i></button>
-                          )}
+                          <div style={{ display: "flex", gap: 6 }}>
+                            {m.mensagem && (
+                              <button className="adm-mini-btn" title={m.mensagem}><i className="fa-regular fa-comment"></i></button>
+                            )}
+                            <button className="adm-mini-btn del" title="Excluir" onClick={() => excluir(m.id)}><i className="fa-regular fa-trash-can"></i></button>
+                          </div>
                         </td>
                       </tr>
                     ))}

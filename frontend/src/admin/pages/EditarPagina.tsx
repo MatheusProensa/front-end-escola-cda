@@ -81,8 +81,8 @@ export default function EditarPagina({ pagina, active, icone, titulo, subtitulo,
           <div className="adm-card">
             <h3 style={{ fontSize: 15, marginBottom: 10 }}>Pré-visualização</h3>
             <div style={{ borderRadius: 12, background: "var(--adm-bg)", padding: "18px 16px", textAlign: "center" }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#0b82f6", letterSpacing: 0.6, textTransform: "uppercase" }}>{intro.eyebrow}</div>
-              <div style={{ fontSize: 18, fontWeight: 800, color: "#0c2657", margin: "8px 0", lineHeight: 1.25 }}>{intro.titulo} <span style={{ color: "#f0b400", fontStyle: "italic" }}>{intro.destaque}</span></div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#f0b400", letterSpacing: 0.6, textTransform: "uppercase" }}>{intro.eyebrow}</div>
+              <div style={{ fontSize: 18, fontWeight: 800, color: "#0e2d6e", margin: "8px 0", lineHeight: 1.25 }}>{intro.titulo} <span style={{ color: "#1b84ff", fontFamily: "'Yellowtail', cursive", fontWeight: 400 }}>{intro.destaque}</span></div>
               <p style={{ fontSize: 12.5, color: "var(--adm-ink-2)", lineHeight: 1.6, margin: 0 }}>{intro.texto}</p>
             </div>
           </div>

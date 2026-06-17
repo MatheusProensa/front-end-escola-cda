@@ -76,8 +76,8 @@ export default function BlocoTexto({ pagina, secao, titulo, defaults, campos, im
         <div style={{ flexShrink: 0, width: 200 }}>
           <span className="adm-form-label" style={{ fontSize: 11.5, display: "block", marginBottom: 6 }}>Pré-visualização</span>
           <div style={{ borderRadius: 12, background: "var(--adm-bg)", padding: "14px 12px", textAlign: "center" }}>
-            {bloco.eyebrow && <div style={{ fontSize: 10, fontWeight: 800, color: "#0b82f6", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 6 }}>{bloco.eyebrow}</div>}
-            {bloco.titulo && <div style={{ fontSize: 14, fontWeight: 800, color: "#0c2657", marginBottom: 6, lineHeight: 1.25 }}>{bloco.titulo}</div>}
+            {bloco.eyebrow && <div style={{ fontSize: 10, fontWeight: 800, color: "#f0b400", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 6 }}>{bloco.eyebrow}</div>}
+            {bloco.titulo && <div style={{ fontSize: 14, fontWeight: 800, color: "#0e2d6e", marginBottom: 6, lineHeight: 1.25 }}>{bloco.titulo}</div>}
             {bloco.p1 && <p style={{ fontSize: 11, color: "var(--adm-ink-2)", lineHeight: 1.5, margin: 0 }}>{bloco.p1}</p>}
           </div>
         </div>

@@ -92,7 +92,7 @@ export default function ListEditor({ pagina, secao, titulo, defaults, campos, no
             <div style={{ flexShrink: 0, width: 150 }}>
               <span className="adm-form-label" style={{ fontSize: 10.5, display: "block", marginBottom: 5 }}>Pré-visualização</span>
               <div style={{ borderRadius: 10, background: "var(--adm-bg)", padding: "10px 9px" }}>
-                {typeof it.t === "string" && it.t && <div style={{ fontSize: 12, fontWeight: 800, color: "#0c2657", marginBottom: 4, lineHeight: 1.25 }}>{it.t}</div>}
+                {typeof it.t === "string" && it.t && <div style={{ fontSize: 12, fontWeight: 800, color: "#0e2d6e", marginBottom: 4, lineHeight: 1.25 }}>{it.t}</div>}
                 {(typeof it.d === "string" && it.d) || (typeof it.p === "string" && it.p) ? (
                   <p style={{ fontSize: 10.5, color: "var(--adm-ink-2)", lineHeight: 1.45, margin: 0 }}>{String(it.d ?? it.p)}</p>
                 ) : null}
