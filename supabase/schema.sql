@@ -171,3 +171,12 @@ insert into page_content (pagina, secao, dados) values
   ('home', 'pilares', '[{"titulo":"Acolhimento que abraça","descricao":"Ambiente seguro, afetivo e cheio de empatia."},{"titulo":"Ensino que desenvolve","descricao":"Aprendizagem significativa para a vida toda."},{"titulo":"Valores que inspiram","descricao":"Incentivamos autonomia, respeito e responsabilidade."},{"titulo":"Parceria que transforma","descricao":"Família e escola juntas no mesmo propósito."}]'),
   ('home', 'diario', '{"titulo":"Você acompanha tudo, todos os dias","texto":"Recados, fotos e a rotina do seu filho direto no celular — em tempo real, pelo app Diário Escola.","recursos":"Agenda diária\nRecados\nMural & álbuns\nMedicamentos\nCalendário & presença\nEm tempo real"}')
 on conflict (pagina, secao) do nothing;
+
+-- Cabeçalhos (intro) editáveis das páginas internas
+insert into page_content (pagina, secao, dados) values
+  ('segmentos', 'intro', '{"eyebrow":"Nossos segmentos","titulo":"Caminhos de aprendizado para cada","destaque":"fase da infância","texto":"Da descoberta aos novos desafios, cada segmento acompanha o desenvolvimento da criança com acolhimento, propósito e experiências que despertam o aprender."}'),
+  ('metodologia', 'intro', '{"eyebrow":"Nossa metodologia","titulo":"Formação integral","destaque":"para a vida inteira","texto":"A CDA adota a metodologia ProRaiz, que une o aprendizado acadêmico ao desenvolvimento socioemocional para formar crianças mais autônomas, confiantes e conscientes do seu papel no mundo."}'),
+  ('vivencias', 'intro', '{"eyebrow":"Vivências que transformam","titulo":"Experiências que despertam habilidades","destaque":"para a vida","texto":"Mais do que atividades, são vivências reais que estimulam talentos, desenvolvem competências e tornam o aprendizado vivo, criativo e cheio de significado."}'),
+  ('espacos', 'intro', '{"eyebrow":"Nosso espaço","titulo":"Ambientes pensados para acolher, explorar e","destaque":"crescer","texto":"Cada cantinho da CDA é preparado com cuidado para oferecer segurança, conforto e experiências que fazem parte do desenvolvimento infantil."}'),
+  ('sobre', 'intro', '{"eyebrow":"Sobre a escola","titulo":"Há 15 anos sonhando junto com as","destaque":"famílias","texto":"Mais que uma escola, somos uma comunidade que acredita na educação como um ato de afeto, propósito e parceria — para formar crianças felizes e preparadas para a vida."}')
+on conflict (pagina, secao) do nothing;

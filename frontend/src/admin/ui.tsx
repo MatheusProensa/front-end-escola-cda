@@ -19,12 +19,18 @@ export function useToast(): [(m: string, err?: boolean) => void, React.ReactNode
 }
 
 // Barra de salvar / publicar
-export function SaveBar({ onSave, saving }: { onSave: () => void; saving?: boolean }) {
+export function SaveBar({ onSave, saving, onDiscard }: { onSave: () => void; saving?: boolean; onDiscard?: () => void }) {
+  const discard = () => {
+    if (window.confirm("Descartar as alterações não salvas?")) {
+      if (onDiscard) onDiscard();
+      else window.location.reload();
+    }
+  };
   return (
     <div className="adm-savebar">
       <div className="msg"><i className="fa-solid fa-circle-info"></i> Alterações ainda não publicadas</div>
       <div className="sp">
-        <button className="adm-btn adm-btn-ghost adm-btn-sm" disabled={saving}>Descartar</button>
+        <button className="adm-btn adm-btn-ghost adm-btn-sm" disabled={saving} onClick={discard}>Descartar</button>
         <button className="adm-btn adm-btn-primary adm-btn-sm" style={{ width: "auto" }} onClick={onSave} disabled={saving}>
           {saving
             ? <><i className="fa-solid fa-spinner fa-spin"></i> Salvando…</>

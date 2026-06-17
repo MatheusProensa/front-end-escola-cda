@@ -1,6 +1,7 @@
 import { Fragment, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Icon, Layout, useContact, usePageMeta } from "../components/site";
+import { PageHero } from "../components/PageHero";
 import { asset } from "../lib/assets";
 
 // Galerias "rolo de fotos" — ordem embaralhada p/ cenas não se repetirem em sequência
@@ -185,11 +186,7 @@ export default function Segmentos() {
   const contact = useContact();
   return (
     <Layout>
-      <section className="page-hero reveal">
-        <span className="eyebrow">Nossos segmentos</span>
-        <h1>Caminhos de aprendizado para cada <span className="script">fase da infância</span></h1>
-        <p>Da descoberta aos novos desafios, cada segmento acompanha o desenvolvimento da criança com acolhimento, propósito e experiências que despertam o aprender.</p>
-      </section>
+      <PageHero pagina="segmentos" />
 
       {SEGS.map((s, i) => {
         const g = GALERIAS[s.key];

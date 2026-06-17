@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Icon, Layout, useContact, usePageMeta } from "../components/site";
+import { PageHero } from "../components/PageHero";
 import { asset } from "../lib/assets";
 
 // Galeria: áreas externas primeiro (grama → britas → areia → quadra → horta),
@@ -60,11 +61,7 @@ export default function Espacos() {
   const fechar = useCallback(() => setLb(null), []);
   return (
     <Layout>
-      <section className="page-hero reveal">
-        <span className="eyebrow">Nosso espaço</span>
-        <h1>Ambientes pensados para acolher, explorar e <span className="script">crescer</span></h1>
-        <p>Cada cantinho da CDA é preparado com cuidado para oferecer segurança, conforto e experiências que fazem parte do desenvolvimento infantil.</p>
-      </section>
+      <PageHero pagina="espacos" />
 
       <div className="page-cover reveal">
         <img src={asset("fachada.webp")} alt="Fachada da Escola CDA" decoding="async" />

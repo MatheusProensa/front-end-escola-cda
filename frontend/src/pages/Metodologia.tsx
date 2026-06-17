@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Icon, Layout, useContact, usePageMeta } from "../components/site";
+import { PageHero } from "../components/PageHero";
 import { asset } from "../lib/assets";
 
 const PILARES = [
@@ -33,11 +34,7 @@ export default function Metodologia() {
   const contact = useContact();
   return (
     <Layout>
-      <section className="page-hero reveal">
-        <span className="eyebrow">Nossa metodologia</span>
-        <h1>Formação integral <span className="script">para a vida inteira</span></h1>
-        <p>A CDA adota a metodologia <strong>ProRaiz</strong>, que une o aprendizado acadêmico ao desenvolvimento socioemocional para formar crianças mais autônomas, confiantes e conscientes do seu papel no mundo.</p>
-      </section>
+      <PageHero pagina="metodologia" />
 
       <div className="feature-row reveal">
         <div className="fr-media">

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Icon, Layout, usePageMeta } from "../components/site";
+import { PageHero } from "../components/PageHero";
 import { asset } from "../lib/assets";
 
 const VALORES = [
@@ -33,11 +34,7 @@ export default function Sobre() {
   usePageMeta("Sobre a Escola CDA — 15 anos de história em Santa Maria/RS", "Há 15 anos sonhando junto com as famílias. Conheça a história, os valores e a proposta educacional da Escola CDA.");
   return (
     <Layout>
-      <section className="page-hero reveal">
-        <span className="eyebrow">Sobre a escola</span>
-        <h1>Há 15 anos sonhando junto com as <span className="script">famílias</span></h1>
-        <p>Mais que uma escola, somos uma comunidade que acredita na educação como um ato de afeto, propósito e parceria — para formar crianças felizes e preparadas para a vida.</p>
-      </section>
+      <PageHero pagina="sobre" />
 
       <div className="feature-row reveal">
         <div className="fr-media">

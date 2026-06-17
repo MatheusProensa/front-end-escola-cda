@@ -1,6 +1,6 @@
 import { useState } from "react";
 import AdminShell from "../AdminShell";
-import { SaveBar, useToast, Toggle } from "../ui";
+import { SaveBar, useToast } from "../ui";
 import { asset } from "../../lib/assets";
 import { useAuth } from "../auth";
 import { supabase, API_CONFIGURED } from "../../lib/supabase";
@@ -73,15 +73,15 @@ export default function Configuracoes() {
           </div>
 
           <div className="adm-card">
-            <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-universal-access"></i></div><h3>Acessibilidade</h3></div>
-            <div className="adm-toggle-row"><div className="tr-tx"><strong>Tradutor de Libras (VLibras)</strong><span>Exibe o botão "Acessível em Libras" em todas as páginas</span></div><Toggle on={true} /></div>
-            <div className="adm-toggle-row"><div className="tr-tx"><strong>Recursos de acessibilidade</strong><span>Aumentar/diminuir fonte e alto contraste</span></div><Toggle on={true} /></div>
-          </div>
-
-          <div className="adm-card">
-            <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-sliders"></i></div><h3>Preferências</h3></div>
-            <div className="adm-toggle-row"><div className="tr-tx"><strong>Notificações por e-mail</strong><span>Receber avisos de novas matrículas</span></div><Toggle on={true} /></div>
-            <div className="adm-toggle-row"><div className="tr-tx"><strong>Confirmar antes de publicar</strong><span>Pedir confirmação ao publicar mudanças</span></div><Toggle on={true} /></div>
+            <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-universal-access"></i></div><h3>Acessibilidade do site</h3></div>
+            <p style={{ fontSize: 13, color: "var(--adm-ink-2)", lineHeight: 1.7, margin: 0 }}>
+              O site já oferece, em todas as páginas e para todos os visitantes:
+            </p>
+            <ul style={{ fontSize: 13, color: "var(--adm-ink-2)", lineHeight: 1.8, margin: "10px 0 0", paddingLeft: 18 }}>
+              <li><strong>Tradutor de Libras (VLibras)</strong> — botão "Acessível em Libras"</li>
+              <li><strong>Aumentar / diminuir fonte</strong> e <strong>alto contraste</strong></li>
+            </ul>
+            <p style={{ fontSize: 12.5, color: "var(--adm-ink-3)", marginTop: 10 }}>Esses recursos ficam sempre ativos — não é preciso configurar nada.</p>
           </div>
         </div>
 

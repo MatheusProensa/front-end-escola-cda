@@ -17,7 +17,7 @@ const PAGINAS: [string, string, string, string, string][] = [
   ["book-open", "Sobre", "História, linha do tempo, valores", "pub", "/admin/sobre"],
 ];
 
-type Matricula = { status: string };
+type Matricula = { status: string; responsavel?: string; segmento?: string; whatsapp?: string };
 type Album = { id: number };
 
 export default function Dashboard() {
@@ -92,7 +92,7 @@ export default function Dashboard() {
             ) : matriculas.length === 0 ? (
               <p style={{ padding: "12px 18px", fontSize: 13, color: "var(--adm-ink-3)" }}>Nenhuma solicitação ainda.</p>
             ) : (
-              matriculas.slice(0, 5).map((m: any, i: number) => (
+              matriculas.slice(0, 5).map((m, i) => (
                 <div className="adm-activity" key={i}>
                   <div className="av ic-blue"><i className="fa-solid fa-user"></i></div>
                   <div className="tx">
