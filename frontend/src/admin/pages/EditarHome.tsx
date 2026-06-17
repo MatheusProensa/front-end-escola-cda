@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AdminShell from "../AdminShell";
-import { SaveBar, useToast, ImgSlot } from "../ui";
+import { SaveBar, useToast } from "../ui";
 import { asset } from "../../lib/assets";
 import { supabase, API_CONFIGURED } from "../../lib/supabase";
 import BlocoTexto from "./BlocoTexto";
@@ -103,7 +103,10 @@ export default function EditarHome() {
             <label className="adm-form-label">Texto de apoio</label>
             <textarea className="adm-textarea" value={hero.texto} onChange={(e) => setHero((h) => ({ ...h, texto: e.target.value }))}></textarea>
             <label className="adm-form-label">Imagem de fundo do destaque</label>
-            <ImgSlot src={asset("bg-home.webp")} label="Hero" ratio="16/7" />
+            <div className="adm-img-slot" style={{ aspectRatio: "16/7", cursor: "default" }}>
+              <img src={asset("bg-home.webp")} alt="Hero" />
+            </div>
+            <p className="hint" style={{ marginTop: 6 }}>Esta é a foto oficial da marca CDA e não pode ser trocada por aqui.</p>
           </div>
 
           <div className="adm-card">

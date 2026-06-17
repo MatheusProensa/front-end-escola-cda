@@ -41,18 +41,6 @@ export function SaveBar({ onSave, saving, onDiscard }: { onSave: () => void; sav
   );
 }
 
-// Slot de imagem (upload conecta ao backend futuramente)
-export function ImgSlot({ src, label, ratio }: { src?: string; label?: string; ratio?: string }) {
-  return (
-    <div className="adm-img-slot" style={ratio ? { aspectRatio: ratio } : undefined}>
-      {src
-        ? <img src={src} alt={label || ""} />
-        : <div className="adm-img-empty"><i className="fa-solid fa-cloud-arrow-up"></i><span>{label || "Enviar imagem"}</span></div>}
-      <div className="adm-img-over"><span className="chip"><i className="fa-solid fa-arrows-rotate"></i> Trocar imagem</span></div>
-    </div>
-  );
-}
-
 // Interruptor (toggle)
 export function Toggle({ on }: { on?: boolean }) {
   const [v, setV] = useState(!!on);
