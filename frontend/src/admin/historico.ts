@@ -32,10 +32,3 @@ export function identificarRegistro(r: Registro): string {
   if (r.tabela === "site_settings") return "dados de contato";
   return `#${r.registro_id ?? "?"}`;
 }
-
-// Deriva um nome curto pra exibir a partir do e-mail (ex.: "sm.escolacda@gmail.com" → "Sm").
-export function nomeCurtoDoEmail(email: string | null): string {
-  if (!email) return "Alguém";
-  const usuario = email.split("@")[0].split(/[._-]/)[0];
-  return usuario ? usuario[0].toUpperCase() + usuario.slice(1) : "Alguém";
-}

@@ -5,7 +5,7 @@ import { CountNum } from "../ui";
 import { asset } from "../../lib/assets";
 import { supabase, API_CONFIGURED } from "../../lib/supabase";
 import { useAuth } from "../auth";
-import { type Registro, TABELA_LABEL, identificarRegistro, nomeCurtoDoEmail } from "../historico";
+import { type Registro, TABELA_LABEL, identificarRegistro } from "../historico";
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 
@@ -172,7 +172,7 @@ export default function Dashboard() {
                   <div className={"av " + OPERACAO_COR[e.operacao]}><i className={"fa-solid fa-" + OPERACAO_ICONE[e.operacao]}></i></div>
                   <div className="tx">
                     <p>
-                      <b>{nomeCurtoDoEmail(e.usuario_email)}</b> {OPERACAO_LABEL[e.operacao]} {TABELA_LABEL[e.tabela] ?? e.tabela}
+                      <b>Admin</b> {OPERACAO_LABEL[e.operacao]} {TABELA_LABEL[e.tabela] ?? e.tabela}
                       {" — "}{identificarRegistro(e)}
                     </p>
                     <span>{formatarTempoRelativo(e.created_at)}</span>
