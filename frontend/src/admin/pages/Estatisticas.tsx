@@ -313,7 +313,7 @@ export default function Estatisticas() {
                   <p style={{ color: "var(--adm-ink-3)", fontSize: 13 }}>Nenhum dado no período.</p>
                 ) : (
                   <BarraLista
-                    itens={dados.novosVsRecorrentes.map((t) => ({ rotulo: TIPO_LABEL[t.tipo] ?? t.tipo, valor: t.usuarios }))}
+                    itens={dados.novosVsRecorrentes.map((t) => ({ rotulo: TIPO_LABEL[t.tipo] || "Não identificado", valor: t.usuarios }))}
                     max={maxTipo}
                     render={(v) => `${v}`}
                   />
@@ -332,7 +332,7 @@ export default function Estatisticas() {
                   <p style={{ color: "var(--adm-ink-3)", fontSize: 13 }}>Nenhum dado no período.</p>
                 ) : (
                   <BarraLista
-                    itens={dados.localizacao.map((c) => ({ rotulo: c.cidade === "(not set)" ? "Não identificada" : c.cidade, valor: c.usuarios }))}
+                    itens={dados.localizacao.map((c) => ({ rotulo: !c.cidade || c.cidade === "(not set)" ? "Não identificada" : c.cidade, valor: c.usuarios }))}
                     max={maxCidade}
                     render={(v) => `${v}`}
                   />
