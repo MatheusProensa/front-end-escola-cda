@@ -74,6 +74,18 @@ npm run dev               # http://localhost:5173
 
 > Sem essas variáveis configuradas, o painel admin roda em **modo demo** (qualquer credencial funciona, nada é salvo).
 
+### 3. Estatísticas (Google Analytics) — opcional
+
+A página `/admin/estatisticas` busca dados reais do GA4 através da função serverless `api/analytics.js`. Para ativar, configure no projeto Vercel (Settings → Environment Variables), nunca no código:
+
+| Variável          | Onde encontrar                                                              |
+|-------------------|------------------------------------------------------------------------------|
+| `GA_PROPERTY_ID`  | Google Analytics → Admin → Detalhes da propriedade (ID numérico da propriedade) |
+| `GA_CLIENT_EMAIL` | E-mail da conta de serviço criada no Google Cloud (Console → IAM → Contas de serviço) |
+| `GA_PRIVATE_KEY`  | Chave privada (campo `private_key`) do JSON gerado para essa conta de serviço |
+
+A conta de serviço precisa ser adicionada como **Visualizador** na propriedade do GA4 (Admin → Acesso à propriedade). Sem essas variáveis, a página de estatísticas mostra uma mensagem informando que não está configurada — o restante do site continua funcionando normalmente.
+
 ---
 
 ## Páginas do site público

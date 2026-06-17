@@ -26,6 +26,7 @@ import AdminMomentos from "./admin/pages/Momentos";
 import AdminDepoimentos from "./admin/pages/Depoimentos";
 import AdminMatriculas from "./admin/pages/AdminMatriculas";
 import Contato from "./admin/pages/Contato";
+import Estatisticas from "./admin/pages/Estatisticas";
 import Configuracoes from "./admin/pages/Configuracoes";
 
 function ScrollToTop() {
@@ -72,6 +73,7 @@ function AdminArea() {
         <Route path="depoimentos" element={guard(<AdminDepoimentos />)} />
         <Route path="matriculas" element={guard(<AdminMatriculas />)} />
         <Route path="contato" element={guard(<Contato />)} />
+        <Route path="estatisticas" element={guard(<Estatisticas />)} />
         <Route path="configuracoes" element={guard(<Configuracoes />)} />
         <Route index element={<Navigate to="/admin/login" replace />} />
         <Route path="*" element={<Navigate to="/admin/login" replace />} />

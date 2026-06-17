@@ -19,6 +19,7 @@ const NAV_GERIR: [string, string, string, string][] = [
   ["/admin/depoimentos", "Depoimentos", "comment-dots", "depoimentos"],
   ["/admin/matriculas", "Matrículas", "envelope-open-text", "matriculas"],
   ["/admin/contato", "Contato", "address-book", "contato"],
+  ["/admin/estatisticas", "Estatísticas", "chart-line", "estatisticas"],
   ["/admin/configuracoes", "Configurações", "gear", "configuracoes"],
 ];
 
