@@ -115,6 +115,7 @@ export default function Momentos() {
   };
 
   const excluirFoto = async (f: Foto) => {
+    if (!window.confirm("Excluir esta foto? Essa ação não pode ser desfeita.")) return;
     await removerImagem(f.url);
     const { error } = await supabase.from("fotos").delete().eq("id", f.id);
     if (error) { toast("Erro ao excluir foto.", true); return; }

@@ -110,10 +110,9 @@ export default function Depoimentos() {
               ) : (
                 lista.map((d) => (
                   <div key={d.id} style={{ border: "1px solid var(--adm-line)", borderRadius: 12, padding: 14, marginBottom: 12, opacity: d.ativo ? 1 : 0.55 }}>
-                    <input className="adm-text" value={d.nome} placeholder="(sem nome — mostra coração)" onChange={(e) => editarCampo(d.id, "nome", e.target.value)} style={{ marginBottom: 8, fontWeight: 600 }} />
-                    <textarea className="adm-textarea" value={d.texto} onChange={(e) => editarCampo(d.id, "texto", e.target.value)} style={{ minHeight: 70 }}></textarea>
+                    <input className="adm-text" value={d.nome} placeholder="(sem nome — mostra coração)" onChange={(e) => editarCampo(d.id, "nome", e.target.value)} onBlur={() => salvarEdicao(d)} style={{ marginBottom: 8, fontWeight: 600 }} />
+                    <textarea className="adm-textarea" value={d.texto} onChange={(e) => editarCampo(d.id, "texto", e.target.value)} onBlur={() => salvarEdicao(d)} style={{ minHeight: 70 }}></textarea>
                     <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
-                      <button className="adm-btn adm-btn-primary adm-btn-sm" style={{ width: "auto" }} onClick={() => salvarEdicao(d)}><i className="fa-solid fa-floppy-disk"></i> Salvar</button>
                       <button className="adm-btn adm-btn-ghost adm-btn-sm" style={{ width: "auto" }} onClick={() => alternarAtivo(d)}>
                         <i className={"fa-solid " + (d.ativo ? "fa-eye-slash" : "fa-eye")}></i> {d.ativo ? "Ocultar" : "Mostrar"}
                       </button>
