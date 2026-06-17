@@ -22,8 +22,7 @@ export default function EditarEspacos() {
             secao="galeria"
             titulo="Galeria de fotos"
             defaults={ESPACOS_GAL_DEFAULT}
-            legendas
-            hint="Adicione ou remova as fotos da galeria da página Espaços. A legenda aparece ao ampliar a foto."
+            hint="Adicione ou remova as fotos da galeria da página Espaços."
           />
           <ListEditor
             pagina="espacos"
