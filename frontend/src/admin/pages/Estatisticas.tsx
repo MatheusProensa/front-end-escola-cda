@@ -248,7 +248,7 @@ export default function Estatisticas() {
                   <p style={{ color: "var(--adm-ink-3)", fontSize: 13 }}>Nenhum dado no período.</p>
                 ) : (
                   <BarraLista
-                    itens={dados.paginas.map((p) => ({ rotulo: p.caminho, valor: p.visualizacoes }))}
+                    itens={dados.paginas.map((p) => ({ rotulo: p.caminho === "/" ? "Página inicial" : p.caminho, valor: p.visualizacoes }))}
                     max={maxPagina}
                     render={(v) => `${v}`}
                   />
