@@ -230,6 +230,7 @@ button { font-family: inherit; }
   top: 0;
   align-self: flex-start;
   min-height: 100vh;
+  border-radius: 0 0 var(--adm-r-lg) var(--adm-r-lg);
 }
 .adm-side-logo { display: flex; align-items: center; gap: 11px; padding: 4px 10px 24px; }
 .adm-side-logo img { height: 56px; }
@@ -604,6 +605,7 @@ button { font-family: inherit; }
   .adm-side {
     position: fixed; left: 0; top: 0; z-index: 60;
     transform: translateX(-100%); transition: 0.3s; box-shadow: 0 0 60px rgba(0,0,0,0.3);
+    border-radius: 0;
   }
   .adm-side.open { transform: none; }
   .adm-burger { display: grid; place-items: center; }
