@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Icon, Layout, usePageMeta, useSettings } from "../components/site";
+import { Icon, Layout, track, usePageMeta, useSettings } from "../components/site";
 import { supabase, API_CONFIGURED } from "../lib/supabase";
 
 const MAP = "https://www.google.com/maps?q=R.+Jos%C3%A9+Manhago,+194+-+Camobi,+Santa+Maria+-+RS&output=embed";
@@ -30,8 +30,10 @@ function MatriculaForm() {
         });
         if (error) throw error;
       }
+      track("matricula_enviada", { segmento: f.seg });
       setSent(true);
     } catch {
+      track("matricula_erro");
       setErro("Não foi possível enviar. Tente novamente ou fale pelo WhatsApp.");
     } finally {
       setLoading(false);
@@ -45,7 +47,7 @@ function MatriculaForm() {
           <div className="cda-success-ic"><Icon name="heart" color="#fff" size={26} /></div>
           <h3>Recebemos com carinho!</h3>
           <p>Obrigado{f.resp ? ", " + f.resp.split(" ")[0] : ""}. Em breve a equipe da CDA entra em contato para agendar sua visita.</p>
-          <a className="cda-modal-wpp" href={s.wpp_link} target="_blank" rel="noreferrer"><Icon name="whatsapp" brand size={16} /> Adiantar pelo WhatsApp</a>
+          <a className="cda-modal-wpp" href={s.wpp_link} target="_blank" rel="noreferrer" onClick={() => track("whatsapp_click", { local: "matriculas_sucesso" })}><Icon name="whatsapp" brand size={16} /> Adiantar pelo WhatsApp</a>
         </div>
       </div>
     );
@@ -109,7 +111,7 @@ export default function Matriculas() {
                 <div className="ic"><Icon name={c.icon} brand={c.brand} color={c.wpp ? "#25d366" : "#0b82f6"} size={19} /></div>
                 <div>
                   <strong>{c.t}</strong>
-                  {c.href ? <a href={c.href} target={c.wpp ? "_blank" : undefined} rel="noreferrer">{c.v}</a> : <span>{c.v}</span>}
+                  {c.href ? <a href={c.href} target={c.wpp ? "_blank" : undefined} rel="noreferrer" onClick={c.wpp ? () => track("whatsapp_click", { local: "matriculas_info" }) : undefined}>{c.v}</a> : <span>{c.v}</span>}
                 </div>
               </div>
             ))}
@@ -117,7 +119,7 @@ export default function Matriculas() {
               <div className="ic" style={{ background: "rgba(255,255,255,0.16)", color: "#fff" }}><Icon name="calendar-check" color="#fff" size={19} /></div>
               <div>
                 <strong style={{ color: "#fff" }}>Prefere visitar?</strong>
-                <a href={s.wpp_link} target="_blank" rel="noreferrer" style={{ color: "rgba(255,255,255,0.9)" }}>Agende uma visita pelo WhatsApp →</a>
+                <a href={s.wpp_link} target="_blank" rel="noreferrer" style={{ color: "rgba(255,255,255,0.9)" }} onClick={() => track("whatsapp_click", { local: "matriculas_visita" })}>Agende uma visita pelo WhatsApp →</a>
               </div>
             </div>
           </div>
@@ -132,7 +134,7 @@ export default function Matriculas() {
         <h2>Venha conhecer a CDA de perto</h2>
         <p>Agende uma visita e sinta o acolhimento de uma escola que acolhe, desenvolve e transforma há 15 anos.</p>
         <div className="cta-actions">
-          <a className="btn-white" href={s.wpp_link} target="_blank" rel="noreferrer"><Icon name="whatsapp" brand size={16} /> Falar no WhatsApp</a>
+          <a className="btn-white" href={s.wpp_link} target="_blank" rel="noreferrer" onClick={() => track("whatsapp_click", { local: "matriculas_cta_band" })}><Icon name="whatsapp" brand size={16} /> Falar no WhatsApp</a>
           <Link className="btn-ghost" to="/sobre"><Icon name="arrow-right" size={15} /> Conhecer a escola</Link>
         </div>
       </div>

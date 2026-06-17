@@ -54,7 +54,7 @@ export default function Vivencias() {
         <h2>Toda criança tem um talento esperando para florescer</h2>
         <p>Venha ver de perto como as vivências da CDA despertam o melhor de cada aluno.</p>
         <div className="cta-actions">
-          <button className="btn-white" onClick={contact}><Icon name="calendar-check" size={16} /> Agendar visita</button>
+          <button className="btn-white" onClick={() => contact("vivencias_cta")}><Icon name="calendar-check" size={16} /> Agendar visita</button>
           <Link className="btn-ghost" to="/espacos"><Icon name="arrow-right" size={15} /> Conhecer os espaços</Link>
         </div>
       </div>

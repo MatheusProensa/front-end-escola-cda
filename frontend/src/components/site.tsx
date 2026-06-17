@@ -12,6 +12,12 @@ import { supabase, API_CONFIGURED } from "../lib/supabase";
 // WhatsApp padrão (fallback). O valor real vem das configurações editáveis no painel.
 export const WPP = "https://wa.me/555532177947";
 
+// Evento personalizado do Google Analytics (cliques em CTAs importantes)
+export function track(event: string, params?: Record<string, unknown>) {
+  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+  gtag?.("event", event, params);
+}
+
 /* ───────────── Configurações do site (editáveis no painel) ───────────── */
 export type SiteSettings = {
   whatsapp: string;
@@ -57,8 +63,7 @@ export function usePageMeta(title: string, description?: string) {
       if (!m) { m = document.createElement("meta"); m.setAttribute("name", "description"); document.head.appendChild(m); }
       m.setAttribute("content", description);
     }
-    const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
-    gtag?.("event", "page_view", { page_title: title, page_location: window.location.href, page_path: window.location.pathname });
+    track("page_view", { page_title: title, page_location: window.location.href, page_path: window.location.pathname });
   }, [title, description]);
 }
 
@@ -73,7 +78,7 @@ export function Icon({ name, color, size, brand }: IconProps) {
 
 /* ───────────── Contexto do modal de contato ───────────── */
 /* ───────────── Contexto de contato (→ página Matrículas) ───────────── */
-const ContactCtx = createContext<() => void>(() => {});
+const ContactCtx = createContext<(local?: string) => void>(() => {});
 export const useContact = () => useContext(ContactCtx);
 
 export function ContactProvider({ children }: { children: ReactNode }) {
@@ -90,7 +95,7 @@ export function ContactProvider({ children }: { children: ReactNode }) {
 
   return (
     <SettingsCtx.Provider value={settings}>
-      <ContactCtx.Provider value={() => navigate("/matriculas")}>
+      <ContactCtx.Provider value={(local) => { track("cta_click", { local }); navigate("/matriculas"); }}>
         {children}
         <AccessibilityBar />
         <WhatsAppFloat />
@@ -211,9 +216,9 @@ export function Footer() {
           <img src={asset("logo-cda-15anos-semborda.webp")} alt="Escola CDA" className="footer-logo" />
           <p>Há 15 anos formando crianças com afeto, propósito e experiências que transformam vidas e fortalecem famílias.</p>
           <div className="footer-social">
-            <a href={instagramUrl(s.instagram)} target="_blank" rel="noreferrer" aria-label="Instagram"><Icon name="instagram" brand size={16} /></a>
-            <a href={facebookUrl(s.facebook)} target="_blank" rel="noreferrer" aria-label="Facebook"><Icon name="facebook-f" brand size={16} /></a>
-            <a href={s.wpp_link} target="_blank" rel="noreferrer" aria-label="WhatsApp"><Icon name="whatsapp" brand size={16} /></a>
+            <a href={instagramUrl(s.instagram)} target="_blank" rel="noreferrer" aria-label="Instagram" onClick={() => track("social_click", { rede: "instagram", local: "footer" })}><Icon name="instagram" brand size={16} /></a>
+            <a href={facebookUrl(s.facebook)} target="_blank" rel="noreferrer" aria-label="Facebook" onClick={() => track("social_click", { rede: "facebook", local: "footer" })}><Icon name="facebook-f" brand size={16} /></a>
+            <a href={s.wpp_link} target="_blank" rel="noreferrer" aria-label="WhatsApp" onClick={() => track("whatsapp_click", { local: "footer_social" })}><Icon name="whatsapp" brand size={16} /></a>
           </div>
         </div>
         <div className="footer-col">
@@ -228,7 +233,7 @@ export function Footer() {
           <h4>Contato</h4>
           <div className="footer-contact-item"><Icon name="location-dot" color="#f0b400" size={14} /><span>{s.endereco}</span></div>
           <div className="footer-contact-item"><Icon name="phone" color="#f0b400" size={14} /><a href={telHref}>{s.telefone}</a></div>
-          <div className="footer-contact-item"><Icon name="whatsapp" brand color="#f0b400" size={14} /><a href={s.wpp_link} target="_blank" rel="noreferrer">{s.whatsapp}</a></div>
+          <div className="footer-contact-item"><Icon name="whatsapp" brand color="#f0b400" size={14} /><a href={s.wpp_link} target="_blank" rel="noreferrer" onClick={() => track("whatsapp_click", { local: "footer_contato" })}>{s.whatsapp}</a></div>
           <div className="footer-contact-item"><Icon name="clock|r" color="#f0b400" size={14} /><span>{s.horario}</span></div>
         </div>
       </div>
@@ -236,7 +241,7 @@ export function Footer() {
         <div className="footer-bottom-inner">
           <p>© 2026 Escola CDA. Todos os direitos reservados.</p>
           <span className="footer-credit">Desenvolvido por <strong>Júnior Ferreira</strong> e <strong>Matheus Proensa</strong></span>
-          <button type="button" className="footer-link-btn" onClick={contact}>Agende uma visita</button>
+          <button type="button" className="footer-link-btn" onClick={() => contact("footer")}>Agende uma visita</button>
         </div>
       </div>
     </footer>
@@ -320,7 +325,7 @@ export function AccessibilityBar() {
 export function WhatsAppFloat() {
   const s = useSettings();
   return (
-    <a className="whatsapp-float" href={s.wpp_link} target="_blank" rel="noopener noreferrer" aria-label="Falar com a escola no WhatsApp">
+    <a className="whatsapp-float" href={s.wpp_link} target="_blank" rel="noopener noreferrer" aria-label="Falar com a escola no WhatsApp" onClick={() => track("whatsapp_click", { local: "float" })}>
       <Icon name="whatsapp" brand size={22} /><span>Falar com a escola</span>
     </a>
   );

@@ -97,7 +97,7 @@ export default function Espacos() {
         <h2>Cada espaço fica ainda melhor com seu filho nele</h2>
         <p>Agende uma visita e conheça de perto cada ambiente feito com cuidado para a infância.</p>
         <div className="cta-actions">
-          <button className="btn-white" onClick={contact}><Icon name="calendar-check" size={16} /> Agendar visita</button>
+          <button className="btn-white" onClick={() => contact("espacos_cta")}><Icon name="calendar-check" size={16} /> Agendar visita</button>
           <Link className="btn-ghost" to="/sobre"><Icon name="arrow-right" size={15} /> Conhecer a escola</Link>
         </div>
       </div>

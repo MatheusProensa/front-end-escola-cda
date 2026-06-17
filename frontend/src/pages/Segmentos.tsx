@@ -154,7 +154,7 @@ function Segment({ s, flip }: { s: Seg; flip: boolean }) {
           </Link>
         )}
         <div className="fr-cta" style={{ display: "none" }}>
-          <button className="primary-btn" onClick={contact}>Agendar uma visita</button>
+          <button className="primary-btn" onClick={() => contact("segmentos_hero")}>Agendar uma visita</button>
         </div>
       </div>
     </div>
@@ -189,7 +189,7 @@ export default function Segmentos() {
         <h2>Venha conhecer a CDA de perto</h2>
         <p>Agende uma visita e sinta o acolhimento da nossa escola — será um prazer receber a sua família.</p>
         <div className="cta-actions">
-          <button className="btn-white" onClick={contact}><Icon name="calendar-check" size={16} /> Agendar visita</button>
+          <button className="btn-white" onClick={() => contact("segmentos_cta")}><Icon name="calendar-check" size={16} /> Agendar visita</button>
           <Link className="btn-ghost" to="/vivencias"><Icon name="arrow-right" size={15} /> Ver as vivências</Link>
         </div>
       </div>

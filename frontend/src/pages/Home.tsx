@@ -43,7 +43,7 @@ function Hero({ data }: { data: HeroData }) {
           <h1>{data.titulo}<span className="script-line"> {data.destaque}</span></h1>
           <p>{data.texto}</p>
           <div className="hero-buttons">
-            <button className="primary-btn" onClick={contact}>Falar com a escola</button>
+            <button className="primary-btn" onClick={() => contact("home_hero")}>Falar com a escola</button>
             <button className="secondary-btn" onClick={() => navigate("/sobre")}>Conhecer a escola</button>
           </div>
         </div>
@@ -303,7 +303,7 @@ function EspacoConvite() {
       <div className="espaco-banner-icon"><Icon name="heart" color="#f0b400" size={22} /></div>
       <div className="espaco-banner-text"><strong>Mais que espaços, criamos ambientes que incentivam o aprender, o brincar e o conviver.</strong></div>
       <div className="espaco-banner-sub"><p>Venha conhecer de perto cada cantinho feito com cuidado para o seu filho.</p></div>
-      <button className="espaco-banner-btn" onClick={contact}>Agende uma visita →</button>
+      <button className="espaco-banner-btn" onClick={() => contact("home_banner")}>Agende uma visita →</button>
     </div>
   );
 }

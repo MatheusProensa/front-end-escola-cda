@@ -125,7 +125,7 @@ export default function Metodologia() {
         <h2>Mais que uma metodologia, um compromisso com a vida</h2>
         <p>Na CDA, o ProRaiz fortalece nossa missão de formar alunos preparados para aprender, conviver, escolher e transformar o mundo com consciência e empatia.</p>
         <div className="cta-actions">
-          <button className="btn-white" onClick={contact}><Icon name="calendar-check" size={16} /> Conheça nossa escola</button>
+          <button className="btn-white" onClick={() => contact("metodologia")}><Icon name="calendar-check" size={16} /> Conheça nossa escola</button>
           <Link className="btn-ghost" to="/segmentos"><Icon name="arrow-right" size={15} /> Ver os segmentos</Link>
         </div>
       </div>
