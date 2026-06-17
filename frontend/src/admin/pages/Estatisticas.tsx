@@ -63,6 +63,10 @@ const CANAL_LABEL: Record<string, string> = {
 
 const TIPO_LABEL: Record<string, string> = { new: "Novos visitantes", returning: "Visitantes recorrentes", "(not set)": "Não identificado" };
 
+// Com poucas sessões, um único acesso isolado (até de alguém da equipe checando o site) já
+// distorce a taxa de rejeição inteira — só vale mostrar o número com uma amostra mínima.
+const SESSOES_MIN_REJEICAO = 20;
+
 const formatarDuracao = (seg: number) => {
   const m = Math.floor(seg / 60);
   const s = Math.round(seg % 60);
@@ -369,9 +373,22 @@ export default function Estatisticas() {
                   render={(v) => `${v}`}
                 />
               )}
-              <div className="adm-status-row"><span>Taxa de rejeição</span><b>{loading ? "—" : formatarPercent(dados?.totais.taxaRejeicao ?? 0)}</b></div>
+              <div className="adm-status-row">
+                <span>Taxa de rejeição</span>
+                <b>
+                  {loading
+                    ? "—"
+                    : (dados?.totais.sessoes ?? 0) < SESSOES_MIN_REJEICAO
+                      ? "Dados insuficientes"
+                      : formatarPercent(dados?.totais.taxaRejeicao ?? 0)}
+                </b>
+              </div>
             </div>
-            <p className="hint" style={{ marginTop: 14 }}>Taxa de rejeição = visitantes que saíram sem interagir com a página. Quanto menor, melhor.</p>
+            <p className="hint" style={{ marginTop: 14 }}>
+              {(dados?.totais.sessoes ?? 0) < SESSOES_MIN_REJEICAO
+                ? `Ainda há poucas visitas no período pra esse número ser confiável (precisa de pelo menos ${SESSOES_MIN_REJEICAO} sessões).`
+                : "Taxa de rejeição = visitantes que saíram sem interagir com a página. Quanto menor, melhor."}
+            </p>
           </div>
         </>
       )}
