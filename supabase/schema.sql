@@ -1,5 +1,9 @@
 -- Escola CDA — esquema do banco para Supabase
 -- Execute este arquivo inteiro em: Supabase Dashboard > SQL Editor > New query
+--
+-- Segurança: a escrita (e a leitura de dados sensíveis, como matrículas) é
+-- liberada SOMENTE para o e-mail do admin abaixo. Se o e-mail do admin mudar,
+-- troque o valor em todas as policies que usam (auth.jwt() ->> 'email').
 
 -- ============================================================
 -- site_settings — configurações de contato exibidas no site
@@ -28,7 +32,7 @@ create policy "site_settings: leitura pública" on site_settings
   for select using (true);
 
 create policy "site_settings: escrita autenticada" on site_settings
-  for update using (auth.role() = 'authenticated');
+  for update using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 -- ============================================================
 -- page_content — conteúdo editável de cada página (por seção)
@@ -48,10 +52,10 @@ create policy "page_content: leitura pública" on page_content
   for select using (true);
 
 create policy "page_content: escrita autenticada" on page_content
-  for insert with check (auth.role() = 'authenticated');
+  for insert with check ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 create policy "page_content: atualização autenticada" on page_content
-  for update using (auth.role() = 'authenticated');
+  for update using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 -- ============================================================
 -- depoimentos — carrossel da home
@@ -71,16 +75,16 @@ create policy "depoimentos: leitura pública dos ativos" on depoimentos
   for select using (ativo = true);
 
 create policy "depoimentos: leitura total autenticada" on depoimentos
-  for select using (auth.role() = 'authenticated');
+  for select using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 create policy "depoimentos: escrita autenticada" on depoimentos
-  for insert with check (auth.role() = 'authenticated');
+  for insert with check ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 create policy "depoimentos: atualização autenticada" on depoimentos
-  for update using (auth.role() = 'authenticated');
+  for update using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 create policy "depoimentos: remoção autenticada" on depoimentos
-  for delete using (auth.role() = 'authenticated');
+  for delete using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 -- ============================================================
 -- albuns e fotos — galeria de momentos
@@ -99,16 +103,16 @@ create policy "albuns: leitura pública dos publicados" on albuns
   for select using (publicado = true);
 
 create policy "albuns: leitura total autenticada" on albuns
-  for select using (auth.role() = 'authenticated');
+  for select using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 create policy "albuns: escrita autenticada" on albuns
-  for insert with check (auth.role() = 'authenticated');
+  for insert with check ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 create policy "albuns: atualização autenticada" on albuns
-  for update using (auth.role() = 'authenticated');
+  for update using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 create policy "albuns: remoção autenticada" on albuns
-  for delete using (auth.role() = 'authenticated');
+  for delete using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 create table if not exists fotos (
   id bigint generated always as identity primary key,
@@ -125,13 +129,13 @@ create policy "fotos: leitura pública via album publicado" on fotos
   );
 
 create policy "fotos: leitura total autenticada" on fotos
-  for select using (auth.role() = 'authenticated');
+  for select using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 create policy "fotos: escrita autenticada" on fotos
-  for insert with check (auth.role() = 'authenticated');
+  for insert with check ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 create policy "fotos: remoção autenticada" on fotos
-  for delete using (auth.role() = 'authenticated');
+  for delete using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 -- ============================================================
 -- matriculas — formulário de interesse (site público envia)
@@ -154,10 +158,10 @@ create policy "matriculas: envio público" on matriculas
   for insert with check (true);
 
 create policy "matriculas: leitura autenticada" on matriculas
-  for select using (auth.role() = 'authenticated');
+  for select using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 create policy "matriculas: atualização autenticada" on matriculas
-  for update using (auth.role() = 'authenticated');
+  for update using ((auth.jwt() ->> 'email') = 'escolacdasm@gmail.com');
 
 -- ============================================================
 -- conteúdo inicial da Home (hero, pilares, diário)
