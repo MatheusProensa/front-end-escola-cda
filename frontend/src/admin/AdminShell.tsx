@@ -19,8 +19,12 @@ const NAV_GERIR: [string, string, string, string][] = [
   ["/admin/depoimentos", "Depoimentos", "comment-dots", "depoimentos"],
   ["/admin/matriculas", "Matrículas", "envelope-open-text", "matriculas"],
   ["/admin/contato", "Contato", "address-book", "contato"],
+];
+const NAV_ACOMPANHAR: [string, string, string, string][] = [
   ["/admin/estatisticas", "Estatísticas", "chart-line", "estatisticas"],
   ["/admin/historico", "Histórico", "clock-rotate-left", "historico"],
+];
+const NAV_SISTEMA: [string, string, string, string][] = [
   ["/admin/configuracoes", "Configurações", "gear", "configuracoes"],
 ];
 
@@ -49,6 +53,24 @@ function Sidebar({ active, open, onClose, logoSrc }: { active: string; open: boo
         <div className="adm-side-label">Gerir</div>
         <nav className="adm-nav">
           {NAV_GERIR.map(([to, label, icon, key]) => (
+            <Link key={key} to={to} className={active === key ? "active" : ""} onClick={onClose}>
+              <i className={"fa-solid fa-" + icon}></i>{label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="adm-side-label">Acompanhar</div>
+        <nav className="adm-nav">
+          {NAV_ACOMPANHAR.map(([to, label, icon, key]) => (
+            <Link key={key} to={to} className={active === key ? "active" : ""} onClick={onClose}>
+              <i className={"fa-solid fa-" + icon}></i>{label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="adm-side-label">Sistema</div>
+        <nav className="adm-nav">
+          {NAV_SISTEMA.map(([to, label, icon, key]) => (
             <Link key={key} to={to} className={active === key ? "active" : ""} onClick={onClose}>
               <i className={"fa-solid fa-" + icon}></i>{label}
             </Link>

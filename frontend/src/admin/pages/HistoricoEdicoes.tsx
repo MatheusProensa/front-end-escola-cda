@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AdminShell from "../AdminShell";
 import { asset } from "../../lib/assets";
 import { supabase, API_CONFIGURED } from "../../lib/supabase";
@@ -69,6 +69,47 @@ function formatarData(iso: string) {
   return new Date(iso).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
+const OPCOES_FILTRO: [string, string][] = [["todas", "Todas as seções"], ...Object.entries(TABELA_LABEL)];
+
+function FiltroDropdown({ valor, onChange }: { valor: string; onChange: (v: string) => void }) {
+  const [aberto, setAberto] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!aberto) return;
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setAberto(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [aberto]);
+
+  const labelAtual = OPCOES_FILTRO.find(([v]) => v === valor)?.[1] ?? valor;
+
+  return (
+    <div ref={ref} className="adm-dd">
+      <button type="button" className="adm-dd-trigger" onClick={() => setAberto((v) => !v)}>
+        {labelAtual}
+        <i className={"fa-solid fa-chevron-" + (aberto ? "up" : "down")}></i>
+      </button>
+      {aberto && (
+        <div className="adm-dd-menu">
+          {OPCOES_FILTRO.map(([v, label]) => (
+            <button
+              key={v}
+              type="button"
+              className={"adm-dd-item" + (v === valor ? " active" : "")}
+              onClick={() => { onChange(v); setAberto(false); }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function HistoricoEdicoes() {
   const [itens, setItens] = useState<Registro[]>([]);
   const [loading, setLoading] = useState(true);
@@ -92,7 +133,6 @@ export default function HistoricoEdicoes() {
       });
   }, []);
 
-  const tabelasDisponiveis = Array.from(new Set(itens.map((i) => i.tabela)));
   const itensFiltrados = filtroTabela === "todas" ? itens : itens.filter((i) => i.tabela === filtroTabela);
 
   return (
@@ -101,17 +141,7 @@ export default function HistoricoEdicoes() {
         <div className="ph-ic"><i className="fa-solid fa-clock-rotate-left"></i></div>
         <div><h1>Histórico de edições</h1><p>Registro automático de tudo que foi criado, editado ou excluído no painel.</p></div>
         <div className="ph-act">
-          <select
-            className="adm-input"
-            style={{ width: "auto" }}
-            value={filtroTabela}
-            onChange={(e) => setFiltroTabela(e.target.value)}
-          >
-            <option value="todas">Todas as seções</option>
-            {tabelasDisponiveis.map((t) => (
-              <option key={t} value={t}>{TABELA_LABEL[t] ?? t}</option>
-            ))}
-          </select>
+          <FiltroDropdown valor={filtroTabela} onChange={setFiltroTabela} />
         </div>
       </div>
 
