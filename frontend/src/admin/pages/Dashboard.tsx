@@ -5,6 +5,7 @@ import { CountNum } from "../ui";
 import { asset } from "../../lib/assets";
 import { supabase, API_CONFIGURED } from "../../lib/supabase";
 import { useAuth } from "../auth";
+import { type Registro, TABELA_LABEL, identificarRegistro, nomeCurtoDoEmail } from "../historico";
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 
@@ -19,16 +20,7 @@ const PAGINAS: [string, string, string, string, string][] = [
 
 type Matricula = { status: string; responsavel?: string; segmento?: string; whatsapp?: string };
 type Album = { id: number };
-type Edicao = { id: number; tabela: string; operacao: "insert" | "update" | "delete"; registro_id: string | null; created_at: string };
 
-const TABELA_LABEL: Record<string, string> = {
-  site_settings: "Configurações de contato",
-  page_content: "Conteúdo do site",
-  depoimentos: "Depoimentos",
-  albuns: "Álbuns",
-  fotos: "Fotos",
-  matriculas: "Matrículas",
-};
 const OPERACAO_LABEL: Record<string, string> = { insert: "criou", update: "editou", delete: "excluiu" };
 const OPERACAO_ICONE: Record<string, string> = { insert: "plus", update: "pen", delete: "trash" };
 const OPERACAO_COR: Record<string, string> = { insert: "ic-green", update: "ic-blue", delete: "ic-rose" };
@@ -46,7 +38,7 @@ export default function Dashboard() {
   const { user } = useAuth();
   const [matriculas, setMatriculas] = useState<Matricula[]>([]);
   const [totalAlbuns, setTotalAlbuns] = useState(0);
-  const [edicoes, setEdicoes] = useState<Edicao[]>([]);
+  const [edicoes, setEdicoes] = useState<Registro[]>([]);
   const [visitantes, setVisitantes] = useState<number | null>(null);
   const [loadingStats, setLoadingStats] = useState(true);
 
@@ -55,11 +47,11 @@ export default function Dashboard() {
     Promise.all([
       supabase.from("matriculas").select("status, responsavel, whatsapp, segmento").order("created_at", { ascending: false }),
       supabase.from("albuns").select("id"),
-      supabase.from("historico_edicoes").select("id, tabela, operacao, registro_id, created_at").order("created_at", { ascending: false }).limit(5),
+      supabase.from("historico_edicoes").select("*").order("created_at", { ascending: false }).limit(5),
     ]).then(([matsRes, albunsRes, edicoesRes]) => {
       setMatriculas((matsRes.data as Matricula[]) ?? []);
       setTotalAlbuns((albunsRes.data as Album[])?.length ?? 0);
-      setEdicoes((edicoesRes.data as Edicao[]) ?? []);
+      setEdicoes((edicoesRes.data as Registro[]) ?? []);
     }).finally(() => setLoadingStats(false));
 
     supabase.auth.getSession().then(async ({ data }) => {
@@ -179,7 +171,10 @@ export default function Dashboard() {
                 <div className="adm-activity" key={e.id}>
                   <div className={"av " + OPERACAO_COR[e.operacao]}><i className={"fa-solid fa-" + OPERACAO_ICONE[e.operacao]}></i></div>
                   <div className="tx">
-                    <p>Alguém <b>{OPERACAO_LABEL[e.operacao]}</b> em {TABELA_LABEL[e.tabela] ?? e.tabela}</p>
+                    <p>
+                      <b>{nomeCurtoDoEmail(e.usuario_email)}</b> {OPERACAO_LABEL[e.operacao]} {TABELA_LABEL[e.tabela] ?? e.tabela}
+                      {" — "}{identificarRegistro(e)}
+                    </p>
                     <span>{formatarTempoRelativo(e.created_at)}</span>
                   </div>
                 </div>
