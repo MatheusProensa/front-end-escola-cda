@@ -42,20 +42,25 @@ export default function EditarHome() {
   const [hero, setHero] = useState<Hero>(DEFAULT_HERO);
   const [pilares, setPilares] = useState<Pilar[]>(DEFAULT_PILARES);
   const [diario, setDiario] = useState<Diario>(DEFAULT_DIARIO);
+  const [publicado, setPublicado] = useState({ hero: DEFAULT_HERO, pilares: DEFAULT_PILARES, diario: DEFAULT_DIARIO });
 
   useEffect(() => {
     if (!API_CONFIGURED) return;
     supabase.from("page_content").select("secao, dados").eq("pagina", "home")
       .then(({ data }) => {
         const porSecao = Object.fromEntries((data ?? []).map((r) => [r.secao, r.dados]));
-        if (porSecao.hero) setHero(porSecao.hero as Hero);
-        if (porSecao.pilares) setPilares(porSecao.pilares as Pilar[]);
-        if (porSecao.diario) setDiario(porSecao.diario as Diario);
+        const h = (porSecao.hero ?? DEFAULT_HERO) as Hero;
+        const p = (porSecao.pilares ?? DEFAULT_PILARES) as Pilar[];
+        const d = (porSecao.diario ?? DEFAULT_DIARIO) as Diario;
+        setHero(h); setPilares(p); setDiario(d);
+        setPublicado({ hero: h, pilares: p, diario: d });
       });
   }, []);
 
   const setPilar = (i: number, k: keyof Pilar, v: string) =>
     setPilares((prev) => prev.map((p, idx) => idx === i ? { ...p, [k]: v } : p));
+
+  const dirty = JSON.stringify({ hero, pilares, diario }) !== JSON.stringify(publicado);
 
   const save = async () => {
     setSaving(true);
@@ -68,6 +73,7 @@ export default function EditarHome() {
         ], { onConflict: "pagina,secao" });
         if (error) throw error;
       }
+      setPublicado({ hero, pilares, diario });
       toast("Home publicada com sucesso!");
     } catch {
       toast("Erro ao salvar. Tente novamente.", true);
@@ -155,7 +161,7 @@ export default function EditarHome() {
         </div>
       </div>
 
-      <SaveBar onSave={save} saving={saving} />
+      {dirty && <SaveBar onSave={save} saving={saving} onDiscard={() => { setHero(publicado.hero); setPilares(publicado.pilares); setDiario(publicado.diario); }} />}
       {toastNode}
     </AdminShell>
   );

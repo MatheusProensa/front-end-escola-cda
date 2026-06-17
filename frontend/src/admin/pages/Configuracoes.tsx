@@ -16,10 +16,13 @@ export default function Configuracoes() {
     ? user.nome.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()
     : "CDA";
 
-  const [nome, setNome] = useState(user?.nome ?? "Equipe CDA");
+  const nomePublicado = user?.nome ?? "Equipe CDA";
+  const [nome, setNome] = useState(nomePublicado);
   const [email] = useState(user?.email ?? "equipe@escolacda.com.br");
   const [senha, setSenha] = useState("");
   const [senhaConf, setSenhaConf] = useState("");
+
+  const dirty = nome !== nomePublicado || senha !== "" || senhaConf !== "";
 
   const save = async () => {
     if (senha && senha !== senhaConf) {
@@ -106,7 +109,7 @@ export default function Configuracoes() {
         </div>
       </div>
 
-      <SaveBar onSave={save} saving={saving} />
+      {dirty && <SaveBar onSave={save} saving={saving} onDiscard={() => { setNome(nomePublicado); setSenha(""); setSenhaConf(""); }} />}
       {toastNode}
     </AdminShell>
   );

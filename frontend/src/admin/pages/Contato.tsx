@@ -30,15 +30,23 @@ export default function Contato() {
   const [toast, toastNode] = useToast();
   const [saving, setSaving] = useState(false);
   const [fields, setFields] = useState<Settings>(DEFAULTS);
+  const [fieldsPublicado, setFieldsPublicado] = useState<Settings>(DEFAULTS);
 
   useEffect(() => {
     if (!API_CONFIGURED) return;
     supabase.from("site_settings").select("*").eq("id", 1).single()
-      .then(({ data }) => { if (data) setFields((prev) => ({ ...prev, ...data })); });
+      .then(({ data }) => {
+        if (data) {
+          setFields((prev) => ({ ...prev, ...data }));
+          setFieldsPublicado((prev) => ({ ...prev, ...data }));
+        }
+      });
   }, []);
 
   const set = (k: keyof Settings) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setFields((s) => ({ ...s, [k]: e.target.value }));
+
+  const dirty = JSON.stringify(fields) !== JSON.stringify(fieldsPublicado);
 
   const save = async () => {
     setSaving(true);
@@ -47,6 +55,7 @@ export default function Contato() {
         const { error } = await supabase.from("site_settings").update(fields).eq("id", 1);
         if (error) throw error;
       }
+      setFieldsPublicado(fields);
       toast("Contatos atualizados!");
     } catch {
       toast("Erro ao salvar. Tente novamente.", true);
@@ -106,7 +115,7 @@ export default function Contato() {
         </div>
       </div>
 
-      <SaveBar onSave={save} saving={saving} />
+      {dirty && <SaveBar onSave={save} saving={saving} onDiscard={() => setFields(fieldsPublicado)} />}
       {toastNode}
     </AdminShell>
   );

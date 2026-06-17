@@ -24,19 +24,27 @@ export default function EditarPagina({ pagina, active, icone, titulo, subtitulo,
   const [toast, toastNode] = useToast();
   const { sec, loading } = usePageContent(pagina);
   const [intro, setIntro] = useState<Intro>(INTROS[pagina]);
+  const [introPublicado, setIntroPublicado] = useState<Intro>(INTROS[pagina]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (!loading) setIntro(section<Intro>(sec, "intro", INTROS[pagina]));
+    if (!loading) {
+      const carregado = section<Intro>(sec, "intro", INTROS[pagina]);
+      setIntro(carregado);
+      setIntroPublicado(carregado);
+    }
   }, [loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const set = (k: keyof Intro) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setIntro((s) => ({ ...s, [k]: e.target.value }));
 
+  const dirty = JSON.stringify(intro) !== JSON.stringify(introPublicado);
+
   const save = async () => {
     setSaving(true);
     try {
       if (API_CONFIGURED) await savePage(pagina, { intro });
+      setIntroPublicado(intro);
       toast("Página publicada com sucesso!");
     } catch {
       toast("Erro ao salvar. Tente novamente.", true);
@@ -88,7 +96,7 @@ export default function EditarPagina({ pagina, active, icone, titulo, subtitulo,
         </div>
       </div>
 
-      <SaveBar onSave={save} saving={saving} />
+      {dirty && <SaveBar onSave={save} saving={saving} onDiscard={() => setIntro(introPublicado)} />}
       {toastNode}
     </AdminShell>
   );
