@@ -133,7 +133,7 @@
 .hero-left h1 {
   margin-top: 14px;
   color: #0e2d6e;
-  font-size: 62px;
+  font-size: 48px;
   line-height: 0.95;
   font-weight: 800;
   letter-spacing: -1.5px;
@@ -145,7 +145,7 @@
   width: fit-content;
   color: #1b84ff;
   font-family: 'Yellowtail', cursive;
-  font-size: 78px;
+  font-size: 86px;
   line-height: 0.85;
   font-weight: 400;
   margin-top: 8px;
@@ -459,7 +459,7 @@
 
 .segmentos-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 
@@ -1188,8 +1188,8 @@
   width: calc(100% - 200px);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr 0.85fr 1.75fr;
-  gap: 60px;
+  grid-template-columns: 1.1fr 0.7fr 0.7fr 0.7fr 1.6fr;
+  gap: 40px;
   padding-bottom: 60px;
   align-items: start;
 }
@@ -1440,8 +1440,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 1024px) {
   .hero { padding: 0 40px; min-height: 860px; }
   .hero-left { width: 60%; }
-  .hero-left h1 { font-size: 50px; }
-  .hero-left h1 .script-line { font-size: 62px; }
+  .hero-left h1 { font-size: 38px; }
+  .hero-left h1 .script-line { font-size: 68px; }
   .cards { width: calc(100% - 80px); grid-template-columns: 1fr 1fr; gap: 6px 0; }
   .card:nth-child(2)::after { display: none; }
   .proposito, .segmentos, .vivencias, .espaco, .conexao { width: calc(100% - 80px); }
@@ -1492,8 +1492,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
   .hero-content { height: auto; }
   .hero-left { width: 100%; padding-top: 30px; }
-  .hero-left h1 { font-size: 40px; letter-spacing: -1px; }
-  .hero-left h1 .script-line { font-size: 48px; }
+  .hero-left h1 { font-size: 30px; letter-spacing: -1px; }
+  .hero-left h1 .script-line { font-size: 52px; }
   .hero-left h1 .script-line::after { width: 90px; right: 10px; }
   .hero-bg { object-position: 50% 0; opacity: 0.4; }
   .hero::before {
@@ -1558,8 +1558,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 /* ─── ≤480px : phones ─── */
 @media (max-width: 480px) {
-  .hero-left h1 { font-size: 34px; }
-  .hero-left h1 .script-line { font-size: 40px; }
+  .hero-left h1 { font-size: 26px; }
+  .hero-left h1 .script-line { font-size: 44px; }
   .proposito h2, .segmentos h2, .vivencias h2, .espaco-left h2 { font-size: 27px; }
   .vivencias h2 .script-accent { font-size: 32px; }
   .conexao-content h2 { font-size: 24px; }

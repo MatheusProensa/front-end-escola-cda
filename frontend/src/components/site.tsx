@@ -149,9 +149,9 @@ export function useReveal() {
 /* ───────────── Navbar ───────────── */
 const NAV: [string, string][] = [
   ["/", "Início"],
+  ["/metodologia", "Metodologia"],
   ["/segmentos", "Segmentos"],
   ["/vivencias", "Vivências"],
-  ["/metodologia", "Metodologia"],
   ["/espacos", "Espaços"],
   ["/momentos", "Momentos"],
   ["/sobre", "Sobre"],
@@ -202,9 +202,11 @@ export function Footer() {
     ["Educação Infantil", "/segmentos"],
     ["Ensino Fundamental", "/segmentos"],
     ["Contraturno", "/segmentos"],
-    ["Especializadas", "/vivencias"],
+  ];
+  const vivs: [string, string][] = [
     ["Oficinas", "/vivencias"],
-    ["Aulas extras", "/vivencias"],
+    ["Aulas Especializadas", "/vivencias"],
+    ["Aulas Extras", "/vivencias"],
   ];
   const contact = useContact();
   const s = useSettings();
@@ -214,7 +216,7 @@ export function Footer() {
       <div className="footer-inner">
         <div className="footer-brand">
           <img src={asset("logo-cda-15anos-semborda.webp")} alt="Escola CDA" className="footer-logo" />
-          <p>Há 15 anos formando crianças com afeto, propósito e experiências que transformam vidas e fortalecem famílias.</p>
+          <p>Há 15 anos transformando vidas e fortalecendo famílias através de um fazer pedagógico com acolhimento e propósito.</p>
           <div className="footer-social">
             <a href={instagramUrl(s.instagram)} target="_blank" rel="noreferrer" aria-label="Instagram" onClick={() => track("social_click", { rede: "instagram", local: "footer" })}><Icon name="instagram" brand size={16} /></a>
             <a href={facebookUrl(s.facebook)} target="_blank" rel="noreferrer" aria-label="Facebook" onClick={() => track("social_click", { rede: "facebook", local: "footer" })}><Icon name="facebook-f" brand size={16} /></a>
@@ -229,12 +231,15 @@ export function Footer() {
           <h4>Segmentos</h4>
           <ul>{segs.map(([x, to], i) => <li key={i}><Link to={to}>{x}</Link></li>)}</ul>
         </div>
+        <div className="footer-col">
+          <h4>Vivências</h4>
+          <ul>{vivs.map(([x, to], i) => <li key={i}><Link to={to}>{x}</Link></li>)}</ul>
+        </div>
         <div className="footer-contact">
           <h4>Contato</h4>
           <div className="footer-contact-item"><Icon name="location-dot" color="#f0b400" size={14} /><span>{s.endereco}</span></div>
           <div className="footer-contact-item"><Icon name="phone" color="#f0b400" size={14} /><a href={telHref}>{s.telefone}</a></div>
           <div className="footer-contact-item"><Icon name="whatsapp" brand color="#f0b400" size={14} /><a href={s.wpp_link} target="_blank" rel="noreferrer" onClick={() => track("whatsapp_click", { local: "footer_contato" })}>{s.whatsapp}</a></div>
-          <div className="footer-contact-item"><Icon name="clock|r" color="#f0b400" size={14} /><span>{s.horario}</span></div>
         </div>
       </div>
       <div className="footer-bottom">
