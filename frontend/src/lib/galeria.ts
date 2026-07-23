@@ -53,6 +53,14 @@ export const SEG_BERCARIO_DEFAULT: GalFoto[] = semLegenda([
   "gal-bercario-6.webp", "gal-bercario-12.webp",
 ]);
 
+// Prévia "Nosso espaço" da Home (4 fotos com rótulo — ideal manter 4)
+export const HOME_ESP_FOTOS: GalFoto[] = [
+  { url: asset("patio.webp"), titulo: "Pátio", descricao: "" },
+  { url: asset("biblioteca.webp"), titulo: "Biblioteca", descricao: "" },
+  { url: asset("horta.webp"), titulo: "Horta", descricao: "" },
+  { url: asset("quadra.webp"), titulo: "Quadra", descricao: "" },
+];
+
 // Fotos do bloco "Tecnologia" da Metodologia (ideal manter 4 fotos)
 export const MET_TEC_FOTOS: GalFoto[] = [
   { url: asset("tec-1.webp"), titulo: "Alunos usando notebook em sala", descricao: "" },

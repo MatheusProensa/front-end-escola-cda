@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Icon, Navbar, Footer, useReveal, useContact, usePageMeta } from "../components/site";
 import { asset } from "../lib/assets";
 import { usePageContent, section } from "../lib/content";
-import { HOME_PROPOSITO, HOME_CONEXAO, type Bloco } from "../lib/textos";
+import { HOME_PROPOSITO, HOME_CONEXAO, HOME_SEG_HEAD, HOME_VIV_HEAD, HOME_ESP_HEAD, HOME_FACHADA, HOME_CONVITE, type Bloco } from "../lib/textos";
+import { HOME_SEG_CARDS, HOME_VIV_CARDS, HOME_CONEXAO_FEATS, type HomeCard, type FeatItem } from "../lib/listas";
+import { HOME_ESP_FOTOS, type GalFoto } from "../lib/galeria";
 import { supabase, API_CONFIGURED } from "../lib/supabase";
 
 type HeroData = { selo: string; titulo: string; destaque: string; texto: string };
@@ -98,32 +100,26 @@ function Proposito({ data }: { data: Bloco }) {
 }
 
 /* ───────────── Segmentos ───────────── */
-function Segmentos() {
+function Segmentos({ head, segs }: { head: Bloco; segs: HomeCard[] }) {
   const navigate = useNavigate();
-  const segs = [
-    { img: "infantil-home.webp", icon: "child-reaching", t: "Educação Infantil", p: "Do berçário à pré-escola, acolhemos cada conquista com amor e estimulamos o aprender brincando.", to: "/segmentos", pos: "center 35%" },
-    { img: "fundamental-livro.webp", icon: "book", t: "Ensino Fundamental", p: "Anos iniciais com aprendizagem ativa, pensamento crítico e desenvolvimento integral.", to: "/segmentos", pos: "center 24%" },
-    { img: "contraturno-home.webp", icon: "clock|r", t: "Contraturno", p: "Acolhimento no turno da manhã com rotina equilibrada e oficinas que ampliam o aprender.", to: "/segmentos", pos: "center 18%" },
-    { img: "oficinas.webp", icon: "paintbrush", t: "Oficinas", p: "Libras, Educação Socioemocional, Culinária e Educação Ambiental — no contraturno.", to: "/vivencias" },
-  ];
   return (
     <section className="segmentos reveal" id="segmentos">
       <div className="segmentos-header">
         <div>
-          <span className="segmentos-mini">NOSSOS SEGMENTOS</span>
-          <h2>Caminhos de aprendizado<br />para cada fase da infância</h2>
+          <span className="segmentos-mini">{head.eyebrow}</span>
+          <h2>{head.titulo}</h2>
         </div>
-        <p>Da descoberta aos novos desafios, nossos segmentos acompanham cada fase da infância com acolhimento, propósito e experiências que despertam o aprender.</p>
+        <p>{head.p1}</p>
       </div>
       <div className="segmentos-grid">
         {segs.map((s, i) => (
           <div className="segmento-card" key={i}>
-            <img src={asset(s.img)} alt={s.t} decoding="async" style={s.pos ? { objectPosition: s.pos } : undefined} />
+            <img src={s.img} alt={s.t} decoding="async" style={s.pos ? { objectPosition: s.pos } : undefined} />
             <div className="segmento-overlay">
               <div className="segmento-icon"><Icon name={s.icon} color="#0b82f6" size={20} /></div>
               <h3>{s.t}</h3>
               <p>{s.p}</p>
-              <button onClick={() => navigate(s.to)}>Saiba mais</button>
+              <button onClick={() => navigate(s.to || "/segmentos")}>Saiba mais</button>
             </div>
           </div>
         ))}
@@ -133,26 +129,19 @@ function Segmentos() {
 }
 
 /* ───────────── Vivências ───────────── */
-function Vivencias() {
+function Vivencias({ head, vivs }: { head: Bloco; vivs: HomeCard[] }) {
   const navigate = useNavigate();
-  const vivs = [
-    { img: "musica.webp", icon: "music", c: "#f0b400", t: "Musicalização", p: "Estímulo à sensibilidade, criatividade e expressão através da música.", pos: "center 88%" },
-    { img: "capoeira.webp", icon: "hand-fist", c: "#0b82f6", t: "Capoeira", p: "Promove disciplina, respeito, coordenação e consciência corporal.", pos: "center 42%" },
-    { img: "ambiental.webp", icon: "leaf", c: "#0b82f6", t: "Ed. Ambiental", p: "Conexão com a natureza para formar cidadãos conscientes e responsáveis.", pos: "" },
-    { img: "culinaria.webp", icon: "utensils", c: "#f0b400", t: "Culinária Afetiva", p: "Com a nutricionista: autonomia, saúde e afeto ao aprender com as mãos.", pos: "center 100%" },
-    { img: "ingles.webp", icon: "globe", c: "#0b82f6", t: "Proposta Bilíngue", p: "Imersão no inglês desde cedo para formar alunos preparados para o futuro.", pos: "" },
-  ];
   return (
     <section className="vivencias reveal" id="vivencias">
-      <span className="vivencias-mini">VIVÊNCIAS QUE TRANSFORMAM</span>
-      <h2>Experiências que despertam<br />habilidades <span className="script-accent">para a vida</span></h2>
-      <p className="vivencias-sub">Mais do que atividades, vivências que <strong>estimulam talentos</strong>, <strong>desenvolvem competências</strong> e tornam o <strong>aprendizado mais significativo.</strong></p>
+      <span className="vivencias-mini">{head.eyebrow}</span>
+      <h2>{head.titulo} {head.destaque && <span className="script-accent">{head.destaque}</span>}</h2>
+      <p className="vivencias-sub">{head.p1}</p>
       <div className="vivencias-grid">
         {vivs.map((v, i) => (
           <div className="vivencia-card" key={i}>
-            <img src={asset(v.img)} alt={v.t} decoding="async" style={v.pos ? { objectPosition: v.pos } : undefined} />
+            <img src={v.img} alt={v.t} decoding="async" style={v.pos ? { objectPosition: v.pos } : undefined} />
             <div className="vivencia-overlay">
-              <div className="vivencia-icon"><Icon name={v.icon} color={v.c} size={18} /></div>
+              <div className="vivencia-icon"><Icon name={v.icon} color={v.c || "#0b82f6"} size={18} /></div>
               <h3>{v.t}</h3>
               <p>{v.p}</p>
             </div>
@@ -165,24 +154,22 @@ function Vivencias() {
 }
 
 /* ───────────── Nosso Espaço ───────────── */
-function Espaco() {
+function Espaco({ head, fotos }: { head: Bloco; fotos: GalFoto[] }) {
   const navigate = useNavigate();
-  const fotos = ["patio.webp", "biblioteca.webp", "horta.webp", "quadra.webp"];
-  const labels = ["Pátio", "Biblioteca", "Horta", "Quadra"];
   return (
     <section className="espaco reveal" id="espaco">
       <div className="espaco-left">
-        <span className="espaco-mini">NOSSO ESPAÇO</span>
-        <h2>Ambientes pensados<br />para <span className="azul-accent">acolher, explorar</span><br />e crescer</h2>
-        <p>Cada espaço da CDA é preparado para proporcionar segurança, conforto e experiências que fazem parte do desenvolvimento infantil.</p>
-        <button className="espaco-ver-mais-btn" onClick={() => navigate("/espacos")}>Conheça todos os nossos espaços →</button>
+        <span className="espaco-mini">{head.eyebrow}</span>
+        <h2>{head.titulo} {head.destaque && <span className="azul-accent">{head.destaque}</span>}</h2>
+        <p>{head.p1}</p>
+        <button className="espaco-ver-mais-btn" onClick={() => navigate("/espacos")}>{head.btn || "Conheça todos os nossos espaços →"}</button>
       </div>
       <div className="espaco-right">
         <div className="espaco-grid">
           {fotos.map((f, i) => (
             <div className="espaco-foto" key={i}>
-              <img src={asset(f)} alt={labels[i]} decoding="async" />
-              <span className="espaco-label"><span className="espaco-dot"></span>{labels[i]}</span>
+              <img src={f.url} alt={f.titulo} decoding="async" />
+              <span className="espaco-label"><span className="espaco-dot"></span>{f.titulo}</span>
             </div>
           ))}
         </div>
@@ -247,13 +234,7 @@ function Depoimentos() {
 }
 
 /* ───────────── Conexão ───────────── */
-function Conexao({ data }: { data: Bloco }) {
-  const feats = [
-    { icon: "user-group", t: "Acompanhamento próximo", p: "Olhar individual para cada aluno." },
-    { icon: "heart", t: "Diálogo com as famílias", p: "Comunicação aberta, transparente e constante." },
-    { icon: "shield-halved", t: "Desenvolvimento integral", p: "Cuidado com o cognitivo, emocional e social." },
-    { icon: "star", t: "Vivências que marcam", p: "Experiências que constroem memórias e valores." },
-  ];
+function Conexao({ data, feats }: { data: Bloco; feats: FeatItem[] }) {
   return (
     <section className="conexao reveal" id="conexao">
       <div className="conexao-foto"><img src={data.img} alt="Professora e alunos CDA" decoding="async" /></div>
@@ -282,28 +263,28 @@ function Conexao({ data }: { data: Bloco }) {
 }
 
 /* ───────────── Faixa da fachada (convite a conhecer) ───────────── */
-function FachadaBand() {
+function FachadaBand({ data }: { data: Bloco }) {
   return (
     <section className="fachada-band reveal">
       <img src={asset("fachada.webp")} alt="Fachada da Escola CDA" decoding="async" />
       <div className="fachada-band-overlay">
-        <span className="fb-eyebrow">Venha nos conhecer</span>
-        <h2>A sua próxima escolha começa com uma visita</h2>
-        <p>Conheça de perto a estrutura, o acolhimento e o cuidado que fazem da CDA um segundo lar há 15 anos.</p>
+        <span className="fb-eyebrow">{data.eyebrow}</span>
+        <h2>{data.titulo}</h2>
+        <p>{data.p1}</p>
       </div>
     </section>
   );
 }
 
 /* ── Faixa-convite (logo após a fachada) ── */
-function EspacoConvite() {
+function EspacoConvite({ data }: { data: Bloco }) {
   const contact = useContact();
   return (
     <div className="espaco-banner solo reveal">
       <div className="espaco-banner-icon"><Icon name="heart" color="#f0b400" size={22} /></div>
-      <div className="espaco-banner-text"><strong>Mais que espaços, criamos ambientes que incentivam o aprender, o brincar e o conviver.</strong></div>
-      <div className="espaco-banner-sub"><p>Venha conhecer de perto cada cantinho feito com cuidado para o seu filho.</p></div>
-      <button className="espaco-banner-btn" onClick={() => contact("home_banner")}>Agende uma visita →</button>
+      <div className="espaco-banner-text"><strong>{data.titulo}</strong></div>
+      <div className="espaco-banner-sub"><p>{data.p1}</p></div>
+      <button className="espaco-banner-btn" onClick={() => contact("home_banner")}>{data.btn || "Agende uma visita →"}</button>
     </div>
   );
 }
@@ -343,19 +324,28 @@ export default function Home() {
   const diario = section<DiarioData>(sec, "diario", DIARIO_DEFAULT);
   const proposito = section<Bloco>(sec, "proposito", HOME_PROPOSITO);
   const conexao = section<Bloco>(sec, "conexao", HOME_CONEXAO);
+  const segHead = section<Bloco>(sec, "seg_head", HOME_SEG_HEAD);
+  const segCards = section<HomeCard[]>(sec, "seg_cards", HOME_SEG_CARDS);
+  const vivHead = section<Bloco>(sec, "viv_head", HOME_VIV_HEAD);
+  const vivCards = section<HomeCard[]>(sec, "viv_cards", HOME_VIV_CARDS);
+  const espHead = section<Bloco>(sec, "esp_head", HOME_ESP_HEAD);
+  const espFotos = section<GalFoto[]>(sec, "esp_fotos", HOME_ESP_FOTOS);
+  const conexaoFeats = section<FeatItem[]>(sec, "conexao_feats", HOME_CONEXAO_FEATS);
+  const fachada = section<Bloco>(sec, "fachada", HOME_FACHADA);
+  const convite = section<Bloco>(sec, "convite", HOME_CONVITE);
   return (
     <div className="app">
       <Hero data={hero} />
       <Pillars pilares={pilares} />
       <Proposito data={proposito} />
-      <Segmentos />
-      <Vivencias />
-      <FachadaBand />
-      <EspacoConvite />
-      <Espaco />
+      <Segmentos head={segHead} segs={segCards} />
+      <Vivencias head={vivHead} vivs={vivCards} />
+      <FachadaBand data={fachada} />
+      <EspacoConvite data={convite} />
+      <Espaco head={espHead} fotos={espFotos} />
       <Depoimentos />
       <DiarioBand data={diario} />
-      <Conexao data={conexao} />
+      <Conexao data={conexao} feats={conexaoFeats} />
       <Footer />
     </div>
   );

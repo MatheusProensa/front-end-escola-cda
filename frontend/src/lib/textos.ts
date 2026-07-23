@@ -130,3 +130,25 @@ export const HOME_CONEXAO: Bloco = {
   p1: "Acreditamos que a parceria entre escola e família é essencial para que cada criança se desenvolva com segurança, autonomia e confiança.",
   img: asset("conexao.webp"),
 };
+export const HOME_SEG_HEAD: Bloco = {
+  eyebrow: "NOSSOS SEGMENTOS", titulo: "Caminhos de aprendizado para cada fase da infância",
+  p1: "Da descoberta aos novos desafios, nossos segmentos acompanham cada fase da infância com acolhimento, propósito e experiências que despertam o aprender.",
+};
+export const HOME_VIV_HEAD: Bloco = {
+  eyebrow: "VIVÊNCIAS QUE TRANSFORMAM", titulo: "Experiências que despertam habilidades", destaque: "para a vida",
+  p1: "Mais do que atividades, vivências que estimulam talentos, desenvolvem competências e tornam o aprendizado mais significativo.",
+};
+export const HOME_ESP_HEAD: Bloco = {
+  eyebrow: "NOSSO ESPAÇO", titulo: "Ambientes pensados para acolher, explorar e", destaque: "crescer",
+  p1: "Cada espaço da CDA é preparado para proporcionar segurança, conforto e experiências que fazem parte do desenvolvimento infantil.",
+  btn: "Conheça todos os nossos espaços →",
+};
+export const HOME_FACHADA: Bloco = {
+  eyebrow: "Venha nos conhecer", titulo: "A sua próxima escolha começa com uma visita",
+  p1: "Conheça de perto a estrutura, o acolhimento e o cuidado que fazem da CDA um segundo lar há 15 anos.",
+};
+export const HOME_CONVITE: Bloco = {
+  titulo: "Mais que espaços, criamos ambientes que incentivam o aprender, o brincar e o conviver.",
+  p1: "Venha conhecer de perto cada cantinho feito com cuidado para o seu filho.",
+  btn: "Agende uma visita →",
+};

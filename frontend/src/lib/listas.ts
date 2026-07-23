@@ -14,6 +14,32 @@ export function imgUrl(v: string): string {
   return v.startsWith("http") || v.startsWith("/") ? v : asset(v);
 }
 
+/* ───── Home (prévias da página inicial) ───── */
+export type HomeCard = { img: string; icon: string; t: string; p: string; to?: string; pos?: string; c?: string };
+
+export const HOME_SEG_CARDS: HomeCard[] = [
+  { img: asset("infantil-home.webp"), icon: "child-reaching", t: "Educação Infantil", p: "Do berçário à pré-escola, acolhemos cada conquista com amor e estimulamos o aprender brincando.", to: "/segmentos", pos: "center 35%" },
+  { img: asset("fundamental-livro.webp"), icon: "book", t: "Ensino Fundamental", p: "Anos iniciais com aprendizagem ativa, pensamento crítico e desenvolvimento integral.", to: "/segmentos", pos: "center 24%" },
+  { img: asset("contraturno-home.webp"), icon: "clock|r", t: "Contraturno", p: "Acolhimento no turno da manhã com rotina equilibrada e oficinas que ampliam o aprender.", to: "/segmentos", pos: "center 18%" },
+  { img: asset("oficinas.webp"), icon: "paintbrush", t: "Oficinas", p: "Libras, Educação Socioemocional, Culinária e Educação Ambiental — no contraturno.", to: "/vivencias" },
+];
+
+export const HOME_VIV_CARDS: HomeCard[] = [
+  { img: asset("musica.webp"), icon: "music", c: "#f0b400", t: "Musicalização", p: "Estímulo à sensibilidade, criatividade e expressão através da música.", pos: "center 88%" },
+  { img: asset("capoeira.webp"), icon: "hand-fist", c: "#0b82f6", t: "Capoeira", p: "Promove disciplina, respeito, coordenação e consciência corporal.", pos: "center 42%" },
+  { img: asset("ambiental.webp"), icon: "leaf", c: "#0b82f6", t: "Ed. Ambiental", p: "Conexão com a natureza para formar cidadãos conscientes e responsáveis.", pos: "" },
+  { img: asset("culinaria.webp"), icon: "utensils", c: "#f0b400", t: "Culinária Afetiva", p: "Com a nutricionista: autonomia, saúde e afeto ao aprender com as mãos.", pos: "center 100%" },
+  { img: asset("ingles.webp"), icon: "globe", c: "#0b82f6", t: "Proposta Bilíngue", p: "Imersão no inglês desde cedo para formar alunos preparados para o futuro.", pos: "" },
+];
+
+export type FeatItem = { icon: string; t: string; p: string };
+export const HOME_CONEXAO_FEATS: FeatItem[] = [
+  { icon: "user-group", t: "Acompanhamento próximo", p: "Olhar individual para cada aluno." },
+  { icon: "heart", t: "Diálogo com as famílias", p: "Comunicação aberta, transparente e constante." },
+  { icon: "shield-halved", t: "Desenvolvimento integral", p: "Cuidado com o cognitivo, emocional e social." },
+  { icon: "star", t: "Vivências que marcam", p: "Experiências que constroem memórias e valores." },
+];
+
 /* ───── Metodologia ───── */
 export const MET_DIMENSOES: Valor[] = [
   { icon: "hand-holding-heart", gold: false, t: "Inteligência emocional", p: "Cuidamos das emoções e dos vínculos, desenvolvendo empatia, autoconhecimento e autorregulação." },

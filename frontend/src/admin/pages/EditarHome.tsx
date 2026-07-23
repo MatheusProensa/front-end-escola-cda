@@ -4,13 +4,30 @@ import { SaveBar, useToast } from "../ui";
 import { asset } from "../../lib/assets";
 import { supabase, API_CONFIGURED } from "../../lib/supabase";
 import BlocoTexto from "./BlocoTexto";
-import { HOME_PROPOSITO, HOME_CONEXAO } from "../../lib/textos";
+import ListEditor from "./ListEditor";
+import GaleriaEditor from "./GaleriaEditor";
+import { HOME_PROPOSITO, HOME_CONEXAO, HOME_SEG_HEAD, HOME_VIV_HEAD, HOME_ESP_HEAD, HOME_FACHADA, HOME_CONVITE } from "../../lib/textos";
+import { HOME_SEG_CARDS, HOME_VIV_CARDS, HOME_CONEXAO_FEATS } from "../../lib/listas";
+import { HOME_ESP_FOTOS } from "../../lib/galeria";
 
 const camposHomeBloco = [
   { key: "eyebrow" as const, label: "Texto pequeno (acima do título)" },
   { key: "titulo" as const, label: "Título" },
   { key: "p1" as const, label: "Parágrafo", tipo: "textarea" as const },
 ];
+const camposHead = [
+  { key: "eyebrow" as const, label: "Texto pequeno (acima do título)" },
+  { key: "titulo" as const, label: "Título" },
+  { key: "destaque" as const, label: "Palavra em destaque (opcional)" },
+  { key: "p1" as const, label: "Texto de apoio", tipo: "textarea" as const },
+];
+const camposEspHead = [...camposHead, { key: "btn" as const, label: "Texto do botão" }];
+const camposBanner = [
+  { key: "titulo" as const, label: "Texto principal" },
+  { key: "p1" as const, label: "Texto de apoio", tipo: "textarea" as const },
+  { key: "btn" as const, label: "Texto do botão" },
+];
+const campoCard = [{ key: "t", label: "Título" }, { key: "p", label: "Texto", tipo: "textarea" as const }];
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 
@@ -138,7 +155,21 @@ export default function EditarHome() {
           </div>
 
           <BlocoTexto pagina="home" secao="proposito" titulo="Bloco: Educação com propósito" defaults={HOME_PROPOSITO} imagem campos={camposHomeBloco} hint="Seção com foto à direita, logo após os pilares." />
+
+          <BlocoTexto pagina="home" secao="seg_head" titulo="Prévia Segmentos — título" defaults={HOME_SEG_HEAD} campos={camposHead} />
+          <ListEditor pagina="home" secao="seg_cards" titulo="Prévia Segmentos — cards" defaults={HOME_SEG_CARDS} campos={campoCard} novo={{ img: "", icon: "star", t: "", p: "", to: "/segmentos" }} imagem hint="Os cards que aparecem na seção 'Nossos segmentos' da Home." />
+
+          <BlocoTexto pagina="home" secao="viv_head" titulo="Prévia Vivências — título" defaults={HOME_VIV_HEAD} campos={camposHead} />
+          <ListEditor pagina="home" secao="viv_cards" titulo="Prévia Vivências — cards" defaults={HOME_VIV_CARDS} campos={campoCard} novo={{ img: "", icon: "star", c: "#0b82f6", t: "", p: "" }} imagem hint="Os cards da seção 'Vivências que transformam' da Home." />
+
+          <BlocoTexto pagina="home" secao="fachada" titulo="Faixa da fachada" defaults={HOME_FACHADA} campos={camposHomeBloco} hint="Faixa com a foto da fachada e o convite a visitar." />
+          <BlocoTexto pagina="home" secao="convite" titulo="Faixa-convite (após a fachada)" defaults={HOME_CONVITE} campos={camposBanner} />
+
+          <BlocoTexto pagina="home" secao="esp_head" titulo="Prévia Nosso espaço — título" defaults={HOME_ESP_HEAD} campos={camposEspHead} />
+          <GaleriaEditor pagina="home" secao="esp_fotos" titulo="Prévia Nosso espaço — fotos" defaults={HOME_ESP_FOTOS} legendas hint="4 fotos com rótulo (o rótulo aparece sobre a foto). O ideal é manter 4." />
+
           <BlocoTexto pagina="home" secao="conexao" titulo="Bloco: Conexão que transforma" defaults={HOME_CONEXAO} imagem campos={camposHomeBloco} hint="Seção perto do fim da página inicial." />
+          <ListEditor pagina="home" secao="conexao_feats" titulo="Conexão — itens" defaults={HOME_CONEXAO_FEATS} campos={campoCard} novo={{ icon: "star", t: "", p: "" }} hint="Os 4 itens com ícone dentro da seção 'Conexão que transforma'." />
         </div>
 
         <div className="adm-side-panel">
