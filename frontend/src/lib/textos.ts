@@ -103,6 +103,22 @@ export const MET_CTA: Bloco = {
   btn: "Conheça nossa escola",
 };
 
+/* ───── Matrículas ───── */
+export const MATRICULAS_HERO: Bloco = {
+  eyebrow: "Agende uma visita", titulo: "Vamos conversar sobre o futuro do seu", destaque: "filho?",
+  p1: "Estamos de portas abertas para receber a sua família. Escolha o caminho mais fácil para você — formulário, WhatsApp ou uma visita à escola.",
+};
+export const MATRICULAS_FORM: Bloco = {
+  eyebrow: "Formulário de interesse", titulo: "Vamos conversar?",
+  p1: "Preencha os dados e nossa equipe entra em contato para agendar uma visita acolhedora.",
+  btn: "Quero falar com a escola",
+};
+export const MATRICULAS_CTA: Bloco = {
+  titulo: "Venha conhecer a CDA de perto",
+  p1: "Agende uma visita e sinta o acolhimento de uma escola que acolhe, desenvolve e transforma há 15 anos.",
+  btn: "Falar no WhatsApp",
+};
+
 /* ───── Home ───── */
 export const HOME_PROPOSITO: Bloco = {
   eyebrow: "EDUCAÇÃO COM PROPÓSITO", titulo: "Um jeito de aprender que respeita a infância",

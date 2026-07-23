@@ -16,6 +16,7 @@ const PAGINAS: [string, string, string, string, string][] = [
   ["palette", "Vivências", "Especializadas, Oficinas, Aulas extras", "pub", "/admin/vivencias"],
   ["image", "Espaços", "Galeria + energia solar", "pub", "/admin/espacos"],
   ["book-open", "Sobre", "História, linha do tempo, valores", "pub", "/admin/sobre"],
+  ["file-lines", "Matrículas", "Textos da página de matrículas", "pub", "/admin/pagina-matriculas"],
 ];
 
 type Matricula = { status: string; responsavel?: string; segmento?: string; whatsapp?: string };

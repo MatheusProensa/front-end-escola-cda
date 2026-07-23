@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon, Layout, track, usePageMeta, useSettings } from "../components/site";
+import { CtaBand } from "../components/blocks";
+import { usePageContent, section } from "../lib/content";
+import { MATRICULAS_HERO, MATRICULAS_FORM, MATRICULAS_CTA, type Bloco } from "../lib/textos";
 import { supabase, API_CONFIGURED } from "../lib/supabase";
 
 const MAP = "https://www.google.com/maps?q=R.+Jos%C3%A9+Manhago,+194+-+Camobi,+Santa+Maria+-+RS&output=embed";
 
-function MatriculaForm() {
+function MatriculaForm({ txt }: { txt: Bloco }) {
   const s = useSettings();
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -54,9 +57,9 @@ function MatriculaForm() {
   }
   return (
     <form className="contato-form" onSubmit={submit}>
-      <span className="eyebrow">Formulário de interesse</span>
-      <h3 style={{ marginTop: 8 }}>Vamos conversar?</h3>
-      <p>Preencha os dados e nossa equipe entra em contato para agendar uma visita acolhedora.</p>
+      <span className="eyebrow">{txt.eyebrow}</span>
+      <h3 style={{ marginTop: 8 }}>{txt.titulo}</h3>
+      <p>{txt.p1}</p>
       {erro && <div className="cda-field-erro"><Icon name="circle-exclamation" size={14} /> {erro}</div>}
       <div className="form-grid">
         <div className="cda-field"><label htmlFor="resp">Responsável</label><input id="resp" type="text" placeholder="Seu nome" value={f.resp} onChange={set("resp")} required /></div>
@@ -77,7 +80,7 @@ function MatriculaForm() {
       </div>
       <div className="cda-field"><label htmlFor="msg">Mensagem (opcional)</label><textarea id="msg" placeholder="Conte um pouco sobre o que você procura…" value={f.msg} onChange={set("msg")}></textarea></div>
       <button type="submit" className="primary-btn" style={{ width: "100%", marginTop: 4 }} disabled={loading}>
-        {loading ? <><Icon name="spinner" size={15} /> Enviando…</> : "Quero falar com a escola"}
+        {loading ? <><Icon name="spinner" size={15} /> Enviando…</> : (txt.btn || "Quero falar com a escola")}
       </button>
     </form>
   );
@@ -88,6 +91,10 @@ type Info = { icon: string; brand?: boolean; wpp?: boolean; t: string; v: string
 export default function Matriculas() {
   usePageMeta("Matrículas Abertas — Escola CDA, Santa Maria/RS", "Matrículas abertas na Escola CDA. Agende uma visita, conheça a escola e fale com a gente pelo WhatsApp.");
   const s = useSettings();
+  const { sec } = usePageContent("matriculas");
+  const hero = section<Bloco>(sec, "hero", MATRICULAS_HERO);
+  const formTxt = section<Bloco>(sec, "form", MATRICULAS_FORM);
+  const cta = section<Bloco>(sec, "cta", MATRICULAS_CTA);
   const INFO: Info[] = [
     { icon: "location-dot", t: "Endereço", v: s.endereco },
     { icon: "whatsapp", brand: true, wpp: true, t: "WhatsApp", v: s.whatsapp, href: s.wpp_link },
@@ -97,14 +104,14 @@ export default function Matriculas() {
   return (
     <Layout>
       <section className="page-hero reveal">
-        <span className="eyebrow">Agende uma visita</span>
-        <h1>Vamos conversar sobre o futuro do seu <span className="script">filho?</span></h1>
-        <p>Estamos de portas abertas para receber a sua família. Escolha o caminho mais fácil para você — formulário, WhatsApp ou uma visita à escola.</p>
+        <span className="eyebrow">{hero.eyebrow}</span>
+        <h1>{hero.titulo} <span className="script">{hero.destaque}</span></h1>
+        <p>{hero.p1}</p>
       </section>
 
       <div className="cda-panel reveal">
         <div className="contato-grid">
-          <MatriculaForm />
+          <MatriculaForm txt={formTxt} />
           <div className="contato-info">
             {INFO.map((c, i) => (
               <div className={"info-card" + (c.wpp ? " wpp" : "")} key={i}>
@@ -130,14 +137,10 @@ export default function Matriculas() {
         <iframe src={MAP} title="Mapa — Escola CDA" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
       </div>
 
-      <div className="cta-band reveal">
-        <h2>Venha conhecer a CDA de perto</h2>
-        <p>Agende uma visita e sinta o acolhimento de uma escola que acolhe, desenvolve e transforma há 15 anos.</p>
-        <div className="cta-actions">
-          <a className="btn-white" href={s.wpp_link} target="_blank" rel="noreferrer" onClick={() => track("whatsapp_click", { local: "matriculas_cta_band" })}><Icon name="whatsapp" brand size={16} /> Falar no WhatsApp</a>
-          <Link className="btn-ghost" to="/sobre"><Icon name="arrow-right" size={15} /> Conhecer a escola</Link>
-        </div>
-      </div>
+      <CtaBand b={cta}>
+        <a className="btn-white" href={s.wpp_link} target="_blank" rel="noreferrer" onClick={() => track("whatsapp_click", { local: "matriculas_cta_band" })}><Icon name="whatsapp" brand size={16} /> {cta.btn || "Falar no WhatsApp"}</a>
+        <Link className="btn-ghost" to="/sobre"><Icon name="arrow-right" size={15} /> Conhecer a escola</Link>
+      </CtaBand>
     </Layout>
   );
 }
