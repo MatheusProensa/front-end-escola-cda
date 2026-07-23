@@ -14,6 +14,43 @@ export function imgUrl(v: string): string {
   return v.startsWith("http") || v.startsWith("/") ? v : asset(v);
 }
 
+/* ───── Segmentos (blocos principais) ───── */
+// metodo/stats: um item por linha no formato "Título | descrição".
+// chips: separados por vírgula. Os padrões reproduzem o que já estava no site.
+export type SegBloco = {
+  key: string; img: string; icon: string; tag: string; pos?: string;
+  title: string; p: string; metodo: string; chipsLabel: string; chips: string; stats: string;
+};
+export const SEG_BLOCOS: SegBloco[] = [
+  {
+    key: "infantil", img: asset("infantil.webp"), icon: "child-reaching", tag: "Berçário à pré-escola", pos: "center 30%",
+    title: "Educação Infantil",
+    p: "A fase das primeiras descobertas — do berçário à pré-escola. Acolhemos cada criança com afeto e criamos um ambiente seguro onde aprender é, antes de tudo, brincar, explorar e se sentir amada.",
+    metodo: "Berçário acolhedor | Cuidado afetivo e atento desde os primeiros meses, com rotina de sono, alimentação e estímulos.\nAprender brincando | O brincar é a linguagem da infância e o caminho do aprendizado.\nProposta participativa (BNCC) | Projetos a partir dos interesses da criança, com o sistema ProRaiz.\nInglês desde o Maternal 1 | No período da tarde, de forma lúdica e interdisciplinar.",
+    chipsLabel: "Especializadas · turno da tarde",
+    chips: "Musicalização, Educação Física, Capoeira, Inglês",
+    stats: "0–5 | anos\nTarde | 13h–18h30\nContraturno | opcional",
+  },
+  {
+    key: "fundamental", img: asset("fundamental-home.webp"), icon: "book", tag: "Anos iniciais", pos: "center 30%",
+    title: "Ensino Fundamental",
+    p: "O momento de ampliar horizontes sobre uma base sólida. Cada aluno cresce curioso, confiante e preparado para os próximos passos da vida escolar.",
+    metodo: "Aprendizagem ativa | O aluno no centro: investiga, questiona e constrói o conhecimento.\nPensamento crítico | Projetos que desenvolvem raciocínio, leitura de mundo e argumentação.\nTecnologia no aprendizado | Notebooks em atividades pedagógicas que conectam o aluno ao mundo digital.",
+    chipsLabel: "Contraturno do Fundamental",
+    chips: "Artes Circenses, Libras, Reforço Escolar",
+    stats: "Anos | iniciais\nTarde | 13h–18h30\nContraturno | opcional",
+  },
+  {
+    key: "contraturno", img: asset("seg-contraturno.webp"), icon: "clock|r", tag: "Turno da manhã", pos: "center 28%",
+    title: "Contraturno",
+    p: "No turno da manhã, cada dia é uma nova experiência. Oficinas diferenciadas ampliam o aprender de forma leve, com tempo também para o brincar livre e a alimentação cuidada.",
+    metodo: "Uma oficina por dia | De segunda a sexta, uma vivência diferente para cada manhã.\nRotina equilibrada | Oficinas, brincar livre, alimentação e descanso em harmonia.\nAprender com leveza | Experiências que estimulam talentos sem peso de conteúdo.",
+    chipsLabel: "Oficinas da semana",
+    chips: "Libras, Educação Socioemocional, Culinária Afetiva, Educação Ambiental",
+    stats: "Manhã | 7h–12h45\n1 oficina | por dia\nAlmoço | incluso",
+  },
+];
+
 /* ───── Home (prévias da página inicial) ───── */
 export type HomeCard = { img: string; icon: string; t: string; p: string; to?: string; pos?: string; c?: string };
 

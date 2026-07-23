@@ -77,6 +77,19 @@ export const MET_FUNDAMENTAL_BLOCO: Bloco = {
   img: asset("fundamental-met.webp"),
 };
 
+/* ───── Segmentos ───── */
+export const SEG_BERCARIO: Bloco = {
+  eyebrow: "Berçário", titulo: "Um começo cercado de", destaque: "cuidado",
+  p1: "No berçário, cada bebê é acolhido com afeto e atenção individual. Cuidamos do sono, da alimentação e dos primeiros estímulos num ambiente seguro e cheio de carinho — onde a família fica tranquila e o bebê se sente em casa.",
+};
+export const SEG_INFANTIL_GAL_HEAD: Bloco = { eyebrow: "Maternal e Pré-escola", titulo: "Brincar, criar e descobrir" };
+export const SEG_FUNDAMENTAL_GAL_HEAD: Bloco = { eyebrow: "Anos iniciais", titulo: "Momentos do Ensino Fundamental" };
+export const SEG_CTA: Bloco = {
+  titulo: "Venha conhecer a CDA de perto",
+  p1: "Agende uma visita e sinta o acolhimento da nossa escola — será um prazer receber a sua família.",
+  btn: "Agendar visita",
+};
+
 /* ───── Vivências ───── */
 export const VIV_TARDE_HEAD: Bloco = { eyebrow: "Turno da tarde", titulo: "Especializadas", p1: "Aulas que fazem parte da rotina e ampliam o repertório de corpo, ritmo e movimento." };
 export const VIV_MANHA_HEAD: Bloco = { eyebrow: "Turno da manhã", titulo: "Oficinas", p1: "No contraturno, oficinas que despertam talentos, valores e novas descobertas a cada dia." };

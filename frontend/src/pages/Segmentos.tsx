@@ -2,9 +2,19 @@ import { Fragment, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Icon, Layout, useContact, usePageMeta } from "../components/site";
 import { PageHero } from "../components/PageHero";
-import { asset } from "../lib/assets";
+import { CtaBand } from "../components/blocks";
 import { usePageContent, section } from "../lib/content";
 import { SEG_INFANTIL_DEFAULT, SEG_FUNDAMENTAL_DEFAULT, SEG_BERCARIO_DEFAULT, type GalFoto } from "../lib/galeria";
+import { SEG_BLOCOS, imgUrl, type SegBloco } from "../lib/listas";
+import { SEG_BERCARIO, SEG_INFANTIL_GAL_HEAD, SEG_FUNDAMENTAL_GAL_HEAD, SEG_CTA, type Bloco } from "../lib/textos";
+
+// "Título | descrição" por linha → pares [t, d]
+const parLinhas = (s: string): [string, string][] =>
+  s.split("\n").map((l) => l.trim()).filter(Boolean).map((l) => {
+    const i = l.indexOf("|");
+    return i === -1 ? [l, ""] : [l.slice(0, i).trim(), l.slice(i + 1).trim()];
+  });
+const listaVirgula = (s: string): string[] => s.split(",").map((c) => c.trim()).filter(Boolean);
 
 // arrastar com o mouse (drag-to-scroll) no carrossel
 function useDragScroll() {
@@ -55,75 +65,30 @@ function SegGaleria({ eyebrow, title, fotos }: { eyebrow: string; title: string;
   );
 }
 
-function BercarioDestaque({ fotos }: { fotos: GalFoto[] }) {
+function BercarioDestaque({ b, fotos }: { b: Bloco; fotos: GalFoto[] }) {
   return (
     <div className="bercario-band reveal">
       <div className="bercario-band-head">
         <div>
-          <span className="eyebrow">Berçário</span>
-          <h2>Um começo cercado de <span style={{ color: "#1b84ff" }}>cuidado</span></h2>
+          <span className="eyebrow">{b.eyebrow}</span>
+          <h2>{b.titulo} {b.destaque && <span style={{ color: "#1b84ff" }}>{b.destaque}</span>}</h2>
         </div>
-        <p>No berçário, cada bebê é acolhido com afeto e atenção individual. Cuidamos do sono, da alimentação e dos primeiros estímulos num ambiente seguro e cheio de carinho — onde a família fica tranquila e o bebê se sente em casa.</p>
+        <p>{b.p1}</p>
       </div>
       <Carrossel fotos={fotos} alt="Berçário CDA" />
     </div>
   );
 }
 
-type Seg = {
-  key: string; img: string; icon: string; tag: string; title: string; p: string;
-  metodo: [string, string][]; chipsLabel: string; chips: string[]; stats: [string, string][]; pos?: string;
-};
-
-const SEGS: Seg[] = [
-  {
-    key: "infantil", img: "infantil.webp", icon: "child-reaching", tag: "Berçário à pré-escola", pos: "center 30%",
-    title: "Educação Infantil",
-    p: "A fase das primeiras descobertas — do berçário à pré-escola. Acolhemos cada criança com afeto e criamos um ambiente seguro onde aprender é, antes de tudo, brincar, explorar e se sentir amada.",
-    metodo: [
-      ["Berçário acolhedor", "Cuidado afetivo e atento desde os primeiros meses, com rotina de sono, alimentação e estímulos."],
-      ["Aprender brincando", "O brincar é a linguagem da infância e o caminho do aprendizado."],
-      ["Proposta participativa (BNCC)", "Projetos a partir dos interesses da criança, com o sistema ProRaiz."],
-      ["Inglês desde o Maternal 1", "No período da tarde, de forma lúdica e interdisciplinar."],
-    ],
-    chipsLabel: "Especializadas · turno da tarde",
-    chips: ["Musicalização", "Educação Física", "Capoeira", "Inglês"],
-    stats: [["0–5", "anos"], ["Tarde", "13h–18h30"], ["Contraturno", "opcional"]],
-  },
-  {
-    key: "fundamental", img: "fundamental-home.webp", icon: "book", tag: "Anos iniciais", pos: "center 30%",
-    title: "Ensino Fundamental",
-    p: "O momento de ampliar horizontes sobre uma base sólida. Cada aluno cresce curioso, confiante e preparado para os próximos passos da vida escolar.",
-    metodo: [
-      ["Aprendizagem ativa", "O aluno no centro: investiga, questiona e constrói o conhecimento."],
-      ["Pensamento crítico", "Projetos que desenvolvem raciocínio, leitura de mundo e argumentação."],
-      ["Tecnologia no aprendizado", "Notebooks em atividades pedagógicas que conectam o aluno ao mundo digital."],
-    ],
-    chipsLabel: "Contraturno do Fundamental",
-    chips: ["Artes Circenses", "Libras", "Reforço Escolar"],
-    stats: [["Anos", "iniciais"], ["Tarde", "13h–18h30"], ["Contraturno", "opcional"]],
-  },
-  {
-    key: "contraturno", img: "seg-contraturno.webp", icon: "clock|r", tag: "Turno da manhã", pos: "center 28%",
-    title: "Contraturno",
-    p: "No turno da manhã, cada dia é uma nova experiência. Oficinas diferenciadas ampliam o aprender de forma leve, com tempo também para o brincar livre e a alimentação cuidada.",
-    metodo: [
-      ["Uma oficina por dia", "De segunda a sexta, uma vivência diferente para cada manhã."],
-      ["Rotina equilibrada", "Oficinas, brincar livre, alimentação e descanso em harmonia."],
-      ["Aprender com leveza", "Experiências que estimulam talentos sem peso de conteúdo."],
-    ],
-    chipsLabel: "Oficinas da semana",
-    chips: ["Libras", "Educação Socioemocional", "Culinária Afetiva", "Educação Ambiental"],
-    stats: [["Manhã", "7h–12h45"], ["1 oficina", "por dia"], ["Almoço", "incluso"]],
-  },
-];
-
-function Segment({ s, flip }: { s: Seg; flip: boolean }) {
+function Segment({ s, flip }: { s: SegBloco; flip: boolean }) {
   const contact = useContact();
+  const metodo = parLinhas(s.metodo);
+  const chips = listaVirgula(s.chips);
+  const stats = parLinhas(s.stats);
   return (
     <div className={"feature-row reveal" + (flip ? " flip" : "")}>
       <div className="fr-media">
-        <img src={asset(s.img)} alt={s.title} decoding="async" style={s.pos ? { objectPosition: s.pos } : undefined} />
+        <img src={imgUrl(s.img)} alt={s.title} decoding="async" style={s.pos ? { objectPosition: s.pos } : undefined} />
         <span className="fr-tag"><span className="dot"></span>{s.tag}</span>
       </div>
       <div className="fr-body">
@@ -131,7 +96,7 @@ function Segment({ s, flip }: { s: Seg; flip: boolean }) {
         <h3>{s.title}</h3>
         <p>{s.p}</p>
         <div className="cda-list">
-          {s.metodo.map(([t, d], i) => (
+          {metodo.map(([t, d], i) => (
             <div className="li" key={i}>
               <div className={"li-ic" + (i === 1 ? " gold" : "")}><Icon name="check" size={12} /></div>
               <div><strong>{t}</strong><span>{d}</span></div>
@@ -140,10 +105,10 @@ function Segment({ s, flip }: { s: Seg; flip: boolean }) {
         </div>
         <span className="seg-chips-label">{s.chipsLabel}</span>
         <div className="seg-chips">
-          {s.chips.map((c, i) => <span className="seg-chip" key={i}>{c}</span>)}
+          {chips.map((c, i) => <span className="seg-chip" key={i}>{c}</span>)}
         </div>
         <div className="mini-stats">
-          {s.stats.map(([a, b], i) => (
+          {stats.map(([a, b], i) => (
             <div className="mini-stat" key={i}><strong>{a}</strong><span>{b}</span></div>
           ))}
         </div>
@@ -165,34 +130,35 @@ export default function Segmentos() {
   usePageMeta("Segmentos — Educação Infantil, Fundamental e Contraturno | Escola CDA", "Conheça os segmentos da Escola CDA: Educação Infantil, Ensino Fundamental e Contraturno, com proposta bilíngue e cuidado em cada fase.");
   const contact = useContact();
   const { sec } = usePageContent("segmentos");
+  const blocos = section<SegBloco[]>(sec, "blocos", SEG_BLOCOS);
+  const bercario = section<Bloco>(sec, "bercario", SEG_BERCARIO);
   const galBercario = section<GalFoto[]>(sec, "galeria_bercario", SEG_BERCARIO_DEFAULT);
+  const infantilHead = section<Bloco>(sec, "galeria_infantil_head", SEG_INFANTIL_GAL_HEAD);
+  const fundamentalHead = section<Bloco>(sec, "galeria_fundamental_head", SEG_FUNDAMENTAL_GAL_HEAD);
+  const cta = section<Bloco>(sec, "cta", SEG_CTA);
   const galerias: Record<string, { eyebrow: string; title: string; fotos: GalFoto[] }> = {
-    infantil: { eyebrow: "Maternal e Pré-escola", title: "Brincar, criar e descobrir", fotos: section<GalFoto[]>(sec, "galeria_infantil", SEG_INFANTIL_DEFAULT) },
-    fundamental: { eyebrow: "Anos iniciais", title: "Momentos do Ensino Fundamental", fotos: section<GalFoto[]>(sec, "galeria_fundamental", SEG_FUNDAMENTAL_DEFAULT) },
+    infantil: { eyebrow: infantilHead.eyebrow || "", title: infantilHead.titulo || "", fotos: section<GalFoto[]>(sec, "galeria_infantil", SEG_INFANTIL_DEFAULT) },
+    fundamental: { eyebrow: fundamentalHead.eyebrow || "", title: fundamentalHead.titulo || "", fotos: section<GalFoto[]>(sec, "galeria_fundamental", SEG_FUNDAMENTAL_DEFAULT) },
   };
   return (
     <Layout>
       <PageHero pagina="segmentos" />
 
-      {SEGS.map((s, i) => {
+      {blocos.map((s, i) => {
         const g = galerias[s.key];
         return (
-          <Fragment key={s.key}>
+          <Fragment key={s.key + "-" + i}>
             <Segment s={s} flip={i % 2 === 1} />
-            {s.key === "infantil" && <BercarioDestaque fotos={galBercario} />}
+            {s.key === "infantil" && <BercarioDestaque b={bercario} fotos={galBercario} />}
             {g && <SegGaleria eyebrow={g.eyebrow} title={g.title} fotos={g.fotos} />}
           </Fragment>
         );
       })}
 
-      <div className="cta-band reveal">
-        <h2>Venha conhecer a CDA de perto</h2>
-        <p>Agende uma visita e sinta o acolhimento da nossa escola — será um prazer receber a sua família.</p>
-        <div className="cta-actions">
-          <button className="btn-white" onClick={() => contact("segmentos_cta")}><Icon name="calendar-check" size={16} /> Agendar visita</button>
-          <Link className="btn-ghost" to="/vivencias"><Icon name="arrow-right" size={15} /> Ver as vivências</Link>
-        </div>
-      </div>
+      <CtaBand b={cta}>
+        <button className="btn-white" onClick={() => contact("segmentos_cta")}><Icon name="calendar-check" size={16} /> {cta.btn || "Agendar visita"}</button>
+        <Link className="btn-ghost" to="/vivencias"><Icon name="arrow-right" size={15} /> Ver as vivências</Link>
+      </CtaBand>
     </Layout>
   );
 }
