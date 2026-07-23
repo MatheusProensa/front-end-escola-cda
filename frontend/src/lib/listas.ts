@@ -6,6 +6,7 @@ import { asset } from "./assets";
 export type Valor = { icon: string; gold: boolean; t: string; p: string };
 export type Lista = { t: string; d: string };
 export type Viv = { icon: string; gold: boolean; t: string; p: string; img: string; pos?: string };
+export type Chip = { icon: string; t: string };
 
 // resolve o caminho de imagem (asset embutido OU url já completa do storage)
 export function imgUrl(v: string): string {
@@ -36,6 +37,20 @@ export const MET_PILARES5: Valor[] = [
   { icon: "leaf", gold: false, t: "Consciência ambiental", p: "Cuidado e responsabilidade com o planeta e com o outro." },
   { icon: "wand-magic-sparkles", gold: true, t: "Inovação com propósito", p: "Tecnologia e criatividade a serviço de uma educação mais humana." },
   { icon: "hand-holding-heart", gold: false, t: "Parceria com a família", p: "Juntos na missão de educar, acolher e transformar." },
+];
+
+export const MET_TEC_CHIPS: Chip[] = [
+  { icon: "laptop", t: "Notebooks em sala" },
+  { icon: "gamepad", t: "Aprendizagem interativa" },
+  { icon: "chalkboard-user", t: "Mediação do professor" },
+  { icon: "globe", t: "Conexão com o mundo digital" },
+];
+export const MET_MATERIAL_CHIPS: Chip[] = [
+  { icon: "comment", t: "Linguagem acessível e envolvente" },
+  { icon: "globe", t: "Conteúdos conectados à realidade" },
+  { icon: "pen-ruler", t: "Atividades práticas e reflexivas" },
+  { icon: "tablet-screen-button", t: "Recursos digitais interativos" },
+  { icon: "certificate", t: "100% alinhado à BNCC" },
 ];
 
 /* ───── Sobre ───── */

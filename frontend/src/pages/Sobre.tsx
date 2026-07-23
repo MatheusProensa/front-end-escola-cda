@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { Icon, Layout, usePageMeta } from "../components/site";
 import { PageHero } from "../components/PageHero";
+import { SecHead, CtaBand } from "../components/blocks";
 import { usePageContent, section } from "../lib/content";
 import { SOBRE_TIMELINE_DEFAULT, type GalFoto } from "../lib/galeria";
 import { SOBRE_VALORES, type Valor, type Lista } from "../lib/listas";
-import { SOBRE_HISTORIA, SOBRE_ALIMENTACAO, SOBRE_ALIMENTACAO_ITENS, type Bloco } from "../lib/textos";
+import { SOBRE_HISTORIA, SOBRE_ALIMENTACAO, SOBRE_ALIMENTACAO_ITENS, SOBRE_TIMELINE_HEAD, SOBRE_VALORES_HEAD, SOBRE_CTA, type Bloco } from "../lib/textos";
 
 const ALIM_ICONS = ["utensils", "leaf", "ban"];
 
@@ -16,6 +17,9 @@ export default function Sobre() {
   const historia = section<Bloco>(sec, "historia", SOBRE_HISTORIA);
   const alimentacao = section<Bloco>(sec, "alimentacao", SOBRE_ALIMENTACAO);
   const alimItens = section<Lista[]>(sec, "alimentacao_itens", SOBRE_ALIMENTACAO_ITENS);
+  const tlHead = section<Bloco>(sec, "timeline_head", SOBRE_TIMELINE_HEAD);
+  const valoresHead = section<Bloco>(sec, "valores_head", SOBRE_VALORES_HEAD);
+  const cta = section<Bloco>(sec, "cta", SOBRE_CTA);
   return (
     <Layout>
       <PageHero pagina="sobre" />
@@ -34,7 +38,7 @@ export default function Sobre() {
       </div>
 
       <div className="cda-panel reveal">
-        <div className="sec-head"><span className="eyebrow">15 anos de caminhada</span><h2>Nossa linha do tempo</h2><p>De "Carinha de Anjo" à Escola CDA — cada fase carregou o mesmo cuidado com a infância.</p></div>
+        <SecHead b={tlHead} />
         <div className="tl-hint"><i className="fa-solid fa-arrow-right-long"></i> Arraste para percorrer os 15 anos</div>
         <div className="tl-track">
           {tl.map((f, i) => (
@@ -51,7 +55,7 @@ export default function Sobre() {
       </div>
 
       <div className="cda-panel reveal">
-        <div className="sec-head"><span className="eyebrow">No que acreditamos</span><h2>Valores que guiam cada dia</h2></div>
+        <SecHead b={valoresHead} />
         <div className="valores">
           {valores.map((v, i) => (
             <div className={"valor" + (v.gold ? " gold" : "")} key={i}>
@@ -80,14 +84,10 @@ export default function Sobre() {
         </div>
       </div>
 
-      <div className="cta-band reveal">
-        <h2>Venha fazer parte da nossa história</h2>
-        <p>Agende uma visita e descubra por que tantas famílias confiam na CDA há 15 anos.</p>
-        <div className="cta-actions">
-          <Link className="btn-white" to="/matriculas"><Icon name="calendar-check" size={16} /> Quero conhecer</Link>
-          <Link className="btn-ghost" to="/segmentos"><Icon name="arrow-right" size={15} /> Ver os segmentos</Link>
-        </div>
-      </div>
+      <CtaBand b={cta}>
+        <Link className="btn-white" to="/matriculas"><Icon name="calendar-check" size={16} /> {cta.btn || "Quero conhecer"}</Link>
+        <Link className="btn-ghost" to="/segmentos"><Icon name="arrow-right" size={15} /> Ver os segmentos</Link>
+      </CtaBand>
     </Layout>
   );
 }

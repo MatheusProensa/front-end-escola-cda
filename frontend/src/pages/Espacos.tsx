@@ -2,11 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Icon, Layout, useContact, usePageMeta } from "../components/site";
 import { PageHero } from "../components/PageHero";
+import { SecHead, CtaBand } from "../components/blocks";
 import { asset } from "../lib/assets";
 import { usePageContent, section } from "../lib/content";
 import { ESPACOS_GAL_DEFAULT, type GalFoto } from "../lib/galeria";
 import { ESPACOS_FEATS, type Valor, type Lista } from "../lib/listas";
-import { ESPACOS_SOLAR, ESPACOS_SOLAR_ITENS, type Bloco } from "../lib/textos";
+import { ESPACOS_SOLAR, ESPACOS_SOLAR_ITENS, ESPACOS_FEATS_HEAD, ESPACOS_CTA, type Bloco } from "../lib/textos";
 
 const SOLAR_ICONS = ["solar-panel", "leaf", "piggy-bank"];
 
@@ -42,6 +43,8 @@ export default function Espacos() {
   const feats = section<Valor[]>(sec, "feats", ESPACOS_FEATS);
   const solar = section<Bloco>(sec, "solar", ESPACOS_SOLAR);
   const solarItens = section<Lista[]>(sec, "solar_itens", ESPACOS_SOLAR_ITENS);
+  const featsHead = section<Bloco>(sec, "feats_head", ESPACOS_FEATS_HEAD);
+  const cta = section<Bloco>(sec, "cta", ESPACOS_CTA);
   const [lb, setLb] = useState<number | null>(null);
   const fechar = useCallback(() => setLb(null), []);
   return (
@@ -64,7 +67,7 @@ export default function Espacos() {
       </div>
 
       <div className="cda-panel tight reveal">
-        <div className="sec-head"><span className="eyebrow">Por dentro de cada espaço</span><h2>Feitos para o bem-estar de cada criança</h2></div>
+        <SecHead b={featsHead} />
         <div className="valores cols-4">
           {feats.map((f, i) => (
             <div className={"valor" + (f.gold ? " gold" : "")} key={i}>
@@ -93,14 +96,10 @@ export default function Espacos() {
         </div>
       </div>
 
-      <div className="cta-band reveal">
-        <h2>Cada espaço fica ainda melhor com seu filho nele</h2>
-        <p>Agende uma visita e conheça de perto cada ambiente feito com cuidado para a infância.</p>
-        <div className="cta-actions">
-          <button className="btn-white" onClick={() => contact("espacos_cta")}><Icon name="calendar-check" size={16} /> Agendar visita</button>
-          <Link className="btn-ghost" to="/sobre"><Icon name="arrow-right" size={15} /> Conhecer a escola</Link>
-        </div>
-      </div>
+      <CtaBand b={cta}>
+        <button className="btn-white" onClick={() => contact("espacos_cta")}><Icon name="calendar-check" size={16} /> {cta.btn || "Agendar visita"}</button>
+        <Link className="btn-ghost" to="/sobre"><Icon name="arrow-right" size={15} /> Conhecer a escola</Link>
+      </CtaBand>
 
       {lb !== null && <GaleriaLightbox gal={gal} index={lb} onClose={fechar} onNav={setLb} />}
     </Layout>

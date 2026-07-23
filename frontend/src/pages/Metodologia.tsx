@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { Icon, Layout, useContact, usePageMeta } from "../components/site";
 import { PageHero } from "../components/PageHero";
+import { SecHead, CtaBand } from "../components/blocks";
 import { asset } from "../lib/assets";
 import { usePageContent, section } from "../lib/content";
-import { MET_DIMENSOES, MET_INFANTIL, MET_FUNDAMENTAL, MET_PILARES5, type Valor, type Lista } from "../lib/listas";
-import { MET_INTRO, MET_INFANTIL_BLOCO, MET_FUNDAMENTAL_BLOCO, type Bloco } from "../lib/textos";
+import { MET_DIMENSOES, MET_INFANTIL, MET_FUNDAMENTAL, MET_PILARES5, MET_TEC_CHIPS, MET_MATERIAL_CHIPS, type Valor, type Lista, type Chip } from "../lib/listas";
+import { MET_INTRO, MET_INFANTIL_BLOCO, MET_FUNDAMENTAL_BLOCO, MET_DIMENSOES_HEAD, MET_TEC_HEAD, MET_MATERIAL_HEAD, MET_PILARES5_HEAD, MET_CTA, type Bloco } from "../lib/textos";
+import { MET_TEC_FOTOS, type GalFoto } from "../lib/galeria";
 
 export default function Metodologia() {
   usePageMeta("Metodologia ProRaiz — Escola CDA, Santa Maria/RS", "A CDA adota a metodologia ProRaiz: formação integral que une aprendizado acadêmico e desenvolvimento socioemocional, alinhada à BNCC.");
@@ -17,6 +19,14 @@ export default function Metodologia() {
   const intro = section<Bloco>(sec, "intro_bloco", MET_INTRO);
   const infBloco = section<Bloco>(sec, "infantil_bloco", MET_INFANTIL_BLOCO);
   const fundBloco = section<Bloco>(sec, "fundamental_bloco", MET_FUNDAMENTAL_BLOCO);
+  const dimHead = section<Bloco>(sec, "dimensoes_head", MET_DIMENSOES_HEAD);
+  const tecHead = section<Bloco>(sec, "tec_head", MET_TEC_HEAD);
+  const tecFotos = section<GalFoto[]>(sec, "tec_fotos", MET_TEC_FOTOS);
+  const tecChips = section<Chip[]>(sec, "tec_chips", MET_TEC_CHIPS);
+  const materialHead = section<Bloco>(sec, "material_head", MET_MATERIAL_HEAD);
+  const materialChips = section<Chip[]>(sec, "material_chips", MET_MATERIAL_CHIPS);
+  const pilares5Head = section<Bloco>(sec, "pilares5_head", MET_PILARES5_HEAD);
+  const cta = section<Bloco>(sec, "cta", MET_CTA);
   return (
     <Layout>
       <PageHero pagina="metodologia" />
@@ -35,7 +45,7 @@ export default function Metodologia() {
       </div>
 
       <div className="cda-panel tight reveal">
-        <div className="sec-head"><span className="eyebrow">Dimensões do desenvolvimento</span><h2>O que cultivamos em cada criança</h2></div>
+        <SecHead b={dimHead} />
         <div className="valores">
           {PILARES.map((v, i) => (
             <div className={"valor" + (v.gold ? " gold" : "")} key={i}>
@@ -82,34 +92,30 @@ export default function Metodologia() {
       </div>
 
       <div className="cda-panel reveal">
-        <div className="sec-head"><span className="eyebrow">Tecnologia no Ensino Fundamental</span><h2>Aprender também é <span style={{ color: "#1b84ff" }}>conectar-se</span></h2><p>No Ensino Fundamental, unimos o ensino de qualidade à tecnologia: os alunos usam <strong>notebooks</strong> em atividades pedagógicas que tornam o aprendizado mais ativo, interativo e conectado ao mundo de hoje — sempre com mediação dos professores.</p></div>
+        <SecHead b={tecHead} />
         <div className="tec-grid">
-          <div className="tec-photo"><img src={asset("tec-1.webp")} alt="Alunos usando notebook em sala" loading="lazy" decoding="async" /></div>
-          <div className="tec-photo"><img src={asset("tec-4.webp")} alt="Turma do Fundamental com notebooks" loading="lazy" decoding="async" /></div>
-          <div className="tec-photo"><img src={asset("tec-3.webp")} alt="Alunas aprendendo no computador" loading="lazy" decoding="async" /></div>
-          <div className="tec-photo"><img src={asset("tec-2.webp")} alt="Atividade pedagógica no notebook" loading="lazy" decoding="async" /></div>
+          {tecFotos.map((f, i) => (
+            <div className="tec-photo" key={i}><img src={f.url} alt={f.titulo} loading="lazy" decoding="async" /></div>
+          ))}
         </div>
         <div className="sistema-chips">
-          <span className="seg-chip"><Icon name="laptop" size={11} /> Notebooks em sala</span>
-          <span className="seg-chip"><Icon name="gamepad" size={11} /> Aprendizagem interativa</span>
-          <span className="seg-chip"><Icon name="chalkboard-user" size={11} /> Mediação do professor</span>
-          <span className="seg-chip"><Icon name="globe" size={11} /> Conexão com o mundo digital</span>
+          {tecChips.map((c, i) => (
+            <span className="seg-chip" key={i}><Icon name={c.icon} size={11} /> {c.t}</span>
+          ))}
         </div>
       </div>
 
       <div className="cda-panel reveal">
-        <div className="sec-head"><span className="eyebrow">Material didático</span><h2>Materiais de excelência, alinhados à BNCC</h2><p>A metodologia ProRaiz conta com materiais exclusivos e atualizados, desenvolvidos por professores atuantes para estimular o aprendizado significativo e o protagonismo do aluno.</p></div>
+        <SecHead b={materialHead} />
         <div className="sistema-chips">
-          <span className="seg-chip"><Icon name="comment" size={11} /> Linguagem acessível e envolvente</span>
-          <span className="seg-chip"><Icon name="globe" size={11} /> Conteúdos conectados à realidade</span>
-          <span className="seg-chip"><Icon name="pen-ruler" size={11} /> Atividades práticas e reflexivas</span>
-          <span className="seg-chip"><Icon name="tablet-screen-button" size={11} /> Recursos digitais interativos</span>
-          <span className="seg-chip"><Icon name="certificate" size={11} /> 100% alinhado à BNCC</span>
+          {materialChips.map((c, i) => (
+            <span className="seg-chip" key={i}><Icon name={c.icon} size={11} /> {c.t}</span>
+          ))}
         </div>
       </div>
 
       <div className="cda-panel tight tinted reveal">
-        <div className="sec-head"><span className="eyebrow">Pilares que sustentam a proposta</span><h2>A base de tudo que fazemos</h2></div>
+        <SecHead b={pilares5Head} />
         <div className="valores cols-5">
           {PILARES5.map((v, i) => (
             <div className={"valor" + (v.gold ? " gold" : "")} key={i}>
@@ -121,14 +127,10 @@ export default function Metodologia() {
         </div>
       </div>
 
-      <div className="cta-band reveal">
-        <h2>Mais que uma metodologia, um compromisso com a vida</h2>
-        <p>Na CDA, o ProRaiz fortalece nossa missão de formar alunos preparados para aprender, conviver, escolher e transformar o mundo com consciência e empatia.</p>
-        <div className="cta-actions">
-          <button className="btn-white" onClick={() => contact("metodologia")}><Icon name="calendar-check" size={16} /> Conheça nossa escola</button>
-          <Link className="btn-ghost" to="/segmentos"><Icon name="arrow-right" size={15} /> Ver os segmentos</Link>
-        </div>
-      </div>
+      <CtaBand b={cta}>
+        <button className="btn-white" onClick={() => contact("metodologia")}><Icon name="calendar-check" size={16} /> {cta.btn || "Conheça nossa escola"}</button>
+        <Link className="btn-ghost" to="/segmentos"><Icon name="arrow-right" size={15} /> Ver os segmentos</Link>
+      </CtaBand>
     </Layout>
   );
 }

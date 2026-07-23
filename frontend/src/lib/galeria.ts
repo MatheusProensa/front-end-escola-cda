@@ -53,6 +53,14 @@ export const SEG_BERCARIO_DEFAULT: GalFoto[] = semLegenda([
   "gal-bercario-6.webp", "gal-bercario-12.webp",
 ]);
 
+// Fotos do bloco "Tecnologia" da Metodologia (ideal manter 4 fotos)
+export const MET_TEC_FOTOS: GalFoto[] = [
+  { url: asset("tec-1.webp"), titulo: "Alunos usando notebook em sala", descricao: "" },
+  { url: asset("tec-4.webp"), titulo: "Turma do Fundamental com notebooks", descricao: "" },
+  { url: asset("tec-3.webp"), titulo: "Alunas aprendendo no computador", descricao: "" },
+  { url: asset("tec-2.webp"), titulo: "Atividade pedagógica no notebook", descricao: "" },
+];
+
 // Linha do tempo da página Sobre (foto + frase)
 export const SOBRE_TIMELINE_DEFAULT: GalFoto[] = [
   { url: asset("timeline/t01.webp"), titulo: "", descricao: "Onde tudo começou." },
