@@ -240,7 +240,7 @@ export function Footer() {
       <div className="footer-bottom">
         <div className="footer-bottom-inner">
           <p>© 2026 Escola CDA. Todos os direitos reservados.</p>
-          <span className="footer-credit">Desenvolvido por <strong>Júnior Ferreira</strong> e <strong>Matheus Proensa</strong></span>
+          <span className="footer-credit">Desenvolvido por <strong>Matheus Proensa</strong></span>
           <button type="button" className="footer-link-btn" onClick={() => contact("footer")}>Agende uma visita</button>
         </div>
       </div>
