@@ -33,17 +33,22 @@ const DIARIO_DEFAULT: DiarioData = {
 };
 
 /* ───────────── Hero ───────────── */
+// Imagem da campanha embutida no site (carrega junto com a página, na hora).
+// A edição pelo painel ainda tem prioridade: se salvarem outra imagem, ela vence.
+const CAMPANHA_SLOGAN = asset("campanha-fundamental.webp");
+
 function Hero({ data }: { data: HeroData }) {
   const contact = useContact();
   const navigate = useNavigate();
+  const slogan = data.imagem || CAMPANHA_SLOGAN;
   return (
     <section className="hero" id="hero">
       <Navbar />
       <div className="hero-content">
         <div className="hero-left">
-          {!data.imagem && data.selo && <span className="mini-title">{data.selo}</span>}
-          {data.imagem
-            ? <img src={data.imagem} alt={data.titulo + " " + data.destaque} className="hero-slogan-img" fetchPriority="high" decoding="async" />
+          {!slogan && data.selo && <span className="mini-title">{data.selo}</span>}
+          {slogan
+            ? <img src={slogan} alt={data.titulo + " " + data.destaque} className="hero-slogan-img" fetchPriority="high" decoding="async" />
             : <h1>{data.titulo}<span className="script-line"> {data.destaque}</span></h1>}
           <p>{data.texto}</p>
           <div className="hero-buttons">
