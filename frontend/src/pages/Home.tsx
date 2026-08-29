@@ -8,7 +8,7 @@ import { HOME_SEG_CARDS, HOME_VIV_CARDS, HOME_CONEXAO_FEATS, type HomeCard, type
 import { HOME_ESP_FOTOS, type GalFoto } from "../lib/galeria";
 import { supabase, API_CONFIGURED } from "../lib/supabase";
 
-type HeroData = { selo: string; titulo: string; destaque: string; texto: string };
+type HeroData = { selo: string; titulo: string; destaque: string; texto: string; imagem?: string };
 type PilarData = { titulo: string; descricao: string };
 type DiarioData = { titulo: string; texto: string; recursos: string };
 
@@ -42,7 +42,9 @@ function Hero({ data }: { data: HeroData }) {
       <div className="hero-content">
         <div className="hero-left">
           <span className="mini-title">{data.selo}</span>
-          <h1>{data.titulo}<span className="script-line"> {data.destaque}</span></h1>
+          {data.imagem
+            ? <img src={data.imagem} alt={data.titulo + " " + data.destaque} className="hero-slogan-img" fetchPriority="high" decoding="async" />
+            : <h1>{data.titulo}<span className="script-line"> {data.destaque}</span></h1>}
           <p>{data.texto}</p>
           <div className="hero-buttons">
             <button className="primary-btn" onClick={() => contact("home_hero")}>Falar com a escola</button>

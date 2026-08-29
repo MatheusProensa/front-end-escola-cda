@@ -139,6 +139,16 @@
   letter-spacing: -1.5px;
 }
 
+.hero-slogan-img {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin-top: 14px;
+}
+@media (max-width: 900px) { .hero-slogan-img { max-width: 380px; } }
+@media (max-width: 560px) { .hero-slogan-img { max-width: 300px; margin: 14px auto 0; } }
+
 .hero-left h1 .script-line {
   display: block;
   position: relative;

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AdminShell from "../AdminShell";
 import { SaveBar, useToast } from "../ui";
 import { asset } from "../../lib/assets";
+import { uploadImagem } from "../../lib/storage";
 import { supabase, API_CONFIGURED } from "../../lib/supabase";
 import BlocoTexto from "./BlocoTexto";
 import ListEditor from "./ListEditor";
@@ -31,7 +32,7 @@ const campoCard = [{ key: "t", label: "Título" }, { key: "p", label: "Texto", t
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 
-type Hero = { selo: string; titulo: string; destaque: string; texto: string };
+type Hero = { selo: string; titulo: string; destaque: string; texto: string; imagem?: string };
 type Pilar = { titulo: string; descricao: string };
 type Diario = { titulo: string; texto: string; recursos: string };
 
@@ -60,6 +61,21 @@ export default function EditarHome() {
   const [pilares, setPilares] = useState<Pilar[]>(DEFAULT_PILARES);
   const [diario, setDiario] = useState<Diario>(DEFAULT_DIARIO);
   const [publicado, setPublicado] = useState({ hero: DEFAULT_HERO, pilares: DEFAULT_PILARES, diario: DEFAULT_DIARIO });
+  const sloganRef = useRef<HTMLInputElement>(null);
+  const [enviandoSlogan, setEnviandoSlogan] = useState(false);
+
+  const trocarSlogan = async (file: File) => {
+    setEnviandoSlogan(true);
+    try {
+      const url = await uploadImagem(file, "home-slogan");
+      setHero((h) => ({ ...h, imagem: url }));
+      toast("Imagem do slogan enviada! Clique em Publicar para salvar.");
+    } catch {
+      toast("Erro ao enviar a imagem.", true);
+    } finally {
+      setEnviandoSlogan(false);
+    }
+  };
 
   useEffect(() => {
     if (!API_CONFIGURED) return;
@@ -119,6 +135,26 @@ export default function EditarHome() {
             </div>
             <label className="adm-form-label">Texto de apoio</label>
             <textarea className="adm-textarea" value={hero.texto} onChange={(e) => setHero((h) => ({ ...h, texto: e.target.value }))}></textarea>
+
+            <label className="adm-form-label" style={{ marginTop: 14 }}>Imagem do slogan (campanha) — opcional</label>
+            <p className="hint" style={{ marginTop: 0, marginBottom: 8 }}>Se você enviar uma arte aqui, ela aparece no lugar do título/destaque acima. Ideal usar PNG com fundo transparente. Deixe vazio para mostrar o texto.</p>
+            <input ref={sloganRef} type="file" accept="image/*" hidden onChange={(e) => { if (e.target.files?.[0]) trocarSlogan(e.target.files[0]); e.target.value = ""; }} />
+            {hero.imagem && (
+              <div className="adm-img-slot" style={{ aspectRatio: "16/7", cursor: "default", background: "#eef4ff", marginBottom: 8 }}>
+                <img src={hero.imagem} alt="Slogan" style={{ objectFit: "contain" }} />
+              </div>
+            )}
+            <div style={{ display: "flex", gap: 8, marginBottom: 4 }}>
+              <button type="button" className="adm-btn adm-btn-ghost adm-btn-sm" style={{ width: "fit-content" }} disabled={enviandoSlogan} onClick={() => sloganRef.current?.click()}>
+                <i className="fa-solid fa-arrow-up-from-bracket"></i> {enviandoSlogan ? "Enviando…" : hero.imagem ? "Trocar imagem" : "Enviar imagem do slogan"}
+              </button>
+              {hero.imagem && (
+                <button type="button" className="adm-btn adm-btn-ghost adm-btn-sm" style={{ width: "fit-content" }} onClick={() => setHero((h) => ({ ...h, imagem: "" }))}>
+                  <i className="fa-solid fa-xmark"></i> Voltar ao texto
+                </button>
+              )}
+            </div>
+
             <label className="adm-form-label">Imagem de fundo do destaque</label>
             <div className="adm-img-slot" style={{ aspectRatio: "16/7", cursor: "default" }}>
               <img src={asset("bg-home.webp")} alt="Hero" />
