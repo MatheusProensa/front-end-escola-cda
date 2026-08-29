@@ -1344,6 +1344,12 @@
 }
 .footer-bottom-inner > * { flex: 1 1 auto; }
 .footer-bottom p { flex: 0 1 auto; }
+/* No desktop, laterais com largura igual deixam o crédito perfeitamente centralizado */
+@media (min-width: 769px) {
+  .footer-bottom p { flex: 1 1 0; }
+  .footer-bottom-inner > .footer-credit { flex: 0 0 auto; }
+  .footer-bottom-inner > .footer-link-btn { flex: 1 1 0; text-align: right; }
+}
 
 .footer-bottom p {
   color: rgba(255,255,255,0.4);
