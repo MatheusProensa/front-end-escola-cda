@@ -1,6 +1,12 @@
 -- Escola CDA — permissões do Storage (bucket "fotos")
 -- Pré-requisito: criar um bucket PÚBLICO chamado "fotos" no painel do Supabase.
 -- Leitura pública; upload/atualização/remoção só para o admin.
+-- Idempotente: apaga as regras antigas antes de recriar (pode rodar quantas vezes precisar).
+
+drop policy if exists "fotos: leitura pública" on storage.objects;
+drop policy if exists "fotos: upload admin" on storage.objects;
+drop policy if exists "fotos: atualização admin" on storage.objects;
+drop policy if exists "fotos: remoção admin" on storage.objects;
 
 create policy "fotos: leitura pública"
   on storage.objects for select
