@@ -149,10 +149,6 @@
   animation: heroSloganIn 0.35s ease both;
 }
 @keyframes heroSloganIn { from { opacity: 0; } to { opacity: 1; } }
-/* espaço reservado enquanto o slogan (texto ou imagem) carrega, para não "pular" */
-.hero-slogan-ph { margin-top: 10px; min-height: 300px; }
-@media (max-width: 900px) { .hero-slogan-ph { min-height: 240px; } }
-@media (max-width: 560px) { .hero-slogan-ph { min-height: 190px; } }
 @media (max-width: 900px) { .hero-slogan-img { max-height: 280px; } }
 @media (max-width: 560px) { .hero-slogan-img { max-height: 220px; margin: 10px auto 0; } }
 

@@ -43,7 +43,7 @@ function Hero({ data, loading }: { data: HeroData; loading: boolean }) {
         <div className="hero-left">
           <span className="mini-title">{data.selo}</span>
           {loading
-            ? <div className="hero-slogan-ph" aria-hidden="true" />
+            ? null
             : data.imagem
               ? <img src={data.imagem} alt={data.titulo + " " + data.destaque} className="hero-slogan-img" fetchPriority="high" decoding="async" />
               : <h1>{data.titulo}<span className="script-line"> {data.destaque}</span></h1>}
