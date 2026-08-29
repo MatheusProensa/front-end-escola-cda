@@ -145,7 +145,13 @@
   max-width: 480px;
   height: auto;
   margin-top: 14px;
+  animation: heroSloganIn 0.35s ease both;
 }
+@keyframes heroSloganIn { from { opacity: 0; } to { opacity: 1; } }
+/* espaço reservado enquanto o slogan (texto ou imagem) carrega, para não "pular" */
+.hero-slogan-ph { margin-top: 14px; min-height: 210px; }
+@media (max-width: 900px) { .hero-slogan-ph { min-height: 170px; } }
+@media (max-width: 560px) { .hero-slogan-ph { min-height: 130px; } }
 @media (max-width: 900px) { .hero-slogan-img { max-width: 380px; } }
 @media (max-width: 560px) { .hero-slogan-img { max-width: 300px; margin: 14px auto 0; } }
 

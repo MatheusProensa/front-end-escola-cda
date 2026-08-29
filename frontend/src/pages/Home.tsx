@@ -33,7 +33,7 @@ const DIARIO_DEFAULT: DiarioData = {
 };
 
 /* ───────────── Hero ───────────── */
-function Hero({ data }: { data: HeroData }) {
+function Hero({ data, loading }: { data: HeroData; loading: boolean }) {
   const contact = useContact();
   const navigate = useNavigate();
   return (
@@ -42,9 +42,11 @@ function Hero({ data }: { data: HeroData }) {
       <div className="hero-content">
         <div className="hero-left">
           <span className="mini-title">{data.selo}</span>
-          {data.imagem
-            ? <img src={data.imagem} alt={data.titulo + " " + data.destaque} className="hero-slogan-img" fetchPriority="high" decoding="async" />
-            : <h1>{data.titulo}<span className="script-line"> {data.destaque}</span></h1>}
+          {loading
+            ? <div className="hero-slogan-ph" aria-hidden="true" />
+            : data.imagem
+              ? <img src={data.imagem} alt={data.titulo + " " + data.destaque} className="hero-slogan-img" fetchPriority="high" decoding="async" />
+              : <h1>{data.titulo}<span className="script-line"> {data.destaque}</span></h1>}
           <p>{data.texto}</p>
           <div className="hero-buttons">
             <button className="primary-btn" onClick={() => contact("home_hero")}>Falar com a escola</button>
@@ -320,7 +322,7 @@ function DiarioBand({ data }: { data: DiarioData }) {
 export default function Home() {
   usePageMeta("Escola CDA — Educação infantil e fundamental em Santa Maria/RS", "Há 15 anos acolhendo, inspirando e transformando vidas com afeto e propósito. Educação infantil e ensino fundamental em Santa Maria/RS.");
   useReveal();
-  const { sec } = usePageContent("home");
+  const { sec, loading } = usePageContent("home");
   const hero = section<HeroData>(sec, "hero", HERO_DEFAULT);
   const pilares = section<PilarData[]>(sec, "pilares", PILARES_DEFAULT);
   const diario = section<DiarioData>(sec, "diario", DIARIO_DEFAULT);
@@ -337,7 +339,7 @@ export default function Home() {
   const convite = section<Bloco>(sec, "convite", HOME_CONVITE);
   return (
     <div className="app">
-      <Hero data={hero} />
+      <Hero data={hero} loading={loading} />
       <Pillars pilares={pilares} />
       <Proposito data={proposito} />
       <Segmentos head={segHead} segs={segCards} />
