@@ -65,13 +65,19 @@ export default function EditarHome() {
   const [enviandoSlogan, setEnviandoSlogan] = useState(false);
 
   const trocarSlogan = async (file: File) => {
+    // limite defensivo: arquivos muito grandes costumam ser recusados pelo Storage
+    if (file.size > 5 * 1024 * 1024) {
+      toast("A imagem tem mais de 5 MB. Use uma versão menor (de preferência PNG com fundo transparente).", true);
+      return;
+    }
     setEnviandoSlogan(true);
     try {
       const url = await uploadImagem(file, "home-slogan");
       setHero((h) => ({ ...h, imagem: url }));
       toast("Imagem do slogan enviada! Clique em Publicar para salvar.");
-    } catch {
-      toast("Erro ao enviar a imagem.", true);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      toast("Erro ao enviar: " + msg, true);
     } finally {
       setEnviandoSlogan(false);
     }
