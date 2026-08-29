@@ -13,7 +13,7 @@ type PilarData = { titulo: string; descricao: string };
 type DiarioData = { titulo: string; texto: string; recursos: string };
 
 const HERO_DEFAULT: HeroData = {
-  selo: "HÁ 15 ANOS",
+  selo: "",
   titulo: "Fundamental para aprender",
   destaque: "e crescer",
   texto: "Acreditamos que a educação vai muito além do ensino. É sobre acolher, inspirar e transformar vidas para construir um futuro melhor.",
@@ -33,7 +33,7 @@ const DIARIO_DEFAULT: DiarioData = {
 };
 
 /* ───────────── Hero ───────────── */
-function Hero({ data, loading }: { data: HeroData; loading: boolean }) {
+function Hero({ data }: { data: HeroData }) {
   const contact = useContact();
   const navigate = useNavigate();
   return (
@@ -41,12 +41,10 @@ function Hero({ data, loading }: { data: HeroData; loading: boolean }) {
       <Navbar />
       <div className="hero-content">
         <div className="hero-left">
-          <span className="mini-title">{data.selo}</span>
-          {loading
-            ? null
-            : data.imagem
-              ? <img src={data.imagem} alt={data.titulo + " " + data.destaque} className="hero-slogan-img" fetchPriority="high" decoding="async" />
-              : <h1>{data.titulo}<span className="script-line"> {data.destaque}</span></h1>}
+          {!data.imagem && data.selo && <span className="mini-title">{data.selo}</span>}
+          {data.imagem
+            ? <img src={data.imagem} alt={data.titulo + " " + data.destaque} className="hero-slogan-img" fetchPriority="high" decoding="async" />
+            : <h1>{data.titulo}<span className="script-line"> {data.destaque}</span></h1>}
           <p>{data.texto}</p>
           <div className="hero-buttons">
             <button className="primary-btn" onClick={() => contact("home_hero")}>Falar com a escola</button>
@@ -322,7 +320,7 @@ function DiarioBand({ data }: { data: DiarioData }) {
 export default function Home() {
   usePageMeta("Escola CDA — Educação infantil e fundamental em Santa Maria/RS", "Há 15 anos acolhendo, inspirando e transformando vidas com afeto e propósito. Educação infantil e ensino fundamental em Santa Maria/RS.");
   useReveal();
-  const { sec, loading } = usePageContent("home");
+  const { sec } = usePageContent("home");
   const hero = section<HeroData>(sec, "hero", HERO_DEFAULT);
   const pilares = section<PilarData[]>(sec, "pilares", PILARES_DEFAULT);
   const diario = section<DiarioData>(sec, "diario", DIARIO_DEFAULT);
@@ -339,7 +337,7 @@ export default function Home() {
   const convite = section<Bloco>(sec, "convite", HOME_CONVITE);
   return (
     <div className="app">
-      <Hero data={hero} loading={loading} />
+      <Hero data={hero} />
       <Pillars pilares={pilares} />
       <Proposito data={proposito} />
       <Segmentos head={segHead} segs={segCards} />
