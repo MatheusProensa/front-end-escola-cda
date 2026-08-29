@@ -37,8 +37,8 @@ type Diario = { titulo: string; texto: string; recursos: string };
 
 const DEFAULT_HERO: Hero = {
   selo: "HÁ 15 ANOS",
-  titulo: "Família e escola",
-  destaque: "sonham juntas.",
+  titulo: "Fundamental para aprender",
+  destaque: "e crescer",
   texto: "Acreditamos que a educação vai muito além do ensino. É sobre acolher, inspirar e transformar vidas para construir um futuro melhor.",
 };
 const DEFAULT_PILARES: Pilar[] = [
