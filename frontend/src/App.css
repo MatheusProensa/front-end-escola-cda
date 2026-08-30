@@ -146,9 +146,7 @@
   max-height: 340px;   /* limita a altura pra não empurrar os botões pra fora */
   height: auto;
   margin-top: 10px;
-  animation: heroSloganIn 0.35s ease both;
 }
-@keyframes heroSloganIn { from { opacity: 0; } to { opacity: 1; } }
 @media (max-width: 900px) { .hero-slogan-img { max-height: 280px; } }
 @media (max-width: 560px) { .hero-slogan-img { max-height: 220px; margin: 10px auto 0; } }
 
