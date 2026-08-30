@@ -115,7 +115,9 @@
   display: flex;
   align-items: center;
   width: 100%;
-  min-height: 815px;   /* preenche o hero (930) menos a navbar, pra centralizar de verdade */
+  /* centraliza o conteúdo na área visível ACIMA dos cards (que sobem 120px sobre o hero),
+     pra os botões não baterem neles */
+  min-height: 700px;
   height: calc(100% - 115px);
 }
 
@@ -2456,8 +2458,18 @@ html.a11y-contrast { filter: contrast(1.32) saturate(1.25); }
 }
 @media print { .a11y-bar, .a11y-menu { display: none !important; } }
 
-/* Botão nativo do VLibras fica oculto — acionado pelo botão "Acessível em Libras" */
-div[vw] [vw-access-button] { right: -200px !important; }
+/* Botão nativo do VLibras fica oculto — acionado pelo botão "Acessível em Libras".
+   Jogado pra fora da tela de forma robusta (não importa como o widget se posicione),
+   mas continua no DOM e acionável por código (dispatchEvent). */
+div[vw] [vw-access-button],
+[vw-access-button] {
+  position: fixed !important;
+  left: -9999px !important;
+  right: auto !important;
+  top: -9999px !important;
+  bottom: auto !important;
+  opacity: 0 !important;
+}
 
 
 /* Crédito de desenvolvimento no rodapé */
