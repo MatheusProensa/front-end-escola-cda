@@ -42,7 +42,8 @@ const CAMPANHA_SLOGAN = campanhaSlogan;
 function Hero({ data }: { data: HeroData }) {
   const contact = useContact();
   const navigate = useNavigate();
-  const slogan = data.imagem || CAMPANHA_SLOGAN;
+  // Usa sempre a arte embutida (sem bolinhas, instantânea). Ignora imagem antiga do banco.
+  const slogan = CAMPANHA_SLOGAN;
   return (
     <section className="hero" id="hero">
       <Navbar />
