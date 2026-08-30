@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import AdminShell from "../AdminShell";
 import { SaveBar, useToast } from "../ui";
 import { asset } from "../../lib/assets";
-import { uploadImagem } from "../../lib/storage";
 import { supabase, API_CONFIGURED } from "../../lib/supabase";
 import BlocoTexto from "./BlocoTexto";
 import ListEditor from "./ListEditor";
@@ -61,32 +60,16 @@ export default function EditarHome() {
   const [pilares, setPilares] = useState<Pilar[]>(DEFAULT_PILARES);
   const [diario, setDiario] = useState<Diario>(DEFAULT_DIARIO);
   const [publicado, setPublicado] = useState({ hero: DEFAULT_HERO, pilares: DEFAULT_PILARES, diario: DEFAULT_DIARIO });
-  const sloganRef = useRef<HTMLInputElement>(null);
-  const [enviandoSlogan, setEnviandoSlogan] = useState(false);
-
-  const trocarSlogan = async (file: File) => {
-    // limite defensivo: arquivos muito grandes costumam ser recusados pelo Storage
-    if (file.size > 5 * 1024 * 1024) {
-      toast("A imagem tem mais de 5 MB. Use uma versão menor (de preferência PNG com fundo transparente).", true);
-      return;
-    }
-    setEnviandoSlogan(true);
-    try {
-      const url = await uploadImagem(file, "home-slogan");
-      setHero((h) => ({ ...h, imagem: url }));
-      toast("Imagem do slogan enviada! Clique em Publicar para salvar.");
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      toast("Erro ao enviar: " + msg, true);
-    } finally {
-      setEnviandoSlogan(false);
-    }
-  };
+  const [erroLoad, setErroLoad] = useState(false);
 
   useEffect(() => {
     if (!API_CONFIGURED) return;
+    let alive = true;
     supabase.from("page_content").select("secao, dados").eq("pagina", "home")
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        if (!alive) return;
+        // falha de carregamento: NÃO cair nos padrões (evita salvar padrão por cima do real)
+        if (error) { setErroLoad(true); return; }
         const porSecao = Object.fromEntries((data ?? []).map((r) => [r.secao, r.dados]));
         const h = (porSecao.hero ?? DEFAULT_HERO) as Hero;
         const p = (porSecao.pilares ?? DEFAULT_PILARES) as Pilar[];
@@ -94,6 +77,7 @@ export default function EditarHome() {
         setHero(h); setPilares(p); setDiario(d);
         setPublicado({ hero: h, pilares: p, diario: d });
       });
+    return () => { alive = false; };
   }, []);
 
   const setPilar = (i: number, k: keyof Pilar, v: string) =>
@@ -102,6 +86,7 @@ export default function EditarHome() {
   const dirty = JSON.stringify({ hero, pilares, diario }) !== JSON.stringify(publicado);
 
   const save = async () => {
+    if (erroLoad) { toast("Não foi possível carregar o conteúdo atual. Recarregue a página antes de publicar.", true); return; }
     setSaving(true);
     try {
       if (API_CONFIGURED) {
@@ -133,39 +118,11 @@ export default function EditarHome() {
         <div className="adm-editor-main">
           <div className="adm-card">
             <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-star"></i></div><h3>Destaque (Hero)</h3></div>
-            <label className="adm-form-label">Selo (acima do título)</label>
-            <input className="adm-text" value={hero.selo} onChange={(e) => setHero((h) => ({ ...h, selo: e.target.value }))} />
-            <div className="adm-grid-fields">
-              <div><label className="adm-form-label">Título</label><input className="adm-text" value={hero.titulo} onChange={(e) => setHero((h) => ({ ...h, titulo: e.target.value }))} /></div>
-              <div><label className="adm-form-label">Destaque manuscrito</label><input className="adm-text" value={hero.destaque} onChange={(e) => setHero((h) => ({ ...h, destaque: e.target.value }))} /></div>
-            </div>
+            <p className="hint" style={{ marginTop: 0, marginBottom: 12 }}>
+              A arte da campanha (<strong>Fundamental para aprender e crescer</strong>) e a foto de fundo fazem parte do design da marca e são fixas. Aqui você edita o <strong>texto de apoio</strong> que aparece abaixo dela.
+            </p>
             <label className="adm-form-label">Texto de apoio</label>
             <textarea className="adm-textarea" value={hero.texto} onChange={(e) => setHero((h) => ({ ...h, texto: e.target.value }))}></textarea>
-
-            <label className="adm-form-label" style={{ marginTop: 14 }}>Imagem do slogan (campanha) — opcional</label>
-            <p className="hint" style={{ marginTop: 0, marginBottom: 8 }}>Se você enviar uma arte aqui, ela aparece no lugar do título/destaque acima. Ideal usar PNG com fundo transparente. Deixe vazio para mostrar o texto.</p>
-            <input ref={sloganRef} type="file" accept="image/*" hidden onChange={(e) => { if (e.target.files?.[0]) trocarSlogan(e.target.files[0]); e.target.value = ""; }} />
-            {hero.imagem && (
-              <div className="adm-img-slot" style={{ aspectRatio: "16/7", cursor: "default", background: "#eef4ff", marginBottom: 8 }}>
-                <img src={hero.imagem} alt="Slogan" style={{ objectFit: "contain" }} />
-              </div>
-            )}
-            <div style={{ display: "flex", gap: 8, marginBottom: 4 }}>
-              <button type="button" className="adm-btn adm-btn-ghost adm-btn-sm" style={{ width: "fit-content" }} disabled={enviandoSlogan} onClick={() => sloganRef.current?.click()}>
-                <i className="fa-solid fa-arrow-up-from-bracket"></i> {enviandoSlogan ? "Enviando…" : hero.imagem ? "Trocar imagem" : "Enviar imagem do slogan"}
-              </button>
-              {hero.imagem && (
-                <button type="button" className="adm-btn adm-btn-ghost adm-btn-sm" style={{ width: "fit-content" }} onClick={() => setHero((h) => ({ ...h, imagem: "" }))}>
-                  <i className="fa-solid fa-xmark"></i> Voltar ao texto
-                </button>
-              )}
-            </div>
-
-            <label className="adm-form-label">Imagem de fundo do destaque</label>
-            <div className="adm-img-slot" style={{ aspectRatio: "16/7", cursor: "default" }}>
-              <img src={asset("bg-home.webp")} alt="Hero" />
-            </div>
-            <p className="hint" style={{ marginTop: 6 }}>Esta é a foto oficial da marca CDA e não pode ser trocada por aqui.</p>
           </div>
 
           <div className="adm-card">
@@ -223,6 +180,13 @@ export default function EditarHome() {
               <a className="adm-btn adm-btn-ghost adm-btn-sm" style={{ marginTop: 12, width: "100%" }} href="/" target="_blank"><i className="fa-solid fa-eye"></i> Abrir página</a>
             </div>
           </div>
+          {erroLoad && (
+            <div className="adm-card" style={{ background: "#fef2f2", border: "1px solid #fecaca" }}>
+              <p style={{ fontSize: 12.5, color: "#b91c1c", margin: 0, lineHeight: 1.6 }}>
+                <i className="fa-solid fa-triangle-exclamation"></i> Não foi possível carregar o conteúdo atual. <strong>Recarregue a página</strong> antes de editar — publicar agora pode apagar o conteúdo salvo.
+              </p>
+            </div>
+          )}
           <div className="adm-card">
             <h3 style={{ fontSize: 15 }}>Status</h3>
             <div className="adm-status-row"><span>Situação</span><b style={{ color: "#1f9d57" }}>Publicado</b></div>

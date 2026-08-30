@@ -22,7 +22,7 @@ export default function Sobre() {
   const cta = section<Bloco>(sec, "cta", SOBRE_CTA);
   return (
     <Layout>
-      <PageHero pagina="sobre" />
+      <PageHero pagina="sobre" sec={sec} />
 
       <div className="feature-row reveal">
         <div className="fr-media">

@@ -1,9 +1,9 @@
-// Cabeçalho das páginas internas — lê o texto editável do banco (com fallback no padrão).
-import { usePageContent, section } from "../lib/content";
+// Cabeçalho das páginas internas — lê o texto editável já carregado pela página
+// (recebe `sec` por prop, sem fazer uma segunda busca ao banco).
+import { section, type SectionMap } from "../lib/content";
 import { INTROS, type Intro } from "../lib/intros";
 
-export function PageHero({ pagina }: { pagina: string }) {
-  const { sec } = usePageContent(pagina);
+export function PageHero({ pagina, sec }: { pagina: string; sec: SectionMap }) {
   const i = section<Intro>(sec, "intro", INTROS[pagina]);
   return (
     <section className="page-hero reveal">

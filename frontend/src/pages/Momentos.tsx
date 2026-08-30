@@ -145,7 +145,9 @@ export default function Momentos() {
               const n = a.count || 0;
               return (
                 <button className="album" key={a.key} onClick={() => setAberto(a)}>
-                  <img src={a.capa} alt={a.titulo} loading="lazy" decoding="async" />
+                  {a.capa
+                    ? <img src={a.capa} alt={a.titulo} loading="lazy" decoding="async" />
+                    : <div className="album-ph" style={{ aspectRatio: "4 / 3" }}><i className="fa-solid fa-camera-retro"></i></div>}
                   <div className="album-body">
                     {a.date && <span className="album-date"><i className="fa-regular fa-calendar"></i> {a.date}</span>}
                     <h3>{a.titulo}</h3>

@@ -18,7 +18,7 @@ type Props = {
 // Acrescentar e remover fotos — salva direto no banco e o site reflete na hora.
 export default function GaleriaEditor({ pagina, secao, titulo, defaults, legendas = false, hint }: Props) {
   const [toast, toastNode] = useToast();
-  const { sec, loading } = usePageContent(pagina);
+  const { sec, loading, erro } = usePageContent(pagina);
   const [fotos, setFotos] = useState<GalFoto[]>(defaults);
   const [subindo, setSubindo] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -30,6 +30,8 @@ export default function GaleriaEditor({ pagina, secao, titulo, defaults, legenda
   const persist = async (next: GalFoto[]) => {
     setFotos(next);
     if (!API_CONFIGURED) return;
+    // se o carregamento falhou, o que está na tela é o padrão — não gravar por cima do real
+    if (erro) { toast("Não foi possível carregar a galeria atual. Recarregue a página antes de salvar.", true); return; }
     try { await savePage(pagina, { [secao]: next }); }
     catch { toast("Erro ao salvar a galeria.", true); }
   };

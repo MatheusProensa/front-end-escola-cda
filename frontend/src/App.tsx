@@ -1,7 +1,8 @@
 import "./App.css";
-import { useEffect, type ReactNode } from "react";
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { useEffect, lazy, Suspense } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { ContactProvider } from "./components/site";
+import ErrorBoundary from "./components/ErrorBoundary";
 import Home from "./pages/Home";
 import Segmentos from "./pages/Segmentos";
 import Vivencias from "./pages/Vivencias";
@@ -11,25 +12,8 @@ import Momentos from "./pages/Momentos";
 import Sobre from "./pages/Sobre";
 import Matriculas from "./pages/Matriculas";
 
-// Painel administrativo (acesso só por URL /admin/*)
-import { AuthProvider } from "./admin/auth";
-import RequireAuth from "./admin/RequireAuth";
-import AdminLogin from "./admin/pages/Login";
-import Dashboard from "./admin/pages/Dashboard";
-import EditarHome from "./admin/pages/EditarHome";
-import EditarSegmentos from "./admin/pages/EditarSegmentos";
-import EditarMetodologia from "./admin/pages/EditarMetodologia";
-import EditarVivencias from "./admin/pages/EditarVivencias";
-import EditarEspacos from "./admin/pages/EditarEspacos";
-import EditarSobre from "./admin/pages/EditarSobre";
-import EditarMatriculasPagina from "./admin/pages/EditarMatriculasPagina";
-import AdminMomentos from "./admin/pages/Momentos";
-import AdminDepoimentos from "./admin/pages/Depoimentos";
-import AdminMatriculas from "./admin/pages/AdminMatriculas";
-import Contato from "./admin/pages/Contato";
-import Estatisticas from "./admin/pages/Estatisticas";
-import HistoricoEdicoes from "./admin/pages/HistoricoEdicoes";
-import Configuracoes from "./admin/pages/Configuracoes";
+// Painel administrativo carregado sob demanda — não pesa o site público.
+const AdminArea = lazy(() => import("./admin/AdminArea"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -57,45 +41,16 @@ function PublicSite() {
   );
 }
 
-// Área administrativa: provider de autenticação + rotas protegidas
-function AdminArea() {
-  const guard = (el: ReactNode) => <RequireAuth>{el}</RequireAuth>;
-  return (
-    <AuthProvider>
-      <Routes>
-        <Route path="login" element={<AdminLogin />} />
-        <Route path="dashboard" element={guard(<Dashboard />)} />
-        <Route path="home" element={guard(<EditarHome />)} />
-        <Route path="segmentos" element={guard(<EditarSegmentos />)} />
-        <Route path="metodologia" element={guard(<EditarMetodologia />)} />
-        <Route path="vivencias" element={guard(<EditarVivencias />)} />
-        <Route path="espacos" element={guard(<EditarEspacos />)} />
-        <Route path="sobre" element={guard(<EditarSobre />)} />
-        <Route path="pagina-matriculas" element={guard(<EditarMatriculasPagina />)} />
-        <Route path="momentos" element={guard(<AdminMomentos />)} />
-        <Route path="depoimentos" element={guard(<AdminDepoimentos />)} />
-        <Route path="matriculas" element={guard(<AdminMatriculas />)} />
-        <Route path="contato" element={guard(<Contato />)} />
-        <Route path="estatisticas" element={guard(<Estatisticas />)} />
-        <Route path="historico" element={guard(<HistoricoEdicoes />)} />
-        <Route path="configuracoes" element={guard(<Configuracoes />)} />
-        <Route index element={<Navigate to="/admin/login" replace />} />
-        <Route path="*" element={<Navigate to="/admin/login" replace />} />
-      </Routes>
-    </AuthProvider>
-  );
-}
-
 export default function App() {
   return (
-    <>
+    <ErrorBoundary>
       <ScrollToTop />
       <Routes>
         {/* Painel administrativo — só por URL /admin/*, protegido por login */}
-        <Route path="/admin/*" element={<AdminArea />} />
+        <Route path="/admin/*" element={<Suspense fallback={null}><AdminArea /></Suspense>} />
         {/* Site público */}
         <Route path="/*" element={<PublicSite />} />
       </Routes>
-    </>
+    </ErrorBoundary>
   );
 }

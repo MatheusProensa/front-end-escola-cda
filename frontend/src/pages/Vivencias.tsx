@@ -38,7 +38,7 @@ export default function Vivencias() {
   ];
   return (
     <Layout>
-      <PageHero pagina="vivencias" />
+      <PageHero pagina="vivencias" sec={sec} />
 
       {GRUPOS.map((g, gi) => (
         <div className="cda-panel reveal viv-group" key={gi}>

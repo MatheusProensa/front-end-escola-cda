@@ -8,13 +8,13 @@ import { SEG_INFANTIL_DEFAULT, SEG_FUNDAMENTAL_DEFAULT, SEG_BERCARIO_DEFAULT, ty
 import { SEG_BLOCOS, imgUrl, type SegBloco } from "../lib/listas";
 import { SEG_BERCARIO, SEG_INFANTIL_GAL_HEAD, SEG_FUNDAMENTAL_GAL_HEAD, SEG_CTA, type Bloco } from "../lib/textos";
 
-// "Título | descrição" por linha → pares [t, d]
-const parLinhas = (s: string): [string, string][] =>
-  s.split("\n").map((l) => l.trim()).filter(Boolean).map((l) => {
+// "Título | descrição" por linha → pares [t, d]. Tolerante a valor ausente/não-string.
+const parLinhas = (s: unknown): [string, string][] =>
+  String(s ?? "").split("\n").map((l) => l.trim()).filter(Boolean).map((l) => {
     const i = l.indexOf("|");
     return i === -1 ? [l, ""] : [l.slice(0, i).trim(), l.slice(i + 1).trim()];
   });
-const listaVirgula = (s: string): string[] => s.split(",").map((c) => c.trim()).filter(Boolean);
+const listaVirgula = (s: unknown): string[] => String(s ?? "").split(",").map((c) => c.trim()).filter(Boolean);
 
 // arrastar com o mouse (drag-to-scroll) no carrossel
 function useDragScroll() {
@@ -142,7 +142,7 @@ export default function Segmentos() {
   };
   return (
     <Layout>
-      <PageHero pagina="segmentos" />
+      <PageHero pagina="segmentos" sec={sec} />
 
       {blocos.map((s, i) => {
         const g = galerias[s.key];

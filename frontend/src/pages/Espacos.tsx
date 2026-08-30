@@ -49,7 +49,7 @@ export default function Espacos() {
   const fechar = useCallback(() => setLb(null), []);
   return (
     <Layout>
-      <PageHero pagina="espacos" />
+      <PageHero pagina="espacos" sec={sec} />
 
       <div className="page-cover reveal">
         <img src={asset("fachada.webp")} alt="Fachada da Escola CDA" decoding="async" />

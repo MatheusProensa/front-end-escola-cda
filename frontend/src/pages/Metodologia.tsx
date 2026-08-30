@@ -29,7 +29,7 @@ export default function Metodologia() {
   const cta = section<Bloco>(sec, "cta", MET_CTA);
   return (
     <Layout>
-      <PageHero pagina="metodologia" />
+      <PageHero pagina="metodologia" sec={sec} />
 
       <div className="feature-row reveal">
         <div className="fr-media">

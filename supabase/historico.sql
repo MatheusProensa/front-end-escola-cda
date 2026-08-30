@@ -40,7 +40,9 @@ begin
   );
   return coalesce(new, old);
 end;
-$$ language plpgsql security definer;
+-- search_path fixo: função security definer não deve resolver objetos por schema
+-- controlável externamente (hardening contra escalonamento de privilégio no Postgres).
+$$ language plpgsql security definer set search_path = public, pg_catalog;
 
 -- ============================================================
 -- triggers nas tabelas editáveis pelo painel

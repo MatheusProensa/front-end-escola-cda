@@ -19,7 +19,7 @@ type Props = {
 // Editor de um bloco de texto (com imagem opcional) guardado em page_content.
 export default function BlocoTexto({ pagina, secao, titulo, defaults, campos, imagem, hint }: Props) {
   const [toast, toastNode] = useToast();
-  const { sec, loading } = usePageContent(pagina);
+  const { sec, loading, erro } = usePageContent(pagina);
   const [bloco, setBloco] = useState<Bloco>(defaults);
   const [saving, setSaving] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -31,6 +31,8 @@ export default function BlocoTexto({ pagina, secao, titulo, defaults, campos, im
   const persist = async (next: Bloco) => {
     setBloco(next);
     if (!API_CONFIGURED) return;
+    // se o carregamento falhou, o que está na tela é o padrão — não gravar por cima do real
+    if (erro) { toast("Não foi possível carregar o conteúdo atual. Recarregue a página antes de salvar.", true); return; }
     try { await savePage(pagina, { [secao]: next }); }
     catch { toast("Erro ao salvar.", true); }
   };

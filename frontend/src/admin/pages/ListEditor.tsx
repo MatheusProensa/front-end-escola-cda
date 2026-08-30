@@ -23,7 +23,7 @@ type Props = {
 // Edita os textos, adiciona e remove itens — salva direto no banco.
 export default function ListEditor({ pagina, secao, titulo, defaults, campos, novo, imagem, hint, addLabel = "Adicionar item" }: Props) {
   const [toast, toastNode] = useToast();
-  const { sec, loading } = usePageContent(pagina);
+  const { sec, loading, erro } = usePageContent(pagina);
   const [itens, setItens] = useState<Item[]>(defaults);
   const fileRef = useRef<HTMLInputElement>(null);
   const [alvo, setAlvo] = useState<number | null>(null);
@@ -35,6 +35,8 @@ export default function ListEditor({ pagina, secao, titulo, defaults, campos, no
   const persist = async (next: Item[]) => {
     setItens(next);
     if (!API_CONFIGURED) return;
+    // se o carregamento falhou, o que está na tela é o padrão — não gravar por cima do real
+    if (erro) { toast("Não foi possível carregar o conteúdo atual. Recarregue a página antes de salvar.", true); return; }
     try { await savePage(pagina, { [secao]: next }); }
     catch { toast("Erro ao salvar.", true); }
   };

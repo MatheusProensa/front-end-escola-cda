@@ -6,7 +6,10 @@ import { usePageContent, section } from "../lib/content";
 import { MATRICULAS_HERO, MATRICULAS_FORM, MATRICULAS_CTA, type Bloco } from "../lib/textos";
 import { supabase, API_CONFIGURED } from "../lib/supabase";
 
-const MAP = "https://www.google.com/maps?q=R.+Jos%C3%A9+Manhago,+194+-+Camobi,+Santa+Maria+-+RS&output=embed";
+// Endereço padrão do mapa; se o endereço do painel (Contato) estiver preenchido, ele manda.
+const MAP_FALLBACK = "R. José Manhago, 194 - Camobi, Santa Maria - RS";
+const mapaUrl = (endereco: string) =>
+  `https://www.google.com/maps?q=${encodeURIComponent(endereco || MAP_FALLBACK)}&output=embed`;
 
 function MatriculaForm({ txt }: { txt: Bloco }) {
   const s = useSettings();
@@ -62,12 +65,12 @@ function MatriculaForm({ txt }: { txt: Bloco }) {
       <p>{txt.p1}</p>
       {erro && <div className="cda-field-erro"><Icon name="circle-exclamation" size={14} /> {erro}</div>}
       <div className="form-grid">
-        <div className="cda-field"><label htmlFor="resp">Responsável</label><input id="resp" type="text" placeholder="Seu nome" value={f.resp} onChange={set("resp")} required /></div>
-        <div className="cda-field"><label htmlFor="tel">WhatsApp</label><input id="tel" type="tel" placeholder="(55) 9 0000-0000" value={f.tel} onChange={set("tel")} required /></div>
+        <div className="cda-field"><label htmlFor="resp">Responsável</label><input id="resp" type="text" maxLength={80} placeholder="Seu nome" value={f.resp} onChange={set("resp")} required /></div>
+        <div className="cda-field"><label htmlFor="tel">WhatsApp</label><input id="tel" type="tel" maxLength={20} placeholder="(55) 9 0000-0000" value={f.tel} onChange={set("tel")} required /></div>
       </div>
       <div className="form-grid">
-        <div className="cda-field"><label htmlFor="crianca">Nome da criança</label><input id="crianca" type="text" placeholder="Nome do(a) aluno(a)" value={f.crianca} onChange={set("crianca")} /></div>
-        <div className="cda-field"><label htmlFor="idade">Idade da criança</label><input id="idade" type="text" placeholder="Ex.: 3 anos" value={f.idade} onChange={set("idade")} /></div>
+        <div className="cda-field"><label htmlFor="crianca">Nome da criança</label><input id="crianca" type="text" maxLength={80} placeholder="Nome do(a) aluno(a)" value={f.crianca} onChange={set("crianca")} /></div>
+        <div className="cda-field"><label htmlFor="idade">Idade da criança</label><input id="idade" type="text" maxLength={30} placeholder="Ex.: 3 anos" value={f.idade} onChange={set("idade")} /></div>
       </div>
       <div className="cda-field"><label htmlFor="seg">Segmento</label>
         <select id="seg" value={f.seg} onChange={set("seg")} required>
@@ -78,7 +81,7 @@ function MatriculaForm({ txt }: { txt: Bloco }) {
           <option>Ainda não sei</option>
         </select>
       </div>
-      <div className="cda-field"><label htmlFor="msg">Mensagem (opcional)</label><textarea id="msg" placeholder="Conte um pouco sobre o que você procura…" value={f.msg} onChange={set("msg")}></textarea></div>
+      <div className="cda-field"><label htmlFor="msg">Mensagem (opcional)</label><textarea id="msg" maxLength={1000} placeholder="Conte um pouco sobre o que você procura…" value={f.msg} onChange={set("msg")}></textarea></div>
       <button type="submit" className="primary-btn" style={{ width: "100%", marginTop: 4 }} disabled={loading}>
         {loading ? <><Icon name="spinner" size={15} /> Enviando…</> : (txt.btn || "Quero falar com a escola")}
       </button>
@@ -134,7 +137,7 @@ export default function Matriculas() {
       </div>
 
       <div className="mapa reveal">
-        <iframe src={MAP} title="Mapa — Escola CDA" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src={mapaUrl(s.endereco)} title="Mapa — Escola CDA" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
       </div>
 
       <CtaBand b={cta}>

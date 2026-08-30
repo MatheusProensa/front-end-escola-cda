@@ -103,7 +103,7 @@ function Proposito({ data }: { data: Bloco }) {
         <button className="proposito-button" onClick={() => navigate("/sobre")}>Conheça nossa proposta</button>
       </div>
       <div className="proposito-right">
-        <img src={data.img} alt="Criança na escola CDA" decoding="async" />
+        <img src={data.img} alt="Criança na escola CDA" loading="lazy" decoding="async" />
       </div>
     </section>
   );
@@ -124,7 +124,7 @@ function Segmentos({ head, segs }: { head: Bloco; segs: HomeCard[] }) {
       <div className="segmentos-grid">
         {segs.map((s, i) => (
           <div className="segmento-card" key={i}>
-            <img src={s.img} alt={s.t} decoding="async" style={s.pos ? { objectPosition: s.pos } : undefined} />
+            <img src={s.img} alt={s.t} loading="lazy" decoding="async" style={s.pos ? { objectPosition: s.pos } : undefined} />
             <div className="segmento-overlay">
               <div className="segmento-icon"><Icon name={s.icon} color="#0b82f6" size={20} /></div>
               <h3>{s.t}</h3>
@@ -149,7 +149,7 @@ function Vivencias({ head, vivs }: { head: Bloco; vivs: HomeCard[] }) {
       <div className="vivencias-grid">
         {vivs.map((v, i) => (
           <div className="vivencia-card" key={i}>
-            <img src={v.img} alt={v.t} decoding="async" style={v.pos ? { objectPosition: v.pos } : undefined} />
+            <img src={v.img} alt={v.t} loading="lazy" decoding="async" style={v.pos ? { objectPosition: v.pos } : undefined} />
             <div className="vivencia-overlay">
               <div className="vivencia-icon"><Icon name={v.icon} color={v.c || "#0b82f6"} size={18} /></div>
               <h3>{v.t}</h3>
@@ -178,7 +178,7 @@ function Espaco({ head, fotos }: { head: Bloco; fotos: GalFoto[] }) {
         <div className="espaco-grid">
           {fotos.map((f, i) => (
             <div className="espaco-foto" key={i}>
-              <img src={f.url} alt={f.titulo} decoding="async" />
+              <img src={f.url} alt={f.titulo} loading="lazy" decoding="async" />
               <span className="espaco-label"><span className="espaco-dot"></span>{f.titulo}</span>
             </div>
           ))}
@@ -247,7 +247,7 @@ function Depoimentos() {
 function Conexao({ data, feats }: { data: Bloco; feats: FeatItem[] }) {
   return (
     <section className="conexao reveal" id="conexao">
-      <div className="conexao-foto"><img src={data.img} alt="Professora e alunos CDA" decoding="async" /></div>
+      <div className="conexao-foto"><img src={data.img} alt="Professora e alunos CDA" loading="lazy" decoding="async" /></div>
       <div className="conexao-content">
         <span className="conexao-mini">{data.eyebrow}</span>
         <h2>{data.titulo}</h2>
@@ -276,7 +276,7 @@ function Conexao({ data, feats }: { data: Bloco; feats: FeatItem[] }) {
 function FachadaBand({ data }: { data: Bloco }) {
   return (
     <section className="fachada-band reveal">
-      <img src={asset("fachada.webp")} alt="Fachada da Escola CDA" decoding="async" />
+      <img src={asset("fachada.webp")} alt="Fachada da Escola CDA" loading="lazy" decoding="async" />
       <div className="fachada-band-overlay">
         <span className="fb-eyebrow">{data.eyebrow}</span>
         <h2>{data.titulo}</h2>
@@ -302,7 +302,7 @@ function EspacoConvite({ data }: { data: Bloco }) {
 /* ─────────────── Diário Escola (faixa compacta) ─────────────── */
 const DIARIO_ICONS = ["book", "comment-dots", "images", "kit-medical", "calendar-check", "bolt"];
 function DiarioBand({ data }: { data: DiarioData }) {
-  const recursos = data.recursos.split("\n").map((s) => s.trim()).filter(Boolean);
+  const recursos = String(data.recursos ?? "").split("\n").map((s) => s.trim()).filter(Boolean);
   return (
     <section className="diario-band reveal">
       <div className="diario-band-left">

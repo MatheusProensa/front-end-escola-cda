@@ -94,3 +94,17 @@ create policy "matriculas: atualização admin" on matriculas
   for update using ((auth.jwt() ->> 'email') = 'sm.escolacda@gmail.com');
 create policy "matriculas: remoção admin" on matriculas
   for delete using ((auth.jwt() ->> 'email') = 'sm.escolacda@gmail.com');
+
+-- ============================================================
+-- Limites de tamanho em matriculas (defesa contra abuso/spam via API direta).
+-- Idempotente: remove a constraint antiga antes de recriar. Rode uma vez.
+-- ============================================================
+alter table matriculas drop constraint if exists matriculas_tamanhos;
+alter table matriculas add constraint matriculas_tamanhos check (
+  char_length(coalesce(responsavel, ''))   <= 120 and
+  char_length(coalesce(whatsapp, ''))       <= 30  and
+  char_length(coalesce(nome_crianca, ''))   <= 120 and
+  char_length(coalesce(idade_crianca, ''))  <= 40  and
+  char_length(coalesce(segmento, ''))       <= 60  and
+  char_length(coalesce(mensagem, ''))       <= 2000
+);

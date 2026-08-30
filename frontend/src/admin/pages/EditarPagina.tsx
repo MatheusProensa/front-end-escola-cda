@@ -22,7 +22,7 @@ type Props = {
 // e o site reflete a alteração imediatamente.
 export default function EditarPagina({ pagina, active, icone, titulo, subtitulo, verNoSite, extra }: Props) {
   const [toast, toastNode] = useToast();
-  const { sec, loading } = usePageContent(pagina);
+  const { sec, loading, erro } = usePageContent(pagina);
   const [intro, setIntro] = useState<Intro>(INTROS[pagina]);
   const [introPublicado, setIntroPublicado] = useState<Intro>(INTROS[pagina]);
   const [saving, setSaving] = useState(false);
@@ -41,6 +41,8 @@ export default function EditarPagina({ pagina, active, icone, titulo, subtitulo,
   const dirty = JSON.stringify(intro) !== JSON.stringify(introPublicado);
 
   const save = async () => {
+    // não publicar se o conteúdo atual não carregou (evita gravar o padrão por cima)
+    if (erro) { toast("Não foi possível carregar o conteúdo atual. Recarregue a página antes de publicar.", true); return; }
     setSaving(true);
     try {
       if (API_CONFIGURED) await savePage(pagina, { intro });
