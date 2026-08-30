@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon, Navbar, Footer, useReveal, useContact, usePageMeta } from "../components/site";
 import { asset } from "../lib/assets";
+// Imagem do slogan embutida como dado (base64) — aparece já no primeiro instante, sem baixar depois.
+import campanhaSlogan from "../assets/campanhaSloganData";
 import { usePageContent, section } from "../lib/content";
 import { HOME_PROPOSITO, HOME_CONEXAO, HOME_SEG_HEAD, HOME_VIV_HEAD, HOME_ESP_HEAD, HOME_FACHADA, HOME_CONVITE, type Bloco } from "../lib/textos";
 import { HOME_SEG_CARDS, HOME_VIV_CARDS, HOME_CONEXAO_FEATS, type HomeCard, type FeatItem } from "../lib/listas";
@@ -35,7 +37,7 @@ const DIARIO_DEFAULT: DiarioData = {
 /* ───────────── Hero ───────────── */
 // Imagem da campanha embutida no site (carrega junto com a página, na hora).
 // A edição pelo painel ainda tem prioridade: se salvarem outra imagem, ela vence.
-const CAMPANHA_SLOGAN = asset("campanha-fundamental.webp");
+const CAMPANHA_SLOGAN = campanhaSlogan;
 
 function Hero({ data }: { data: HeroData }) {
   const contact = useContact();
