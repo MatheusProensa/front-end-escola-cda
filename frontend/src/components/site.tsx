@@ -252,6 +252,7 @@ export function Footer() {
 export function AccessibilityBar() {
   const [menu, setMenu] = useState(false);
   const [contrast, setContrast] = useState(false);
+  const [libras, setLibras] = useState(false);
   useEffect(() => {
     const z = parseFloat(localStorage.getItem("cda-zoom") || "1");
     if (z !== 1) (document.body.style as unknown as { zoom: string }).zoom = String(z);
@@ -278,12 +279,30 @@ export function AccessibilityBar() {
     setContrast(on);
   };
   const reset = () => { setZoom(0); document.documentElement.classList.remove("a11y-contrast"); localStorage.setItem("cda-contrast", "0"); setContrast(false); };
+  const openLibras = () => {
+    let tries = 0;
+    setLibras(true);
+    const fire = () => {
+      const btn = document.querySelector("[vw-access-button]") as HTMLElement | null;
+      const wrap = document.querySelector("[vw-plugin-wrapper]") as HTMLElement | null;
+      if (btn) ["mousedown", "mouseup", "click"].forEach((t) => btn.dispatchEvent(new MouseEvent(t, { bubbles: true, cancelable: true, view: window })));
+      tries++;
+      const open = wrap && getComputedStyle(wrap).display !== "none";
+      if (open || tries >= 6) { setLibras(false); return; }
+      setTimeout(fire, 600);
+    };
+    fire();
+  };
   return (
     <>
       <div className="a11y-bar">
         <button className="a11y-btn a11y-acc-btn" aria-label="Recursos de acessibilidade" aria-expanded={menu} onClick={(e) => { e.stopPropagation(); setMenu((v) => !v); }}>
           <span className="a11y-label">Recursos de acessibilidade</span>
           <span className="a11y-ic"><Icon name="universal-access" size={24} /></span>
+        </button>
+        <button className={"a11y-btn a11y-libras" + (libras ? " loading" : "")} aria-label="Acessível em Libras" onClick={openLibras}>
+          <span className="a11y-label">{libras ? "Abrindo tradutor…" : "Acessível em Libras"}</span>
+          <span className="a11y-ic"><Icon name={libras ? "spinner" : "hands-asl-interpreting"} size={22} /></span>
         </button>
       </div>
       {menu && (
