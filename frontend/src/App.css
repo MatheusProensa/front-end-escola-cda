@@ -2452,12 +2452,13 @@ img, video, iframe { max-width: 100%; }
 html.a11y-contrast { filter: contrast(1.32) saturate(1.25); }
 
 @media (max-width: 768px) {
-  .a11y-btn { height: 46px; max-width: 46px; }
-  .a11y-btn .a11y-ic { min-width: 46px; width: 46px; height: 46px; font-size: 20px; }
-  /* No celular, tira os botões do meio da tela (onde cobriam o texto) e coloca
-     no canto inferior direito, empilhados acima do botão do WhatsApp. */
-  .a11y-bar { top: auto; bottom: 84px; transform: none; }
-  .a11y-menu { top: auto; bottom: 190px; transform: none; right: 12px; width: 210px; }
+  /* No celular: um único botão REDONDO no canto inferior direito, acima do WhatsApp
+     (sai da área de leitura e não cobre os cards). O menu abre logo acima dele. */
+  .a11y-bar { top: auto; bottom: 84px; right: 16px; transform: none; }
+  .a11y-btn { height: 48px; width: 48px; max-width: 48px; border-radius: 50%; box-shadow: 0 8px 22px rgba(19,52,110,.32); }
+  .a11y-btn .a11y-ic { min-width: 48px; width: 48px; height: 48px; font-size: 21px; }
+  .a11y-btn:hover, .a11y-btn:focus-visible { max-width: 48px; }
+  .a11y-menu { top: auto; bottom: 144px; transform: none; right: 16px; width: 214px; }
 }
 @media print { .a11y-bar, .a11y-menu { display: none !important; } }
 
