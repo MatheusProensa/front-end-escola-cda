@@ -2458,17 +2458,35 @@ html.a11y-contrast { filter: contrast(1.32) saturate(1.25); }
 }
 @media print { .a11y-bar, .a11y-menu { display: none !important; } }
 
-/* Botão nativo do VLibras fica oculto — acionado pelo botão "Acessível em Libras".
-   Jogado pra fora da tela de forma robusta (não importa como o widget se posicione),
-   mas continua no DOM e acionável por código (dispatchEvent). */
+/* Botão nativo do VLibras: alinhado como 3º botão, logo abaixo dos 2 da barra
+   de acessibilidade (que fica centralizada na lateral direita). */
 div[vw] [vw-access-button],
 [vw-access-button] {
   position: fixed !important;
-  left: -9999px !important;
-  right: auto !important;
-  top: -9999px !important;
+  right: 0 !important;
+  left: auto !important;
   bottom: auto !important;
-  opacity: 0 !important;
+  top: calc(50% + 62px) !important;   /* logo abaixo dos 2 botões (2×52 + gap, centrados) */
+  transform: none !important;
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+  max-width: 52px !important;
+  border-radius: 12px 0 0 12px !important;
+  overflow: hidden !important;
+  box-shadow: -2px 6px 18px rgba(19,52,110,.28) !important;
+  margin: 0 !important;
+  z-index: 99990 !important;
+}
+@media (max-width: 768px) {
+  div[vw] [vw-access-button],
+  [vw-access-button] {
+    top: calc(50% + 54px) !important;   /* botões de 46px no celular */
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    max-width: 46px !important;
+  }
 }
 
 
