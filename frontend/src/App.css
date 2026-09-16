@@ -1478,7 +1478,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 /* ─── ≤768px : mobile ─── */
 @media (max-width: 768px) {
-  .hero { padding: 0 20px; min-height: 760px; }
+  .hero { padding: 0 20px; min-height: 560px; }
   .navbar { height: 78px; }
   .logo { width: 150px; }
 
@@ -1509,8 +1509,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .nav-button-desktop { display: none; }
   .nav-button-mobile { display: block; width: 100%; margin-top: 8px; padding: 15px; }
 
-  .hero-content { height: auto; }
-  .hero-left { width: 100%; padding-top: 30px; }
+  .hero-content { height: auto; min-height: 0; align-items: flex-start; }
+  .hero-left { width: 100%; padding-top: 24px; }
   .hero-left h1 { font-size: 40px; letter-spacing: -1px; }
   .hero-left h1 .script-line { font-size: 48px; }
   .hero-left h1 .script-line::after { width: 90px; right: 10px; }
@@ -1526,7 +1526,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .hero::after { height: 300px; }
   .hero-left p br { display: none; }
 
-  .cards { width: calc(100% - 40px); margin: -40px auto 50px; grid-template-columns: 1fr; border-radius: 28px; padding: 16px; }
+  .cards { width: calc(100% - 40px); margin: 24px auto 50px; grid-template-columns: 1fr; border-radius: 28px; padding: 16px; }
   .card { padding: 16px; }
   .card::after, .card:not(:last-child)::after { display: none; }
   .card p { max-width: none; }
@@ -2459,34 +2459,21 @@ html.a11y-contrast { filter: contrast(1.32) saturate(1.25); }
 @media print { .a11y-bar, .a11y-menu { display: none !important; } }
 
 /* Botão nativo do VLibras: alinhado como 3º botão, logo abaixo dos 2 da barra
-   de acessibilidade (que fica centralizada na lateral direita). */
+   de acessibilidade (mantém o tamanho/ícone natural do widget). */
 div[vw] [vw-access-button],
 [vw-access-button] {
   position: fixed !important;
-  right: 0 !important;
+  right: 4px !important;
   left: auto !important;
   bottom: auto !important;
-  top: calc(50% + 62px) !important;   /* logo abaixo dos 2 botões (2×52 + gap, centrados) */
+  top: calc(50% + 62px) !important;   /* logo abaixo dos 2 botões (centrados) */
   transform: none !important;
-  width: 52px !important;
-  height: 52px !important;
-  min-width: 52px !important;
-  max-width: 52px !important;
-  border-radius: 12px 0 0 12px !important;
-  overflow: hidden !important;
-  box-shadow: -2px 6px 18px rgba(19,52,110,.28) !important;
   margin: 0 !important;
   z-index: 99990 !important;
 }
 @media (max-width: 768px) {
   div[vw] [vw-access-button],
-  [vw-access-button] {
-    top: calc(50% + 54px) !important;   /* botões de 46px no celular */
-    width: 46px !important;
-    height: 46px !important;
-    min-width: 46px !important;
-    max-width: 46px !important;
-  }
+  [vw-access-button] { top: calc(50% + 56px) !important; }
 }
 
 
