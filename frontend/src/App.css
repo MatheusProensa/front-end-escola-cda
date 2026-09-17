@@ -2078,6 +2078,16 @@ img, video, iframe { max-width: 100%; }
 .album-empty-note i { color: #f0b400; }
 @media (max-width: 640px) { .album-grid { grid-template-columns: 1fr 1fr; } .album-modal-head h2 { font-size: 22px; } }
 
+/* Esqueleto de carregamento dos álbuns (evita o "pisca" da mensagem de vazio) */
+.album-skel { cursor: default; pointer-events: none; background: #e6edf5; }
+.album-skel::after { display: none; }
+.album-skel .skel-fill { position: absolute; inset: 0; background: linear-gradient(100deg, #e6edf5 30%, #f4f8fc 50%, #e6edf5 70%); background-size: 200% 100%; animation: skelShimmer 1.25s ease-in-out infinite; }
+.album-skel .album-body { z-index: 2; }
+.skel-line { display: block; border-radius: 7px; background: rgba(255,255,255,0.75); }
+.skel-line.skel-lg { width: 70%; height: 16px; margin-bottom: 9px; }
+.skel-line.skel-md { width: 45%; height: 11px; }
+@keyframes skelShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
 
 /* Campo de mensagem (textarea) do formulário de matrícula */
 .cda-field textarea {

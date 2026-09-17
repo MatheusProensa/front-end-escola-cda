@@ -105,17 +105,20 @@ export default function Momentos() {
   usePageMeta("Momentos — Festas e eventos | Escola CDA", "Reviva festas, encontros e celebrações que marcam a vida das crianças e famílias da Escola CDA.");
   const s = useSettings();
   const [albuns, setAlbuns] = useState<UAlbum[]>([]);
+  const [carregando, setCarregando] = useState(true);
   const [aberto, setAberto] = useState<UAlbum | null>(null);
   const fechar = useCallback(() => setAberto(null), []);
 
   useEffect(() => {
-    if (!API_CONFIGURED) return;
+    if (!API_CONFIGURED) { setCarregando(false); return; }
     let alive = true;
     (async () => {
       const { data: albs } = await supabase.from("albuns").select("*").eq("publicado", true).order("created_at", { ascending: false });
-      if (!alive || !albs || albs.length === 0) return;
+      if (!alive) return;
+      if (!albs || albs.length === 0) { setCarregando(false); return; }
       const ids = albs.map((a: { id: number }) => a.id);
       const { data: fs } = await supabase.from("fotos").select("album_id").in("album_id", ids);
+      if (!alive) return;
       const cont: Record<number, number> = {};
       (fs ?? []).forEach((f: { album_id: number }) => { cont[f.album_id] = (cont[f.album_id] || 0) + 1; });
       setAlbuns(albs.map((a: { id: number; titulo: string; capa_url: string | null; created_at: string }) => ({
@@ -126,6 +129,7 @@ export default function Momentos() {
         date: dataLabel(a.created_at),
         count: cont[a.id] || 0,
       })));
+      setCarregando(false);
     })();
     return () => { alive = false; };
   }, []);
@@ -139,7 +143,19 @@ export default function Momentos() {
       </section>
 
       <div className="cda-panel reveal">
-        {albuns.length > 0 ? (
+        {carregando ? (
+          <div className="momentos-grid">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div className="album album-skel" key={i} aria-hidden="true">
+                <div className="skel-fill"></div>
+                <div className="album-body">
+                  <span className="skel-line skel-lg"></span>
+                  <span className="skel-line skel-md"></span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : albuns.length > 0 ? (
           <div className="momentos-grid">
             {albuns.map((a) => {
               const n = a.count || 0;
