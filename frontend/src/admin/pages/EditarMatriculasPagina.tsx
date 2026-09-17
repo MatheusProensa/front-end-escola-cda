@@ -1,5 +1,6 @@
 import AdminShell from "../AdminShell";
 import BlocoTexto from "./BlocoTexto";
+import CamposMatricula from "./CamposMatricula";
 import { asset } from "../../lib/assets";
 import { MATRICULAS_HERO, MATRICULAS_FORM, MATRICULAS_CTA } from "../../lib/textos";
 
@@ -39,6 +40,7 @@ export default function EditarMatriculasPagina() {
         <div className="adm-editor-main">
           <BlocoTexto pagina="matriculas" secao="hero" titulo="Cabeçalho da página" defaults={MATRICULAS_HERO} campos={camposHero} />
           <BlocoTexto pagina="matriculas" secao="form" titulo="Textos do formulário" defaults={MATRICULAS_FORM} campos={camposForm} />
+          <CamposMatricula />
           <BlocoTexto pagina="matriculas" secao="cta" titulo="Faixa final (chamada para visita)" defaults={MATRICULAS_CTA} campos={camposCta} />
         </div>
       </div>

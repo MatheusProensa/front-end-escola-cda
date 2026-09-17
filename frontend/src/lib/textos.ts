@@ -131,6 +131,29 @@ export const MATRICULAS_CTA: Bloco = {
   p1: "Agende uma visita e sinta o acolhimento de uma escola que acolhe, desenvolve e transforma há 15 anos.",
   btn: "Falar no WhatsApp",
 };
+// Rótulos, placeholders, opções e mensagens do formulário de matrículas.
+export type MatriculasCampos = {
+  lResp: string; phResp: string; lTel: string; phTel: string;
+  lCrianca: string; phCrianca: string; lIdade: string; phIdade: string;
+  lSeg: string; phSeg: string; opcoes: string; lMsg: string; phMsg: string;
+  sucessoTitulo: string; sucessoTexto: string; sucessoBtn: string;
+  infoEndereco: string; infoWhats: string; infoTelefone: string; infoHorario: string;
+  visitaTitulo: string; visitaLink: string;
+};
+export const MATRICULAS_CAMPOS: MatriculasCampos = {
+  lResp: "Responsável", phResp: "Seu nome",
+  lTel: "WhatsApp", phTel: "(55) 9 0000-0000",
+  lCrianca: "Nome da criança", phCrianca: "Nome do(a) aluno(a)",
+  lIdade: "Idade da criança", phIdade: "Ex.: 3 anos",
+  lSeg: "Segmento", phSeg: "Selecione…",
+  opcoes: "Educação Infantil\nEnsino Fundamental\nContraturno\nAinda não sei",
+  lMsg: "Mensagem (opcional)", phMsg: "Conte um pouco sobre o que você procura…",
+  sucessoTitulo: "Recebemos com carinho!",
+  sucessoTexto: "Em breve a equipe da CDA entra em contato para agendar sua visita.",
+  sucessoBtn: "Adiantar pelo WhatsApp",
+  infoEndereco: "Endereço", infoWhats: "WhatsApp", infoTelefone: "Telefone", infoHorario: "Horário",
+  visitaTitulo: "Prefere visitar?", visitaLink: "Agende uma visita pelo WhatsApp →",
+};
 
 /* ───── Momentos ───── */
 export const MOMENTOS_HERO: Bloco = {
