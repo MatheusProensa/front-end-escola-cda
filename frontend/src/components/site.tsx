@@ -257,6 +257,26 @@ export function AccessibilityBar() {
     const z = parseFloat(localStorage.getItem("cda-zoom") || "1");
     if (z !== 1) (document.body.style as unknown as { zoom: string }).zoom = String(z);
     if (localStorage.getItem("cda-contrast") === "1") { document.documentElement.classList.add("a11y-contrast"); setContrast(true); }
+    // Trava: esconde o botão nativo do VLibras (que se posiciona sozinho e
+    // duplicava o botão "Libras"). O tradutor continua acessível pelo botão
+    // "Libras" da barra. Reaplica algumas vezes porque o widget carrega async.
+    let tries = 0;
+    let timer: ReturnType<typeof setTimeout>;
+    const hideNative = () => {
+      const btn = document.querySelector("[vw-access-button]") as HTMLElement | null;
+      if (btn) {
+        btn.style.setProperty("position", "fixed", "important");
+        btn.style.setProperty("left", "-9999px", "important");
+        btn.style.setProperty("top", "-9999px", "important");
+        btn.style.setProperty("right", "auto", "important");
+        btn.style.setProperty("bottom", "auto", "important");
+        btn.style.setProperty("opacity", "0", "important");
+        btn.style.setProperty("pointer-events", "none", "important");
+      }
+      if (++tries < 25) timer = setTimeout(hideNative, 400);
+    };
+    hideNative();
+    return () => clearTimeout(timer);
   }, []);
   useEffect(() => {
     if (!menu) return;
@@ -300,6 +320,10 @@ export function AccessibilityBar() {
           <span className="a11y-label">Recursos de acessibilidade</span>
           <span className="a11y-ic"><Icon name="universal-access" size={24} /></span>
         </button>
+        <button className={"a11y-btn a11y-contrast" + (contrast ? " active" : "")} aria-label="Alto contraste" aria-pressed={contrast} onClick={toggleContrast}>
+          <span className="a11y-label">Alto contraste</span>
+          <span className="a11y-ic"><Icon name="circle-half-stroke" size={22} /></span>
+        </button>
         <button className={"a11y-btn a11y-libras" + (libras ? " loading" : "")} aria-label="Acessível em Libras" onClick={openLibras}>
           <span className="a11y-label">{libras ? "Abrindo tradutor…" : "Acessível em Libras"}</span>
           <span className="a11y-ic"><Icon name={libras ? "spinner" : "hands-asl-interpreting"} size={22} /></span>
@@ -313,7 +337,6 @@ export function AccessibilityBar() {
             <button className="opt" onClick={() => setZoom(1)}><Icon name="magnifying-glass-plus" size={13} /> Aumentar</button>
             <button className="opt" onClick={() => setZoom(-1)}><Icon name="magnifying-glass-minus" size={13} /> Diminuir</button>
           </div>
-          <button className={"opt full" + (contrast ? " active" : "")} onClick={toggleContrast}><Icon name="circle-half-stroke" size={13} /> Alto contraste</button>
           <button className="opt full" onClick={reset}><Icon name="rotate-left" size={13} /> Restaurar padrão</button>
         </div>
       )}
