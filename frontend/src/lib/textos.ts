@@ -154,6 +154,12 @@ export const HOME_CONEXAO: Bloco = {
   eyebrow: "CONEXÃO QUE TRANSFORMA", titulo: "Educação construída com carinho, escuta e presença diária",
   p1: "Acreditamos que a parceria entre escola e família é essencial para que cada criança se desenvolva com segurança, autonomia e confiança.",
   img: asset("conexao.webp"),
+  tag: "15",                                               // número do selo (+15 anos)
+  p2: "de história e confiança ao lado das famílias.",     // texto do selo
+};
+export const HOME_DEPO_HEAD: Bloco = {
+  eyebrow: "O QUE AS FAMÍLIAS DIZEM", titulo: "Histórias de quem confia na CDA",
+  p1: "Quem vive a escola todos os dias é quem melhor conta o que somos.",
 };
 export const HOME_SEG_HEAD: Bloco = {
   eyebrow: "NOSSOS SEGMENTOS", titulo: "Caminhos de aprendizado para cada fase da infância",

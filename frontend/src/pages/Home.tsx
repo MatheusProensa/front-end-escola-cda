@@ -5,7 +5,7 @@ import { asset } from "../lib/assets";
 // Imagem do slogan embutida como dado (base64) — aparece já no primeiro instante, sem baixar depois.
 import campanhaSlogan from "../assets/campanhaSloganData";
 import { usePageContent, section } from "../lib/content";
-import { HOME_PROPOSITO, HOME_CONEXAO, HOME_SEG_HEAD, HOME_VIV_HEAD, HOME_ESP_HEAD, HOME_FACHADA, HOME_CONVITE, type Bloco } from "../lib/textos";
+import { HOME_PROPOSITO, HOME_CONEXAO, HOME_DEPO_HEAD, HOME_SEG_HEAD, HOME_VIV_HEAD, HOME_ESP_HEAD, HOME_FACHADA, HOME_CONVITE, type Bloco } from "../lib/textos";
 import { HOME_SEG_CARDS, HOME_VIV_CARDS, HOME_CONEXAO_FEATS, type HomeCard, type FeatItem } from "../lib/listas";
 import { HOME_ESP_FOTOS, type GalFoto } from "../lib/galeria";
 import { supabase, API_CONFIGURED } from "../lib/supabase";
@@ -201,7 +201,7 @@ const DEPOS_DEFAULT: Depo[] = [
   { txt: "Melhor escola — e melhor escolha que fizemos!", name: "Flávia Pedrosa", ini: "F", heart: false },
 ];
 
-function Depoimentos() {
+function Depoimentos({ head }: { head: Bloco }) {
   const [depos, setDepos] = useState<Depo[]>(DEPOS_DEFAULT);
 
   useEffect(() => {
@@ -223,9 +223,9 @@ function Depoimentos() {
   return (
     <section className="depoimentos reveal" id="depoimentos">
       <div className="depo-head">
-        <span className="mini-title">O QUE AS FAMÍLIAS DIZEM</span>
-        <h2>Histórias de quem confia na CDA</h2>
-        <p>Quem vive a escola todos os dias é quem melhor conta o que somos.</p>
+        <span className="mini-title">{head.eyebrow}</span>
+        <h2>{head.titulo}</h2>
+        <p>{head.p1}</p>
       </div>
       <div className="depo-track">
         {depos.map((d, i) => (
@@ -263,8 +263,8 @@ function Conexao({ data, feats }: { data: Bloco; feats: FeatItem[] }) {
         <div className="conexao-cta">
           <div className="conexao-seal-ic"><Icon name="heart" color="#f0b400" size={24} /></div>
           <div className="conexao-seal-text">
-            <strong>+<span className="count-up" data-target="15">15</span> anos</strong>{" "}
-            de história e confiança ao lado das famílias.
+            <strong>+<span className="count-up" data-target={String(data.tag ?? "15")}>{data.tag ?? "15"}</span> anos</strong>{" "}
+            {data.p2 ?? "de história e confiança ao lado das famílias."}
           </div>
         </div>
       </div>
@@ -343,6 +343,7 @@ export default function Home() {
   const conexaoFeats = section<FeatItem[]>(sec, "conexao_feats", HOME_CONEXAO_FEATS);
   const fachada = section<Bloco>(sec, "fachada", HOME_FACHADA);
   const convite = section<Bloco>(sec, "convite", HOME_CONVITE);
+  const depoHead = section<Bloco>(sec, "depo_head", HOME_DEPO_HEAD);
   return (
     <div className="app">
       <Hero data={hero} />
@@ -353,7 +354,7 @@ export default function Home() {
       <FachadaBand data={fachada} />
       <EspacoConvite data={convite} />
       <Espaco head={espHead} fotos={espFotos} />
-      <Depoimentos />
+      <Depoimentos head={depoHead} />
       <DiarioBand data={diario} />
       <Conexao data={conexao} feats={conexaoFeats} />
       <Footer />

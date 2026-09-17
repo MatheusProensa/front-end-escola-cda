@@ -6,7 +6,7 @@ import { supabase, API_CONFIGURED } from "../../lib/supabase";
 import BlocoTexto from "./BlocoTexto";
 import ListEditor from "./ListEditor";
 import GaleriaEditor from "./GaleriaEditor";
-import { HOME_PROPOSITO, HOME_CONEXAO, HOME_SEG_HEAD, HOME_VIV_HEAD, HOME_ESP_HEAD, HOME_FACHADA, HOME_CONVITE } from "../../lib/textos";
+import { HOME_PROPOSITO, HOME_CONEXAO, HOME_DEPO_HEAD, HOME_SEG_HEAD, HOME_VIV_HEAD, HOME_ESP_HEAD, HOME_FACHADA, HOME_CONVITE } from "../../lib/textos";
 import { HOME_SEG_CARDS, HOME_VIV_CARDS, HOME_CONEXAO_FEATS } from "../../lib/listas";
 import { HOME_ESP_FOTOS } from "../../lib/galeria";
 
@@ -28,6 +28,11 @@ const camposBanner = [
   { key: "btn" as const, label: "Texto do botão" },
 ];
 const campoCard = [{ key: "t", label: "Título" }, { key: "p", label: "Texto", tipo: "textarea" as const }];
+const camposConexao = [
+  ...camposHomeBloco,
+  { key: "tag" as const, label: "Selo: número (ex.: 15)" },
+  { key: "p2" as const, label: "Selo: texto ao lado do número" },
+];
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 
@@ -153,6 +158,8 @@ export default function EditarHome() {
             <a className="adm-btn adm-btn-ghost adm-btn-sm" style={{ width: "fit-content" }} href="/admin/depoimentos"><i className="fa-solid fa-pen"></i> Gerenciar depoimentos</a>
           </div>
 
+          <BlocoTexto pagina="home" secao="depo_head" titulo="Depoimentos — cabeçalho da seção" defaults={HOME_DEPO_HEAD} campos={camposHomeBloco} hint="O título acima do carrossel de depoimentos (ex.: 'O que as famílias dizem')." />
+
           <BlocoTexto pagina="home" secao="proposito" titulo="Bloco: Educação com propósito" defaults={HOME_PROPOSITO} imagem campos={camposHomeBloco} hint="Seção com foto à direita, logo após os pilares." />
 
           <BlocoTexto pagina="home" secao="seg_head" titulo="Prévia Segmentos — título" defaults={HOME_SEG_HEAD} campos={camposHead} />
@@ -167,7 +174,7 @@ export default function EditarHome() {
           <BlocoTexto pagina="home" secao="esp_head" titulo="Prévia Nosso espaço — título" defaults={HOME_ESP_HEAD} campos={camposEspHead} />
           <GaleriaEditor pagina="home" secao="esp_fotos" titulo="Prévia Nosso espaço — fotos" defaults={HOME_ESP_FOTOS} legendas hint="4 fotos com rótulo (o rótulo aparece sobre a foto). O ideal é manter 4." />
 
-          <BlocoTexto pagina="home" secao="conexao" titulo="Bloco: Conexão que transforma" defaults={HOME_CONEXAO} imagem campos={camposHomeBloco} hint="Seção perto do fim da página inicial." />
+          <BlocoTexto pagina="home" secao="conexao" titulo="Bloco: Conexão que transforma" defaults={HOME_CONEXAO} imagem campos={camposConexao} hint="Seção perto do fim da página inicial. O selo mostra: +[número] anos [texto]." />
           <ListEditor pagina="home" secao="conexao_feats" titulo="Conexão — itens" defaults={HOME_CONEXAO_FEATS} campos={campoCard} novo={{ icon: "star", t: "", p: "" }} hint="Os 4 itens com ícone dentro da seção 'Conexão que transforma'." />
         </div>
 
