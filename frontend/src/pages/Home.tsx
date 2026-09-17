@@ -276,7 +276,7 @@ function Conexao({ data, feats }: { data: Bloco; feats: FeatItem[] }) {
 function FachadaBand({ data }: { data: Bloco }) {
   return (
     <section className="fachada-band reveal">
-      <img src={asset("fachada.webp")} alt="Fachada da Escola CDA" loading="lazy" decoding="async" />
+      <img src={data.img || asset("fachada.webp")} alt="Fachada da Escola CDA" loading="lazy" decoding="async" />
       <div className="fachada-band-overlay">
         <span className="fb-eyebrow">{data.eyebrow}</span>
         <h2>{data.titulo}</h2>

@@ -30,6 +30,7 @@ export default function EditarEspacos() {
       verNoSite="/espacos"
       extra={
         <>
+          <BlocoTexto pagina="espacos" secao="capa" titulo="Foto de capa da página" defaults={{ img: "" }} imagem campos={[]} hint="A foto grande no topo da página Espaços. Envie uma nova para trocar (a atual é a foto padrão da fachada)." />
           <GaleriaEditor
             pagina="espacos"
             secao="galeria"

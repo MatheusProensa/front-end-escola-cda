@@ -45,6 +45,7 @@ export default function Espacos() {
   const solarItens = section<Lista[]>(sec, "solar_itens", ESPACOS_SOLAR_ITENS);
   const featsHead = section<Bloco>(sec, "feats_head", ESPACOS_FEATS_HEAD);
   const cta = section<Bloco>(sec, "cta", ESPACOS_CTA);
+  const capa = section<{ img?: string }>(sec, "capa", {});
   const [lb, setLb] = useState<number | null>(null);
   const fechar = useCallback(() => setLb(null), []);
   return (
@@ -52,7 +53,7 @@ export default function Espacos() {
       <PageHero pagina="espacos" sec={sec} />
 
       <div className="page-cover reveal">
-        <img src={asset("fachada.webp")} alt="Fachada da Escola CDA" decoding="async" />
+        <img src={capa.img || asset("fachada.webp")} alt="Fachada da Escola CDA" decoding="async" />
       </div>
 
       <div className="cda-panel reveal">

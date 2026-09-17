@@ -168,7 +168,7 @@ export default function EditarHome() {
           <BlocoTexto pagina="home" secao="viv_head" titulo="Prévia Vivências — título" defaults={HOME_VIV_HEAD} campos={camposHead} />
           <ListEditor pagina="home" secao="viv_cards" titulo="Prévia Vivências — cards" defaults={HOME_VIV_CARDS} campos={campoCard} novo={{ img: "", icon: "star", c: "#0b82f6", t: "", p: "" }} imagem icones hint="Os cards da seção 'Vivências que transformam' da Home." />
 
-          <BlocoTexto pagina="home" secao="fachada" titulo="Faixa da fachada" defaults={HOME_FACHADA} campos={camposHomeBloco} hint="Faixa com a foto da fachada e o convite a visitar." />
+          <BlocoTexto pagina="home" secao="fachada" titulo="Faixa da fachada" defaults={HOME_FACHADA} imagem campos={camposHomeBloco} hint="Faixa com a foto da fachada e o convite a visitar. Troque a foto aqui." />
           <BlocoTexto pagina="home" secao="convite" titulo="Faixa-convite (após a fachada)" defaults={HOME_CONVITE} campos={camposBanner} />
 
           <BlocoTexto pagina="home" secao="esp_head" titulo="Prévia Nosso espaço — título" defaults={HOME_ESP_HEAD} campos={camposEspHead} />
