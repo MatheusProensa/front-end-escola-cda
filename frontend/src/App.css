@@ -2466,7 +2466,8 @@ html.a11y-contrast { filter: contrast(1.32) saturate(1.25); }
 /* Botão nativo do VLibras = quadrado do MEIO da barra de acessibilidade. É o
    botão de verdade do widget do governo (abre o tradutor/avatar). Fica no
    centro exato da lateral direita; os dois botões próprios (Acessibilidade e
-   Alto contraste) ficam acima e abaixo dele graças ao gap grande da barra. */
+   Alto contraste) ficam acima e abaixo dele graças ao gap grande da barra.
+   Forçado ao mesmo tamanho (52px) dos outros dois quadrados. */
 div[vw] [vw-access-button],
 [vw-access-button] {
   position: fixed !important;
@@ -2475,10 +2476,47 @@ div[vw] [vw-access-button],
   bottom: auto !important;
   top: 50% !important;
   transform: translateY(-50%) !important;   /* centro vertical, entre os 2 botões */
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+  min-height: 52px !important;
+  max-width: 52px !important;
+  max-height: 52px !important;
+  padding: 0 !important;
   margin: 0 !important;
   border-radius: 14px !important;
+  overflow: hidden !important;
+  background-size: 76% auto !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
   box-shadow: 0 6px 18px rgba(19,52,110,.28) !important;
   z-index: 99990 !important;
+}
+/* escala o conteúdo interno (img/svg/div) pra caber no quadrado sem cortar */
+div[vw] [vw-access-button] > *,
+[vw-access-button] > *,
+[vw-access-button] img,
+[vw-access-button] svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  transform: none !important;
+  margin: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+@media (max-width: 768px) {
+  div[vw] [vw-access-button],
+  [vw-access-button] {
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    min-height: 46px !important;
+    max-width: 46px !important;
+    max-height: 46px !important;
+  }
 }
 
 
