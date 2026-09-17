@@ -5,6 +5,9 @@ const BUCKET = "fotos";
 
 // Sobe um arquivo e retorna a URL pública.
 export async function uploadImagem(file: File, pasta = ""): Promise<string> {
+  // valida antes de enviar: só imagens e até 8 MB
+  if (!file.type.startsWith("image/")) throw new Error("O arquivo selecionado não é uma imagem.");
+  if (file.size > 8 * 1024 * 1024) throw new Error("Imagem muito grande (máximo 8 MB). Reduza o tamanho e tente de novo.");
   const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
   const nome = `${pasta ? pasta + "/" : ""}${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
   const { error } = await supabase.storage.from(BUCKET).upload(nome, file, {

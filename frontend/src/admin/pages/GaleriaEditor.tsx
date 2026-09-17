@@ -27,13 +27,14 @@ export default function GaleriaEditor({ pagina, secao, titulo, defaults, legenda
     if (!loading) setFotos(section<GalFoto[]>(sec, secao, defaults));
   }, [loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const persist = async (next: GalFoto[]) => {
+  // Retorna true só quando realmente gravou (ou modo demo).
+  const persist = async (next: GalFoto[]): Promise<boolean> => {
     setFotos(next);
-    if (!API_CONFIGURED) return;
+    if (!API_CONFIGURED) return true;
     // se o carregamento falhou, o que está na tela é o padrão — não gravar por cima do real
-    if (erro) { toast("Não foi possível carregar a galeria atual. Recarregue a página antes de salvar.", true); return; }
-    try { await savePage(pagina, { [secao]: next }); }
-    catch { toast("Erro ao salvar a galeria.", true); }
+    if (erro) { toast("Não foi possível carregar a galeria atual. Recarregue a página antes de salvar.", true); return false; }
+    try { await savePage(pagina, { [secao]: next }); return true; }
+    catch { toast("Erro ao salvar a galeria.", true); return false; }
   };
 
   const enviar = async (files: FileList) => {
@@ -49,22 +50,22 @@ export default function GaleriaEditor({ pagina, secao, titulo, defaults, legenda
     setSubindo(false);
     if (fileRef.current) fileRef.current.value = "";
     if (novas.length === 0) { toast("Nenhuma foto enviada.", true); return; }
-    await persist([...fotos, ...novas]);
-    toast(`${novas.length} foto(s) adicionada(s)!`);
+    if (await persist([...fotos, ...novas])) toast(`${novas.length} foto(s) adicionada(s)!`);
   };
 
   const remover = async (i: number) => {
     const f = fotos[i];
     if (!window.confirm("Remover esta foto da galeria?")) return;
+    // grava a remoção no banco primeiro; só apaga o arquivo do storage se deu certo
+    if (!(await persist(fotos.filter((_, idx) => idx !== i)))) return;
     await removerImagem(f.url); // best-effort (só remove se for do storage)
-    await persist(fotos.filter((_, idx) => idx !== i));
     toast("Foto removida.");
   };
 
   const editar = (i: number, k: "titulo" | "descricao", v: string) =>
     setFotos((p) => p.map((f, idx) => idx === i ? { ...f, [k]: v } : f));
 
-  const salvar = async () => { await persist(fotos); toast("Galeria salva!"); };
+  const salvar = async () => { if (await persist(fotos)) toast("Galeria salva!"); };
 
   return (
     <div className="adm-card" style={{ marginTop: 18 }}>

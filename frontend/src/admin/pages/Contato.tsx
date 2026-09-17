@@ -34,7 +34,7 @@ export default function Contato() {
 
   useEffect(() => {
     if (!API_CONFIGURED) return;
-    supabase.from("site_settings").select("*").eq("id", 1).single()
+    supabase.from("site_settings").select("*").eq("id", 1).maybeSingle()
       .then(({ data }) => {
         if (data) {
           setFields((prev) => ({ ...prev, ...data }));
@@ -52,7 +52,20 @@ export default function Contato() {
     setSaving(true);
     try {
       if (API_CONFIGURED) {
-        const { error } = await supabase.from("site_settings").update(fields).eq("id", 1);
+        // upsert (não update): se a linha id=1 não existir, cria; se existir, atualiza.
+        // Envia só os campos conhecidos + updated_at fresco (evita gravar valor velho).
+        const payload = {
+          id: 1,
+          whatsapp: fields.whatsapp,
+          telefone: fields.telefone,
+          wpp_link: fields.wpp_link,
+          endereco: fields.endereco,
+          horario: fields.horario,
+          instagram: fields.instagram,
+          facebook: fields.facebook,
+          updated_at: new Date().toISOString(),
+        };
+        const { error } = await supabase.from("site_settings").upsert(payload, { onConflict: "id" });
         if (error) throw error;
       }
       setFieldsPublicado(fields);

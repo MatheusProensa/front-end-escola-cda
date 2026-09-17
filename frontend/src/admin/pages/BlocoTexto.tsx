@@ -28,23 +28,25 @@ export default function BlocoTexto({ pagina, secao, titulo, defaults, campos, im
     if (!loading) setBloco(section<Bloco>(sec, secao, defaults));
   }, [loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const persist = async (next: Bloco) => {
+  // Retorna true só quando realmente gravou (ou modo demo). Assim quem chama
+  // só mostra "Salvo!" de verdade — nunca por cima de um erro/guarda.
+  const persist = async (next: Bloco): Promise<boolean> => {
     setBloco(next);
-    if (!API_CONFIGURED) return;
+    if (!API_CONFIGURED) return true;
     // se o carregamento falhou, o que está na tela é o padrão — não gravar por cima do real
-    if (erro) { toast("Não foi possível carregar o conteúdo atual. Recarregue a página antes de salvar.", true); return; }
-    try { await savePage(pagina, { [secao]: next }); }
-    catch { toast("Erro ao salvar.", true); }
+    if (erro) { toast("Não foi possível carregar o conteúdo atual. Recarregue a página antes de salvar.", true); return false; }
+    try { await savePage(pagina, { [secao]: next }); return true; }
+    catch { toast("Erro ao salvar.", true); return false; }
   };
 
   const editar = (k: keyof Bloco, v: string) => setBloco((b) => ({ ...b, [k]: v }));
-  const salvar = async () => { setSaving(true); await persist(bloco); setSaving(false); toast("Salvo!"); };
+  const salvar = async () => { setSaving(true); const ok = await persist(bloco); setSaving(false); if (ok) toast("Salvo!"); };
 
   const trocarImg = async (file: File) => {
     try {
       const url = await uploadImagem(file, `${pagina}-${secao}`);
-      await persist({ ...bloco, img: url });
-      toast("Imagem trocada!");
+      const ok = await persist({ ...bloco, img: url });
+      if (ok) toast("Imagem trocada!");
     } catch { toast("Erro ao enviar imagem.", true); }
   };
 

@@ -36,6 +36,7 @@ export default function AdminMatriculas() {
   const [matriculas, setMatriculas] = useState<Matricula[]>([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState("todos");
+  const [verMsg, setVerMsg] = useState<string | null>(null);
 
   const load = async () => {
     if (!API_CONFIGURED) { setLoading(false); return; }
@@ -132,7 +133,7 @@ export default function AdminMatriculas() {
                         <td style={{ padding: "12px 16px" }}>
                           <div style={{ display: "flex", gap: 6 }}>
                             {m.mensagem && (
-                              <button className="adm-mini-btn" title={m.mensagem}><i className="fa-regular fa-comment"></i></button>
+                              <button className="adm-mini-btn" title="Ver mensagem" onClick={() => setVerMsg(m.mensagem)}><i className="fa-regular fa-comment"></i></button>
                             )}
                             <button className="adm-mini-btn del" title="Excluir" onClick={() => excluir(m.id)}><i className="fa-regular fa-trash-can"></i></button>
                           </div>
@@ -145,6 +146,18 @@ export default function AdminMatriculas() {
             )}
           </div>
         </>
+      )}
+
+      {verMsg !== null && (
+        <div onClick={() => setVerMsg(null)} style={{ position: "fixed", inset: 0, background: "rgba(8,20,50,.5)", display: "grid", placeItems: "center", zIndex: 100, padding: 20 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 16, padding: 22, maxWidth: 460, width: "100%", boxShadow: "0 24px 64px rgba(19,52,110,.25)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+              <h3 style={{ margin: 0, fontSize: 16, color: "#0e2d6e" }}><i className="fa-regular fa-comment"></i> Mensagem</h3>
+              <button className="adm-mini-btn" onClick={() => setVerMsg(null)} aria-label="Fechar"><i className="fa-solid fa-xmark"></i></button>
+            </div>
+            <p style={{ margin: 0, color: "var(--adm-ink-2)", lineHeight: 1.6, fontSize: 14, whiteSpace: "pre-wrap" }}>{verMsg}</p>
+          </div>
+        </div>
       )}
       {toastNode}
     </AdminShell>

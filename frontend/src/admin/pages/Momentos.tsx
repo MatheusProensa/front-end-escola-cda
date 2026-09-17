@@ -59,12 +59,13 @@ export default function Momentos() {
 
   const excluirAlbum = async (a: Album) => {
     if (!window.confirm(`Excluir o álbum "${a.titulo}" e todas as fotos dele?`)) return;
-    // remove as fotos do storage (best-effort)
+    // pega as URLs antes; apaga no banco primeiro (o cascade remove as fotos),
+    // e só então limpa os arquivos do storage — evita foto órfã se o banco falhar.
     const { data: fs } = await supabase.from("fotos").select("url").eq("album_id", a.id);
-    await Promise.all((fs ?? []).map((f: { url: string }) => removerImagem(f.url)));
-    if (a.capa_url) await removerImagem(a.capa_url);
     const { error } = await supabase.from("albuns").delete().eq("id", a.id);
     if (error) { toast("Erro ao excluir.", true); return; }
+    await Promise.all((fs ?? []).map((f: { url: string }) => removerImagem(f.url)));
+    if (a.capa_url) await removerImagem(a.capa_url);
     setAlbuns((p) => p.filter((x) => x.id !== a.id));
     if (aberto?.id === a.id) setAberto(null);
     toast("Álbum excluído.");
@@ -72,10 +73,10 @@ export default function Momentos() {
 
   const trocarCapa = async (a: Album, file: File) => {
     try {
-      if (a.capa_url) await removerImagem(a.capa_url);
       const url = await uploadImagem(file, "capas");
       const { error } = await supabase.from("albuns").update({ capa_url: url }).eq("id", a.id);
       if (error) throw error;
+      if (a.capa_url) await removerImagem(a.capa_url); // remove a antiga só depois de gravar a nova
       setAlbuns((p) => p.map((x) => x.id === a.id ? { ...x, capa_url: url } : x));
       toast("Capa atualizada!");
     } catch { toast("Erro ao enviar a capa.", true); }
@@ -116,9 +117,10 @@ export default function Momentos() {
 
   const excluirFoto = async (f: Foto) => {
     if (!window.confirm("Excluir esta foto? Essa ação não pode ser desfeita.")) return;
-    await removerImagem(f.url);
+    // apaga no banco primeiro; só remove o arquivo do storage se o banco confirmou
     const { error } = await supabase.from("fotos").delete().eq("id", f.id);
     if (error) { toast("Erro ao excluir foto.", true); return; }
+    await removerImagem(f.url);
     setFotos((p) => p.filter((x) => x.id !== f.id));
   };
 

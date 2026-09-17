@@ -81,7 +81,7 @@ function Sidebar({ active, open, onClose, logoSrc }: { active: string; open: boo
         <div className="adm-side-foot">
           <div className="adm-side-card">
             <b>Site publicado</b>
-            Última atualização há 2 dias. Tudo no ar e funcionando.
+            Tudo no ar e funcionando. As alterações aparecem no site na hora.
           </div>
           <button className="adm-logout" onClick={sair}>
             <i className="fa-solid fa-arrow-right-from-bracket"></i> Sair
@@ -137,10 +137,6 @@ function Topbar({ title, subtitle, onBurger }: { title: string; subtitle: string
         <p>{subtitle}</p>
       </div>
       <div className="adm-top-actions">
-        <div className="adm-search">
-          <i className="fa-solid fa-magnifying-glass"></i>
-          <input placeholder="Buscar conteúdo…" />
-        </div>
         <div ref={helpRef} style={{ position: "relative" }}>
           <button className="adm-icon-btn" aria-label="Ajuda" onClick={() => setShowHelp((v) => !v)}><i className="fa-regular fa-circle-question"></i></button>
           {showHelp && (

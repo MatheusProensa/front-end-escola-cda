@@ -32,34 +32,34 @@ export default function ListEditor({ pagina, secao, titulo, defaults, campos, no
     if (!loading) setItens(section<Item[]>(sec, secao, defaults));
   }, [loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const persist = async (next: Item[]) => {
+  // Retorna true só quando realmente gravou (ou modo demo). Quem chama só
+  // mostra a mensagem de sucesso quando de fato salvou.
+  const persist = async (next: Item[]): Promise<boolean> => {
     setItens(next);
-    if (!API_CONFIGURED) return;
+    if (!API_CONFIGURED) return true;
     // se o carregamento falhou, o que está na tela é o padrão — não gravar por cima do real
-    if (erro) { toast("Não foi possível carregar o conteúdo atual. Recarregue a página antes de salvar.", true); return; }
-    try { await savePage(pagina, { [secao]: next }); }
-    catch { toast("Erro ao salvar.", true); }
+    if (erro) { toast("Não foi possível carregar o conteúdo atual. Recarregue a página antes de salvar.", true); return false; }
+    try { await savePage(pagina, { [secao]: next }); return true; }
+    catch { toast("Erro ao salvar.", true); return false; }
   };
 
   const editar = (i: number, k: string, v: string) =>
     setItens((p) => p.map((it, idx) => idx === i ? { ...it, [k]: v } : it));
 
-  const salvar = async () => { await persist(itens); toast("Salvo!"); };
+  const salvar = async () => { if (await persist(itens)) toast("Salvo!"); };
 
-  const adicionar = async () => { await persist([...itens, { ...novo }]); toast("Item adicionado."); };
+  const adicionar = async () => { if (await persist([...itens, { ...novo }])) toast("Item adicionado."); };
 
   const remover = async (i: number) => {
     if (!window.confirm("Remover este item?")) return;
-    await persist(itens.filter((_, idx) => idx !== i));
-    toast("Item removido.");
+    if (await persist(itens.filter((_, idx) => idx !== i))) toast("Item removido.");
   };
 
   const trocarImg = async (i: number, file: File) => {
     try {
       const url = await uploadImagem(file, `${pagina}-${secao}`);
       const next = itens.map((it, idx) => idx === i ? { ...it, img: url } : it);
-      await persist(next);
-      toast("Imagem trocada!");
+      if (await persist(next)) toast("Imagem trocada!");
     } catch { toast("Erro ao enviar imagem.", true); }
   };
 
