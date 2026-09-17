@@ -97,7 +97,6 @@ export function ContactProvider({ children }: { children: ReactNode }) {
     <SettingsCtx.Provider value={settings}>
       <ContactCtx.Provider value={(local) => { track("cta_click", { local }); navigate("/matriculas"); }}>
         {children}
-        <AccessibilityBar />
         <WhatsAppFloat />
       </ContactCtx.Provider>
     </SettingsCtx.Provider>
@@ -245,82 +244,6 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  );
-}
-
-/* ───────────── Acessibilidade (dock + VLibras) ───────────── */
-export function AccessibilityBar() {
-  const [menu, setMenu] = useState(false);
-  const [contrast, setContrast] = useState(false);
-  useEffect(() => {
-    const z = parseFloat(localStorage.getItem("cda-zoom") || "1");
-    if (z !== 1) (document.body.style as unknown as { zoom: string }).zoom = String(z);
-    if (localStorage.getItem("cda-contrast") === "1") { document.documentElement.classList.add("a11y-contrast"); setContrast(true); }
-    // Mede o tamanho REAL do botão nativo do VLibras e iguala os dois botões
-    // próprios (e o espaçamento) a ele, via a variável CSS --a11y-size. Assim os
-    // 3 ficam do mesmo tamanho em qualquer aparelho, sem chutar medidas.
-    let tries = 0;
-    let timer: ReturnType<typeof setTimeout>;
-    const sync = () => {
-      const vb = document.querySelector("[vw-access-button]") as HTMLElement | null;
-      if (vb) {
-        const s = Math.round(vb.getBoundingClientRect().width);
-        if (s >= 24 && s <= 120) {
-          document.documentElement.style.setProperty("--a11y-size", s + "px");
-          return;
-        }
-      }
-      if (++tries < 40) timer = setTimeout(sync, 300);
-    };
-    sync();
-    window.addEventListener("resize", sync);
-    return () => { clearTimeout(timer); window.removeEventListener("resize", sync); };
-  }, []);
-  useEffect(() => {
-    if (!menu) return;
-    const onDoc = (e: MouseEvent) => {
-      const t = e.target as HTMLElement;
-      if (!t.closest(".a11y-menu") && !t.closest(".a11y-acc-btn")) setMenu(false);
-    };
-    document.addEventListener("click", onDoc);
-    return () => document.removeEventListener("click", onDoc);
-  }, [menu]);
-  const setZoom = (dir: number) => {
-    let z = parseFloat(localStorage.getItem("cda-zoom") || "1");
-    z = dir === 0 ? 1 : Math.min(1.4, Math.max(0.9, +(z + dir * 0.1).toFixed(2)));
-    (document.body.style as unknown as { zoom: string }).zoom = String(z);
-    localStorage.setItem("cda-zoom", String(z));
-  };
-  const toggleContrast = () => {
-    const on = document.documentElement.classList.toggle("a11y-contrast");
-    localStorage.setItem("cda-contrast", on ? "1" : "0");
-    setContrast(on);
-  };
-  const reset = () => { setZoom(0); document.documentElement.classList.remove("a11y-contrast"); localStorage.setItem("cda-contrast", "0"); setContrast(false); };
-  return (
-    <>
-      <div className="a11y-bar">
-        <button className="a11y-btn a11y-acc-btn" aria-label="Recursos de acessibilidade" aria-expanded={menu} onClick={(e) => { e.stopPropagation(); setMenu((v) => !v); }}>
-          <span className="a11y-label">Recursos de acessibilidade</span>
-          <span className="a11y-ic"><Icon name="universal-access" size={24} /></span>
-        </button>
-        <button className={"a11y-btn a11y-contrast" + (contrast ? " active" : "")} aria-label="Alto contraste" aria-pressed={contrast} onClick={toggleContrast}>
-          <span className="a11y-label">Alto contraste</span>
-          <span className="a11y-ic"><Icon name="circle-half-stroke" size={22} /></span>
-        </button>
-      </div>
-      {menu && (
-        <div className="a11y-menu" role="dialog" aria-label="Opções de acessibilidade">
-          <h4><Icon name="universal-access" size={15} /> Acessibilidade</h4>
-          <p className="a11y-menu-sub">Ajuste a leitura do site</p>
-          <div className="a11y-row">
-            <button className="opt" onClick={() => setZoom(1)}><Icon name="magnifying-glass-plus" size={13} /> Aumentar</button>
-            <button className="opt" onClick={() => setZoom(-1)}><Icon name="magnifying-glass-minus" size={13} /> Diminuir</button>
-          </div>
-          <button className="opt full" onClick={reset}><Icon name="rotate-left" size={13} /> Restaurar padrão</button>
-        </div>
-      )}
-    </>
   );
 }
 
