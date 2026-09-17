@@ -13,6 +13,7 @@ type UAlbum = {
   count?: number;
 };
 
+const CACHE_KEY = "cda-momentos-albuns-v1";
 const MESES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 function dataLabel(iso: string): string {
   const d = new Date(iso);
@@ -104,8 +105,15 @@ function AlbumModal({ album, onClose }: { album: UAlbum; onClose: () => void }) 
 export default function Momentos() {
   usePageMeta("Momentos — Festas e eventos | Escola CDA", "Reviva festas, encontros e celebrações que marcam a vida das crianças e famílias da Escola CDA.");
   const s = useSettings();
-  const [albuns, setAlbuns] = useState<UAlbum[]>([]);
-  const [carregando, setCarregando] = useState(true);
+  // Cache local: mostra os álbuns da última visita instantaneamente e atualiza
+  // por trás. Só a primeiríssima visita (sem cache) precisa esperar o banco.
+  const [albuns, setAlbuns] = useState<UAlbum[]>(() => {
+    try { const c = localStorage.getItem(CACHE_KEY); return c ? (JSON.parse(c) as UAlbum[]) : []; }
+    catch { return []; }
+  });
+  const [carregando, setCarregando] = useState(() => {
+    try { return !localStorage.getItem(CACHE_KEY); } catch { return true; }
+  });
   const [aberto, setAberto] = useState<UAlbum | null>(null);
   const fechar = useCallback(() => setAberto(null), []);
 
@@ -115,20 +123,27 @@ export default function Momentos() {
     (async () => {
       const { data: albs } = await supabase.from("albuns").select("*").eq("publicado", true).order("created_at", { ascending: false });
       if (!alive) return;
-      if (!albs || albs.length === 0) { setCarregando(false); return; }
+      if (!albs || albs.length === 0) {
+        setAlbuns([]);
+        try { localStorage.removeItem(CACHE_KEY); } catch { /* ignora */ }
+        setCarregando(false);
+        return;
+      }
       const ids = albs.map((a: { id: number }) => a.id);
       const { data: fs } = await supabase.from("fotos").select("album_id").in("album_id", ids);
       if (!alive) return;
       const cont: Record<number, number> = {};
       (fs ?? []).forEach((f: { album_id: number }) => { cont[f.album_id] = (cont[f.album_id] || 0) + 1; });
-      setAlbuns(albs.map((a: { id: number; titulo: string; capa_url: string | null; created_at: string }) => ({
+      const mapeados: UAlbum[] = albs.map((a: { id: number; titulo: string; capa_url: string | null; created_at: string }) => ({
         key: "db-" + a.id,
         dbId: a.id,
         titulo: a.titulo,
         capa: a.capa_url || "",
         date: dataLabel(a.created_at),
         count: cont[a.id] || 0,
-      })));
+      }));
+      setAlbuns(mapeados);
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify(mapeados)); } catch { /* ignora */ }
       setCarregando(false);
     })();
     return () => { alive = false; };
