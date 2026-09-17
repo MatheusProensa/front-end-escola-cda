@@ -8,7 +8,7 @@ import "../admin.css";
 export default function Login() {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("equipe@escolacda.com.br");
+  const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
   const [info, setInfo] = useState("");
