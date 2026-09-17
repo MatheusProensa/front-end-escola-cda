@@ -157,9 +157,9 @@ export default function Momentos() {
   return (
     <Layout>
       <section className="page-hero reveal">
-        <span className="eyebrow">{hero.eyebrow}</span>
-        <h1>{hero.titulo} <span className="script">{hero.destaque}</span></h1>
-        <p>{hero.p1}</p>
+        <span className="eyebrow">{hero.eyebrow || MOMENTOS_HERO.eyebrow}</span>
+        <h1>{hero.titulo || MOMENTOS_HERO.titulo} <span className="script">{hero.destaque || MOMENTOS_HERO.destaque}</span></h1>
+        <p>{hero.p1 || MOMENTOS_HERO.p1}</p>
       </section>
 
       <div className="cda-panel reveal">
@@ -201,11 +201,11 @@ export default function Momentos() {
       </div>
 
       <div className="cta-band reveal">
-        <h2>{cta.titulo}</h2>
-        <p>{cta.p1}</p>
+        <h2>{cta.titulo || MOMENTOS_CTA.titulo}</h2>
+        <p>{cta.p1 || MOMENTOS_CTA.p1}</p>
         <div className="cta-actions">
-          <a className="btn-white" href={instagramUrl(s.instagram)} target="_blank" rel="noreferrer"><i className="fa-brands fa-instagram"></i> {cta.btn}</a>
-          <Link className="btn-ghost" to="/matriculas"><i className="fa-solid fa-arrow-right"></i> {cta.p2}</Link>
+          <a className="btn-white" href={instagramUrl(s.instagram)} target="_blank" rel="noreferrer"><i className="fa-brands fa-instagram"></i> {cta.btn || MOMENTOS_CTA.btn}</a>
+          <Link className="btn-ghost" to="/matriculas"><i className="fa-solid fa-arrow-right"></i> {cta.p2 || MOMENTOS_CTA.p2}</Link>
         </div>
       </div>
 

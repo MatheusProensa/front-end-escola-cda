@@ -263,7 +263,9 @@ function Conexao({ data, feats }: { data: Bloco; feats: FeatItem[] }) {
         <div className="conexao-cta">
           <div className="conexao-seal-ic"><Icon name="heart" color="#f0b400" size={24} /></div>
           <div className="conexao-seal-text">
-            <strong>+<span className="count-up" data-target={String(data.tag ?? "15")}>{data.tag ?? "15"}</span> anos</strong>{" "}
+            <strong>+{/^\d+$/.test(String(data.tag ?? "15").trim())
+              ? <span className="count-up" data-target={String(data.tag ?? "15")}>{data.tag ?? "15"}</span>
+              : (data.tag ?? "15")} anos</strong>{" "}
             {data.p2 ?? "de história e confiança ao lado das famílias."}
           </div>
         </div>
