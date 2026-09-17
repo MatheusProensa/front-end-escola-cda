@@ -157,7 +157,7 @@ export default function Segmentos() {
 
       <CtaBand b={cta}>
         <button className="btn-white" onClick={() => contact("segmentos_cta")}><Icon name="calendar-check" size={16} /> {cta.btn || "Agendar visita"}</button>
-        <Link className="btn-ghost" to="/vivencias"><Icon name="arrow-right" size={15} /> Ver as vivências</Link>
+        <Link className="btn-ghost" to="/vivencias"><Icon name="arrow-right" size={15} /> {cta.p2 || "Ver as vivências"}</Link>
       </CtaBand>
     </Layout>
   );

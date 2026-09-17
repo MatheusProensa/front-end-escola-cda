@@ -40,6 +40,7 @@ export const SOBRE_CTA: Bloco = {
   titulo: "Venha fazer parte da nossa história",
   p1: "Agende uma visita e descubra por que tantas famílias confiam na CDA há 15 anos.",
   btn: "Quero conhecer",
+  p2: "Ver os segmentos",
 };
 
 /* ───── Espaços ───── */
@@ -58,6 +59,7 @@ export const ESPACOS_CTA: Bloco = {
   titulo: "Cada espaço fica ainda melhor com seu filho nele",
   p1: "Agende uma visita e conheça de perto cada ambiente feito com cuidado para a infância.",
   btn: "Agendar visita",
+  p2: "Conhecer a escola",
 };
 
 /* ───── Metodologia ───── */
@@ -88,6 +90,7 @@ export const SEG_CTA: Bloco = {
   titulo: "Venha conhecer a CDA de perto",
   p1: "Agende uma visita e sinta o acolhimento da nossa escola — será um prazer receber a sua família.",
   btn: "Agendar visita",
+  p2: "Ver as vivências",
 };
 
 /* ───── Vivências ───── */
@@ -98,6 +101,7 @@ export const VIV_CTA: Bloco = {
   titulo: "Toda criança tem um talento esperando para florescer",
   p1: "Venha ver de perto como as vivências da CDA despertam o melhor de cada aluno.",
   btn: "Agendar visita",
+  p2: "Conhecer os espaços",
 };
 
 export const MET_DIMENSOES_HEAD: Bloco = { eyebrow: "Dimensões do desenvolvimento", titulo: "O que cultivamos em cada criança" };
@@ -114,6 +118,7 @@ export const MET_CTA: Bloco = {
   titulo: "Mais que uma metodologia, um compromisso com a vida",
   p1: "Na CDA, o ProRaiz fortalece nossa missão de formar alunos preparados para aprender, conviver, escolher e transformar o mundo com consciência e empatia.",
   btn: "Conheça nossa escola",
+  p2: "Ver os segmentos",
 };
 
 /* ───── Matrículas ───── */
@@ -130,6 +135,7 @@ export const MATRICULAS_CTA: Bloco = {
   titulo: "Venha conhecer a CDA de perto",
   p1: "Agende uma visita e sinta o acolhimento de uma escola que acolhe, desenvolve e transforma há 15 anos.",
   btn: "Falar no WhatsApp",
+  p2: "Conhecer a escola",
 };
 // Rótulos, placeholders, opções e mensagens do formulário de matrículas.
 export type MatriculasCampos = {
@@ -172,6 +178,7 @@ export const HOME_PROPOSITO: Bloco = {
   eyebrow: "EDUCAÇÃO COM PROPÓSITO", titulo: "Um jeito de aprender que respeita a infância",
   p1: "Aprender acontece com afeto, escuta e vivências significativas. Valorizamos a infância como uma fase de descobertas, autonomia e construção de vínculos.",
   img: asset("giovana.webp"),
+  btn: "Conheça nossa proposta",
 };
 export const HOME_CONEXAO: Bloco = {
   eyebrow: "CONEXÃO QUE TRANSFORMA", titulo: "Educação construída com carinho, escuta e presença diária",

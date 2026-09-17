@@ -10,7 +10,7 @@ import { HOME_SEG_CARDS, HOME_VIV_CARDS, HOME_CONEXAO_FEATS, type HomeCard, type
 import { HOME_ESP_FOTOS, type GalFoto } from "../lib/galeria";
 import { supabase, API_CONFIGURED } from "../lib/supabase";
 
-type HeroData = { selo: string; titulo: string; destaque: string; texto: string; imagem?: string };
+type HeroData = { selo: string; titulo: string; destaque: string; texto: string; imagem?: string; btn1?: string; btn2?: string };
 type PilarData = { titulo: string; descricao: string };
 type DiarioData = { titulo: string; texto: string; recursos: string };
 
@@ -55,8 +55,8 @@ function Hero({ data }: { data: HeroData }) {
             : <h1>{data.titulo}<span className="script-line"> {data.destaque}</span></h1>}
           <p>{data.texto}</p>
           <div className="hero-buttons">
-            <button className="primary-btn" onClick={() => contact("home_hero")}>Falar com a escola</button>
-            <button className="secondary-btn" onClick={() => navigate("/sobre")}>Conhecer a escola</button>
+            <button className="primary-btn" onClick={() => contact("home_hero")}>{data.btn1 || "Falar com a escola"}</button>
+            <button className="secondary-btn" onClick={() => navigate("/sobre")}>{data.btn2 || "Conhecer a escola"}</button>
           </div>
         </div>
       </div>
@@ -100,7 +100,7 @@ function Proposito({ data }: { data: Bloco }) {
         <span className="proposito-mini">{data.eyebrow}</span>
         <h2>{data.titulo}</h2>
         <p>{data.p1}</p>
-        <button className="proposito-button" onClick={() => navigate("/sobre")}>Conheça nossa proposta</button>
+        <button className="proposito-button" onClick={() => navigate("/sobre")}>{data.btn || "Conheça nossa proposta"}</button>
       </div>
       <div className="proposito-right">
         <img src={data.img} alt="Criança na escola CDA" loading="lazy" decoding="async" />

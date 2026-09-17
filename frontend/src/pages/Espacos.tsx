@@ -99,7 +99,7 @@ export default function Espacos() {
 
       <CtaBand b={cta}>
         <button className="btn-white" onClick={() => contact("espacos_cta")}><Icon name="calendar-check" size={16} /> {cta.btn || "Agendar visita"}</button>
-        <Link className="btn-ghost" to="/sobre"><Icon name="arrow-right" size={15} /> Conhecer a escola</Link>
+        <Link className="btn-ghost" to="/sobre"><Icon name="arrow-right" size={15} /> {cta.p2 || "Conhecer a escola"}</Link>
       </CtaBand>
 
       {lb !== null && <GaleriaLightbox gal={gal} index={lb} onClose={fechar} onNav={setLb} />}

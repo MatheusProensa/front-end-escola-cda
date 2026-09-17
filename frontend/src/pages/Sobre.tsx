@@ -86,7 +86,7 @@ export default function Sobre() {
 
       <CtaBand b={cta}>
         <Link className="btn-white" to="/matriculas"><Icon name="calendar-check" size={16} /> {cta.btn || "Quero conhecer"}</Link>
-        <Link className="btn-ghost" to="/segmentos"><Icon name="arrow-right" size={15} /> Ver os segmentos</Link>
+        <Link className="btn-ghost" to="/segmentos"><Icon name="arrow-right" size={15} /> {cta.p2 || "Ver os segmentos"}</Link>
       </CtaBand>
     </Layout>
   );

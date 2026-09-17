@@ -55,7 +55,7 @@ export default function Vivencias() {
 
       <CtaBand b={cta}>
         <button className="btn-white" onClick={() => contact("vivencias_cta")}><Icon name="calendar-check" size={16} /> {cta.btn || "Agendar visita"}</button>
-        <Link className="btn-ghost" to="/espacos"><Icon name="arrow-right" size={15} /> Conhecer os espaços</Link>
+        <Link className="btn-ghost" to="/espacos"><Icon name="arrow-right" size={15} /> {cta.p2 || "Conhecer os espaços"}</Link>
       </CtaBand>
     </Layout>
   );

@@ -141,7 +141,7 @@ export default function Matriculas() {
 
       <CtaBand b={cta}>
         <a className="btn-white" href={s.wpp_link} target="_blank" rel="noreferrer" onClick={() => track("whatsapp_click", { local: "matriculas_cta_band" })}><Icon name="whatsapp" brand size={16} /> {cta.btn || "Falar no WhatsApp"}</a>
-        <Link className="btn-ghost" to="/sobre"><Icon name="arrow-right" size={15} /> Conhecer a escola</Link>
+        <Link className="btn-ghost" to="/sobre"><Icon name="arrow-right" size={15} /> {cta.p2 || "Conhecer a escola"}</Link>
       </CtaBand>
     </Layout>
   );

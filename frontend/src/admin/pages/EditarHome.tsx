@@ -15,6 +15,7 @@ const camposHomeBloco = [
   { key: "titulo" as const, label: "Título" },
   { key: "p1" as const, label: "Parágrafo", tipo: "textarea" as const },
 ];
+const camposProposito = [...camposHomeBloco, { key: "btn" as const, label: "Texto do botão" }];
 const camposHead = [
   { key: "eyebrow" as const, label: "Texto pequeno (acima do título)" },
   { key: "titulo" as const, label: "Título" },
@@ -36,7 +37,7 @@ const camposConexao = [
 
 const logo = () => asset("logo-cda-15anos-semborda.webp");
 
-type Hero = { selo: string; titulo: string; destaque: string; texto: string; imagem?: string };
+type Hero = { selo: string; titulo: string; destaque: string; texto: string; imagem?: string; btn1?: string; btn2?: string };
 type Pilar = { titulo: string; descricao: string };
 type Diario = { titulo: string; texto: string; recursos: string };
 
@@ -45,6 +46,8 @@ const DEFAULT_HERO: Hero = {
   titulo: "Fundamental para aprender",
   destaque: "e crescer",
   texto: "Acreditamos que a educação vai muito além do ensino. É sobre acolher, inspirar e transformar vidas para construir um futuro melhor.",
+  btn1: "Falar com a escola",
+  btn2: "Conhecer a escola",
 };
 const DEFAULT_PILARES: Pilar[] = [
   { titulo: "Acolhimento que abraça", descricao: "Ambiente seguro, afetivo e cheio de empatia." },
@@ -128,6 +131,10 @@ export default function EditarHome() {
             </p>
             <label className="adm-form-label">Texto de apoio</label>
             <textarea className="adm-textarea" value={hero.texto} onChange={(e) => setHero((h) => ({ ...h, texto: e.target.value }))}></textarea>
+            <div className="adm-grid-fields" style={{ marginTop: 10 }}>
+              <div><label className="adm-form-label">Botão principal</label><input className="adm-text" value={hero.btn1 ?? ""} onChange={(e) => setHero((h) => ({ ...h, btn1: e.target.value }))} /></div>
+              <div><label className="adm-form-label">Botão secundário</label><input className="adm-text" value={hero.btn2 ?? ""} onChange={(e) => setHero((h) => ({ ...h, btn2: e.target.value }))} /></div>
+            </div>
           </div>
 
           <div className="adm-card">
@@ -160,7 +167,7 @@ export default function EditarHome() {
 
           <BlocoTexto pagina="home" secao="depo_head" titulo="Depoimentos — cabeçalho da seção" defaults={HOME_DEPO_HEAD} campos={camposHomeBloco} hint="O título acima do carrossel de depoimentos (ex.: 'O que as famílias dizem')." />
 
-          <BlocoTexto pagina="home" secao="proposito" titulo="Bloco: Educação com propósito" defaults={HOME_PROPOSITO} imagem campos={camposHomeBloco} hint="Seção com foto à direita, logo após os pilares." />
+          <BlocoTexto pagina="home" secao="proposito" titulo="Bloco: Educação com propósito" defaults={HOME_PROPOSITO} imagem campos={camposProposito} hint="Seção com foto à direita, logo após os pilares." />
 
           <BlocoTexto pagina="home" secao="seg_head" titulo="Prévia Segmentos — título" defaults={HOME_SEG_HEAD} campos={camposHead} />
           <ListEditor pagina="home" secao="seg_cards" titulo="Prévia Segmentos — cards" defaults={HOME_SEG_CARDS} campos={campoCard} novo={{ img: "", icon: "star", t: "", p: "", to: "/segmentos" }} imagem icones hint="Os cards que aparecem na seção 'Nossos segmentos' da Home." />

@@ -23,6 +23,7 @@ const camposCta = [
   { key: "destaque" as const, label: "Palavra em destaque (dourado, opcional)" },
   { key: "p1" as const, label: "Texto", tipo: "textarea" as const },
   { key: "btn" as const, label: "Texto do botão" },
+  { key: "p2" as const, label: "Botão secundário (leva a outra página)" },
 ];
 
 // Editor dos textos da página pública de Matrículas (hero, formulário e faixa final).

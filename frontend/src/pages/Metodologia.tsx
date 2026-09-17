@@ -129,7 +129,7 @@ export default function Metodologia() {
 
       <CtaBand b={cta}>
         <button className="btn-white" onClick={() => contact("metodologia")}><Icon name="calendar-check" size={16} /> {cta.btn || "Conheça nossa escola"}</button>
-        <Link className="btn-ghost" to="/segmentos"><Icon name="arrow-right" size={15} /> Ver os segmentos</Link>
+        <Link className="btn-ghost" to="/segmentos"><Icon name="arrow-right" size={15} /> {cta.p2 || "Ver os segmentos"}</Link>
       </CtaBand>
     </Layout>
   );
