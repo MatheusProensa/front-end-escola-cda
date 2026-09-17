@@ -45,6 +45,7 @@ export default function EditarEspacos() {
             defaults={ESPACOS_FEATS}
             campos={[{ key: "t", label: "Título" }, { key: "p", label: "Texto", tipo: "textarea" }]}
             novo={{ icon: "star", gold: false, t: "", p: "" }}
+            icones
           />
           <BlocoTexto
             pagina="espacos"

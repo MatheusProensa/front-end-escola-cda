@@ -58,6 +58,7 @@ export default function EditarSobre() {
             defaults={SOBRE_VALORES}
             campos={[{ key: "t", label: "Título" }, { key: "p", label: "Texto", tipo: "textarea" }]}
             novo={{ icon: "star", gold: false, t: "", p: "" }}
+            icones
           />
           <BlocoTexto pagina="sobre" secao="cta" titulo="Faixa final (chamada para visita)" defaults={SOBRE_CTA} campos={camposCta} />
         </>

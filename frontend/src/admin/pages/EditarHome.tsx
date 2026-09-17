@@ -163,10 +163,10 @@ export default function EditarHome() {
           <BlocoTexto pagina="home" secao="proposito" titulo="Bloco: Educação com propósito" defaults={HOME_PROPOSITO} imagem campos={camposHomeBloco} hint="Seção com foto à direita, logo após os pilares." />
 
           <BlocoTexto pagina="home" secao="seg_head" titulo="Prévia Segmentos — título" defaults={HOME_SEG_HEAD} campos={camposHead} />
-          <ListEditor pagina="home" secao="seg_cards" titulo="Prévia Segmentos — cards" defaults={HOME_SEG_CARDS} campos={campoCard} novo={{ img: "", icon: "star", t: "", p: "", to: "/segmentos" }} imagem hint="Os cards que aparecem na seção 'Nossos segmentos' da Home." />
+          <ListEditor pagina="home" secao="seg_cards" titulo="Prévia Segmentos — cards" defaults={HOME_SEG_CARDS} campos={campoCard} novo={{ img: "", icon: "star", t: "", p: "", to: "/segmentos" }} imagem icones hint="Os cards que aparecem na seção 'Nossos segmentos' da Home." />
 
           <BlocoTexto pagina="home" secao="viv_head" titulo="Prévia Vivências — título" defaults={HOME_VIV_HEAD} campos={camposHead} />
-          <ListEditor pagina="home" secao="viv_cards" titulo="Prévia Vivências — cards" defaults={HOME_VIV_CARDS} campos={campoCard} novo={{ img: "", icon: "star", c: "#0b82f6", t: "", p: "" }} imagem hint="Os cards da seção 'Vivências que transformam' da Home." />
+          <ListEditor pagina="home" secao="viv_cards" titulo="Prévia Vivências — cards" defaults={HOME_VIV_CARDS} campos={campoCard} novo={{ img: "", icon: "star", c: "#0b82f6", t: "", p: "" }} imagem icones hint="Os cards da seção 'Vivências que transformam' da Home." />
 
           <BlocoTexto pagina="home" secao="fachada" titulo="Faixa da fachada" defaults={HOME_FACHADA} campos={camposHomeBloco} hint="Faixa com a foto da fachada e o convite a visitar." />
           <BlocoTexto pagina="home" secao="convite" titulo="Faixa-convite (após a fachada)" defaults={HOME_CONVITE} campos={camposBanner} />
@@ -175,7 +175,7 @@ export default function EditarHome() {
           <GaleriaEditor pagina="home" secao="esp_fotos" titulo="Prévia Nosso espaço — fotos" defaults={HOME_ESP_FOTOS} legendas hint="4 fotos com rótulo (o rótulo aparece sobre a foto). O ideal é manter 4." />
 
           <BlocoTexto pagina="home" secao="conexao" titulo="Bloco: Conexão que transforma" defaults={HOME_CONEXAO} imagem campos={camposConexao} hint="Seção perto do fim da página inicial. O selo mostra: +[número] anos [texto]." />
-          <ListEditor pagina="home" secao="conexao_feats" titulo="Conexão — itens" defaults={HOME_CONEXAO_FEATS} campos={campoCard} novo={{ icon: "star", t: "", p: "" }} hint="Os 4 itens com ícone dentro da seção 'Conexão que transforma'." />
+          <ListEditor pagina="home" secao="conexao_feats" titulo="Conexão — itens" defaults={HOME_CONEXAO_FEATS} campos={campoCard} novo={{ icon: "star", t: "", p: "" }} icones hint="Os 4 itens com ícone dentro da seção 'Conexão que transforma'." />
         </div>
 
         <div className="adm-side-panel">

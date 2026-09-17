@@ -7,6 +7,16 @@ import { uploadImagem } from "../../lib/storage";
 export type Item = Record<string, unknown>;
 type Campo = { key: string; label: string; tipo?: "text" | "textarea" };
 
+// Ícones disponíveis para escolher nos cards (nomes do Font Awesome).
+const ICONES = [
+  "star", "heart", "hand-holding-heart", "shield-heart", "hands-holding-child", "child-reaching", "children", "users", "user-group", "people-group",
+  "book", "book-open", "graduation-cap", "chalkboard-user", "pencil", "paint-brush", "palette", "music", "guitar", "drum",
+  "futbol", "basketball", "dumbbell", "bicycle", "puzzle-piece", "shapes", "gamepad", "dice", "robot", "brain",
+  "lightbulb", "seedling", "leaf", "tree", "sun", "earth-americas", "globe", "flask", "microscope", "dna",
+  "apple-whole", "carrot", "utensils", "bus", "clock", "calendar", "camera", "image", "award", "medal",
+  "trophy", "face-smile", "comments", "comment-dots", "handshake", "school", "bell", "heart-pulse", "tooth", "check",
+];
+
 type Props = {
   pagina: string;          // page_content.pagina
   secao: string;           // page_content.secao
@@ -15,18 +25,20 @@ type Props = {
   campos: Campo[];         // campos de texto editáveis
   novo: Item;              // modelo para um item novo
   imagem?: boolean;        // mostra troca de imagem (campo "img")
+  icones?: boolean;        // mostra seletor de ícone (campo "icon")
   hint?: string;
   addLabel?: string;
 };
 
 // Editor genérico de uma lista de itens (cards, valores, listas) em page_content.
 // Edita os textos, adiciona e remove itens — salva direto no banco.
-export default function ListEditor({ pagina, secao, titulo, defaults, campos, novo, imagem, hint, addLabel = "Adicionar item" }: Props) {
+export default function ListEditor({ pagina, secao, titulo, defaults, campos, novo, imagem, icones, hint, addLabel = "Adicionar item" }: Props) {
   const [toast, toastNode] = useToast();
   const { sec, loading, erro } = usePageContent(pagina);
   const [itens, setItens] = useState<Item[]>(defaults);
   const fileRef = useRef<HTMLInputElement>(null);
   const [alvo, setAlvo] = useState<number | null>(null);
+  const [iconAlvo, setIconAlvo] = useState<number | null>(null);
 
   useEffect(() => {
     if (!loading) setItens(section<Item[]>(sec, secao, defaults));
@@ -63,6 +75,12 @@ export default function ListEditor({ pagina, secao, titulo, defaults, campos, no
     } catch { toast("Erro ao enviar imagem.", true); }
   };
 
+  const escolherIcone = async (i: number, name: string) => {
+    setIconAlvo(null);
+    const next = itens.map((it, idx) => idx === i ? { ...it, icon: name } : it);
+    if (await persist(next)) toast("Ícone alterado!");
+  };
+
   return (
     <div className="adm-card" style={{ marginTop: 18 }}>
       <div className="adm-card-sec"><div className="si"><i className="fa-solid fa-list"></i></div><h3>{titulo} ({itens.length})</h3></div>
@@ -79,6 +97,15 @@ export default function ListEditor({ pagina, secao, titulo, defaults, campos, no
                   {typeof it.img === "string" && it.img ? <img src={it.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <i className="fa-regular fa-image" style={{ color: "var(--adm-ink-3)" }}></i>}
                 </div>
                 <button className="adm-btn adm-btn-ghost adm-btn-sm" style={{ width: "100%", marginTop: 6, fontSize: 11, padding: "5px 6px" }} onClick={() => { setAlvo(i); fileRef.current?.click(); }}><i className="fa-solid fa-arrows-rotate"></i> Trocar</button>
+              </div>
+            )}
+            {icones && (
+              <div style={{ flexShrink: 0, width: 66, textAlign: "center" }}>
+                <span className="adm-form-label" style={{ fontSize: 10.5, display: "block", marginBottom: 5 }}>Ícone</span>
+                <button type="button" onClick={() => setIconAlvo(i)} title="Trocar ícone"
+                  style={{ width: 58, height: 58, borderRadius: 12, border: "1px solid var(--adm-line)", background: "var(--adm-bg)", cursor: "pointer", display: "grid", placeItems: "center" }}>
+                  <i className={"fa-solid fa-" + (typeof it.icon === "string" && it.icon ? it.icon : "star")} style={{ fontSize: 22, color: "#0e2d6e" }}></i>
+                </button>
               </div>
             )}
             <div style={{ flex: 1 }}>
@@ -106,6 +133,28 @@ export default function ListEditor({ pagina, secao, titulo, defaults, campos, no
       </div>
 
       <button className="adm-btn adm-btn-ghost adm-btn-sm" style={{ width: "auto", marginTop: 12 }} onClick={adicionar}><i className="fa-solid fa-plus"></i> {addLabel}</button>
+
+      {iconAlvo !== null && (
+        <div onClick={() => setIconAlvo(null)} style={{ position: "fixed", inset: 0, background: "rgba(8,20,50,.5)", display: "grid", placeItems: "center", zIndex: 100, padding: 20 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 16, padding: 20, maxWidth: 480, width: "100%", maxHeight: "80vh", overflow: "auto", boxShadow: "0 24px 64px rgba(19,52,110,.25)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+              <h3 style={{ margin: 0, fontSize: 16, color: "#0e2d6e" }}>Escolha um ícone</h3>
+              <button className="adm-mini-btn" onClick={() => setIconAlvo(null)} aria-label="Fechar"><i className="fa-solid fa-xmark"></i></button>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(52px, 1fr))", gap: 8 }}>
+              {ICONES.map((name) => {
+                const atual = typeof itens[iconAlvo]?.icon === "string" && itens[iconAlvo].icon === name;
+                return (
+                  <button key={name} type="button" onClick={() => escolherIcone(iconAlvo, name)} title={name}
+                    style={{ height: 52, borderRadius: 10, border: atual ? "2px solid #1351b4" : "1px solid var(--adm-line)", background: atual ? "#eef4ff" : "#fff", cursor: "pointer", display: "grid", placeItems: "center" }}>
+                    <i className={"fa-solid fa-" + name} style={{ fontSize: 20, color: "#0e2d6e" }}></i>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
       {toastNode}
     </div>
   );
