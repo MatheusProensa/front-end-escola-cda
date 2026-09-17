@@ -257,26 +257,41 @@ export function AccessibilityBar() {
     const z = parseFloat(localStorage.getItem("cda-zoom") || "1");
     if (z !== 1) (document.body.style as unknown as { zoom: string }).zoom = String(z);
     if (localStorage.getItem("cda-contrast") === "1") { document.documentElement.classList.add("a11y-contrast"); setContrast(true); }
-    // Trava: esconde o botão nativo do VLibras (que se posiciona sozinho e
-    // duplicava o botão "Libras"). O tradutor continua acessível pelo botão
-    // "Libras" da barra. Reaplica algumas vezes porque o widget carrega async.
+    // Trava: esconde o botão nativo do VLibras (que se posiciona sozinho via
+    // estilo inline e duplicava o botão "Libras"). Um MutationObserver
+    // re-esconde sempre que o widget tentar reposicioná-lo — à prova de falha.
+    // O tradutor continua acessível pelo botão "Libras" da barra (dispara o
+    // clique neste botão, o que funciona mesmo com ele fora da tela).
+    let observer: MutationObserver | null = null;
     let tries = 0;
     let timer: ReturnType<typeof setTimeout>;
-    const hideNative = () => {
+    const hide = (btn: HTMLElement) => {
+      btn.style.setProperty("position", "fixed", "important");
+      btn.style.setProperty("left", "-9999px", "important");
+      btn.style.setProperty("top", "auto", "important");
+      btn.style.setProperty("bottom", "auto", "important");
+      btn.style.setProperty("right", "auto", "important");
+      btn.style.setProperty("width", "1px", "important");
+      btn.style.setProperty("height", "1px", "important");
+      btn.style.setProperty("opacity", "0", "important");
+      btn.style.setProperty("pointer-events", "none", "important");
+    };
+    const attach = () => {
       const btn = document.querySelector("[vw-access-button]") as HTMLElement | null;
       if (btn) {
-        btn.style.setProperty("position", "fixed", "important");
-        btn.style.setProperty("left", "-9999px", "important");
-        btn.style.setProperty("top", "-9999px", "important");
-        btn.style.setProperty("right", "auto", "important");
-        btn.style.setProperty("bottom", "auto", "important");
-        btn.style.setProperty("opacity", "0", "important");
-        btn.style.setProperty("pointer-events", "none", "important");
+        hide(btn);
+        observer = new MutationObserver(() => {
+          observer?.disconnect();
+          hide(btn);
+          observer?.observe(btn, { attributes: true, attributeFilter: ["style", "class"] });
+        });
+        observer.observe(btn, { attributes: true, attributeFilter: ["style", "class"] });
+        return;
       }
-      if (++tries < 25) timer = setTimeout(hideNative, 400);
+      if (++tries < 40) timer = setTimeout(attach, 250);
     };
-    hideNative();
-    return () => clearTimeout(timer);
+    attach();
+    return () => { clearTimeout(timer); observer?.disconnect(); };
   }, []);
   useEffect(() => {
     if (!menu) return;
