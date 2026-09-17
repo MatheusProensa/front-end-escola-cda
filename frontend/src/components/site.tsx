@@ -256,6 +256,25 @@ export function AccessibilityBar() {
     const z = parseFloat(localStorage.getItem("cda-zoom") || "1");
     if (z !== 1) (document.body.style as unknown as { zoom: string }).zoom = String(z);
     if (localStorage.getItem("cda-contrast") === "1") { document.documentElement.classList.add("a11y-contrast"); setContrast(true); }
+    // Mede o tamanho REAL do botão nativo do VLibras e iguala os dois botões
+    // próprios (e o espaçamento) a ele, via a variável CSS --a11y-size. Assim os
+    // 3 ficam do mesmo tamanho em qualquer aparelho, sem chutar medidas.
+    let tries = 0;
+    let timer: ReturnType<typeof setTimeout>;
+    const sync = () => {
+      const vb = document.querySelector("[vw-access-button]") as HTMLElement | null;
+      if (vb) {
+        const s = Math.round(vb.getBoundingClientRect().width);
+        if (s >= 24 && s <= 120) {
+          document.documentElement.style.setProperty("--a11y-size", s + "px");
+          return;
+        }
+      }
+      if (++tries < 40) timer = setTimeout(sync, 300);
+    };
+    sync();
+    window.addEventListener("resize", sync);
+    return () => { clearTimeout(timer); window.removeEventListener("resize", sync); };
   }, []);
   useEffect(() => {
     if (!menu) return;
