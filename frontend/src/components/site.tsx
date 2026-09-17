@@ -252,46 +252,10 @@ export function Footer() {
 export function AccessibilityBar() {
   const [menu, setMenu] = useState(false);
   const [contrast, setContrast] = useState(false);
-  const [libras, setLibras] = useState(false);
   useEffect(() => {
     const z = parseFloat(localStorage.getItem("cda-zoom") || "1");
     if (z !== 1) (document.body.style as unknown as { zoom: string }).zoom = String(z);
     if (localStorage.getItem("cda-contrast") === "1") { document.documentElement.classList.add("a11y-contrast"); setContrast(true); }
-    // Trava: esconde o botão nativo do VLibras (que se posiciona sozinho via
-    // estilo inline e duplicava o botão "Libras"). Um MutationObserver
-    // re-esconde sempre que o widget tentar reposicioná-lo — à prova de falha.
-    // O tradutor continua acessível pelo botão "Libras" da barra (dispara o
-    // clique neste botão, o que funciona mesmo com ele fora da tela).
-    let observer: MutationObserver | null = null;
-    let tries = 0;
-    let timer: ReturnType<typeof setTimeout>;
-    const hide = (btn: HTMLElement) => {
-      btn.style.setProperty("position", "fixed", "important");
-      btn.style.setProperty("left", "-9999px", "important");
-      btn.style.setProperty("top", "auto", "important");
-      btn.style.setProperty("bottom", "auto", "important");
-      btn.style.setProperty("right", "auto", "important");
-      btn.style.setProperty("width", "1px", "important");
-      btn.style.setProperty("height", "1px", "important");
-      btn.style.setProperty("opacity", "0", "important");
-      btn.style.setProperty("pointer-events", "none", "important");
-    };
-    const attach = () => {
-      const btn = document.querySelector("[vw-access-button]") as HTMLElement | null;
-      if (btn) {
-        hide(btn);
-        observer = new MutationObserver(() => {
-          observer?.disconnect();
-          hide(btn);
-          observer?.observe(btn, { attributes: true, attributeFilter: ["style", "class"] });
-        });
-        observer.observe(btn, { attributes: true, attributeFilter: ["style", "class"] });
-        return;
-      }
-      if (++tries < 40) timer = setTimeout(attach, 250);
-    };
-    attach();
-    return () => { clearTimeout(timer); observer?.disconnect(); };
   }, []);
   useEffect(() => {
     if (!menu) return;
@@ -314,20 +278,6 @@ export function AccessibilityBar() {
     setContrast(on);
   };
   const reset = () => { setZoom(0); document.documentElement.classList.remove("a11y-contrast"); localStorage.setItem("cda-contrast", "0"); setContrast(false); };
-  const openLibras = () => {
-    let tries = 0;
-    setLibras(true);
-    const fire = () => {
-      const btn = document.querySelector("[vw-access-button]") as HTMLElement | null;
-      const wrap = document.querySelector("[vw-plugin-wrapper]") as HTMLElement | null;
-      if (btn) ["mousedown", "mouseup", "click"].forEach((t) => btn.dispatchEvent(new MouseEvent(t, { bubbles: true, cancelable: true, view: window })));
-      tries++;
-      const open = wrap && getComputedStyle(wrap).display !== "none";
-      if (open || tries >= 6) { setLibras(false); return; }
-      setTimeout(fire, 600);
-    };
-    fire();
-  };
   return (
     <>
       <div className="a11y-bar">
@@ -338,10 +288,6 @@ export function AccessibilityBar() {
         <button className={"a11y-btn a11y-contrast" + (contrast ? " active" : "")} aria-label="Alto contraste" aria-pressed={contrast} onClick={toggleContrast}>
           <span className="a11y-label">Alto contraste</span>
           <span className="a11y-ic"><Icon name="circle-half-stroke" size={22} /></span>
-        </button>
-        <button className={"a11y-btn a11y-libras" + (libras ? " loading" : "")} aria-label="Acessível em Libras" onClick={openLibras}>
-          <span className="a11y-label">{libras ? "Abrindo tradutor…" : "Acessível em Libras"}</span>
-          <span className="a11y-ic"><Icon name={libras ? "spinner" : "hands-asl-interpreting"} size={22} /></span>
         </button>
       </div>
       {menu && (

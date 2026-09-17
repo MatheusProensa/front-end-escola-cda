@@ -2460,24 +2460,26 @@ html.a11y-contrast { filter: contrast(1.32) saturate(1.25); }
 }
 @media print { .a11y-bar, .a11y-menu { display: none !important; } }
 
-/* Botão nativo do VLibras: fica OCULTO para não duplicar / desalinhar. O acesso
-   ao tradutor de Libras é feito pelo botão "Libras" da barra de acessibilidade
-   (que dispara o clique neste botão). Mantido no DOM e clicável para o widget
-   continuar funcionando — apenas fora da tela. */
+/* Botão nativo do VLibras = 3º quadrado da barra de acessibilidade. É o botão
+   de verdade do widget do governo (abre o tradutor/avatar), posicionado logo
+   abaixo dos dois botões próprios (Acessibilidade e Alto contraste), alinhado
+   à mesma borda direita. Mantém o tamanho/ícone natural do widget. */
 div[vw] [vw-access-button],
 [vw-access-button] {
   position: fixed !important;
-  left: -9999px !important;
-  right: auto !important;
-  top: -9999px !important;
+  right: 12px !important;
+  left: auto !important;
   bottom: auto !important;
+  top: calc(50% + 67px) !important;   /* logo abaixo dos 2 botões (52px + gap) */
   transform: none !important;
-  width: 1px !important;
-  height: 1px !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
   margin: 0 !important;
-  z-index: -1 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 6px 18px rgba(19,52,110,.28) !important;
+  z-index: 99990 !important;
+}
+@media (max-width: 768px) {
+  div[vw] [vw-access-button],
+  [vw-access-button] { top: calc(50% + 61px) !important; }   /* botões de 46px */
 }
 
 
