@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Layout, usePageMeta, useSettings, instagramUrl } from "../components/site";
 import { supabase, API_CONFIGURED } from "../lib/supabase";
+import { usePageContent, section } from "../lib/content";
+import { MOMENTOS_HERO, MOMENTOS_CTA } from "../lib/textos";
 
 type Foto = { thumb: string; full: string };
 type UAlbum = {
@@ -105,6 +107,9 @@ function AlbumModal({ album, onClose }: { album: UAlbum; onClose: () => void }) 
 export default function Momentos() {
   usePageMeta("Momentos — Festas e eventos | Escola CDA", "Reviva festas, encontros e celebrações que marcam a vida das crianças e famílias da Escola CDA.");
   const s = useSettings();
+  const { sec } = usePageContent("momentos");
+  const hero = section(sec, "hero", MOMENTOS_HERO);
+  const cta = section(sec, "cta", MOMENTOS_CTA);
   // Cache local: mostra os álbuns da última visita instantaneamente e atualiza
   // por trás. Só a primeiríssima visita (sem cache) precisa esperar o banco.
   const [albuns, setAlbuns] = useState<UAlbum[]>(() => {
@@ -152,9 +157,9 @@ export default function Momentos() {
   return (
     <Layout>
       <section className="page-hero reveal">
-        <span className="eyebrow">Momentos</span>
-        <h1>Cada conquista vira uma <span className="script">lembrança</span></h1>
-        <p>Festas, encontros e celebrações que marcam a vida das nossas crianças e famílias — reviva cada momento com a gente.</p>
+        <span className="eyebrow">{hero.eyebrow}</span>
+        <h1>{hero.titulo} <span className="script">{hero.destaque}</span></h1>
+        <p>{hero.p1}</p>
       </section>
 
       <div className="cda-panel reveal">
@@ -196,11 +201,11 @@ export default function Momentos() {
       </div>
 
       <div className="cta-band reveal">
-        <h2>Quer ver de perto o dia a dia da CDA?</h2>
-        <p>Acompanhe nossos momentos no Instagram ou venha nos visitar — será um prazer receber a sua família.</p>
+        <h2>{cta.titulo}</h2>
+        <p>{cta.p1}</p>
         <div className="cta-actions">
-          <a className="btn-white" href={instagramUrl(s.instagram)} target="_blank" rel="noreferrer"><i className="fa-brands fa-instagram"></i> Seguir no Instagram</a>
-          <Link className="btn-ghost" to="/matriculas"><i className="fa-solid fa-arrow-right"></i> Agendar visita</Link>
+          <a className="btn-white" href={instagramUrl(s.instagram)} target="_blank" rel="noreferrer"><i className="fa-brands fa-instagram"></i> {cta.btn}</a>
+          <Link className="btn-ghost" to="/matriculas"><i className="fa-solid fa-arrow-right"></i> {cta.p2}</Link>
         </div>
       </div>
 

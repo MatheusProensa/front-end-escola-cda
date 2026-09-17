@@ -13,10 +13,11 @@ const NAV_MAIN: [string, string, string, string][] = [
   ["/admin/vivencias", "Vivências", "palette", "vivencias"],
   ["/admin/espacos", "Espaços", "image", "espacos"],
   ["/admin/sobre", "Sobre", "book-open", "sobre"],
+  ["/admin/pagina-momentos", "Momentos", "camera-retro", "pagina-momentos"],
   ["/admin/pagina-matriculas", "Matrículas", "file-lines", "pagina-matriculas"],
 ];
 const NAV_GERIR: [string, string, string, string][] = [
-  ["/admin/momentos", "Momentos", "camera-retro", "momentos"],
+  ["/admin/momentos", "Álbuns de fotos", "images", "momentos"],
   ["/admin/depoimentos", "Depoimentos", "comment-dots", "depoimentos"],
   ["/admin/matriculas", "Matrículas recebidas", "envelope-open-text", "matriculas"],
   ["/admin/contato", "Contato", "address-book", "contato"],

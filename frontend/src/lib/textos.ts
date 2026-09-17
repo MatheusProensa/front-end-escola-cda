@@ -132,6 +132,18 @@ export const MATRICULAS_CTA: Bloco = {
   btn: "Falar no WhatsApp",
 };
 
+/* ───── Momentos ───── */
+export const MOMENTOS_HERO: Bloco = {
+  eyebrow: "Momentos", titulo: "Cada conquista vira uma", destaque: "lembrança",
+  p1: "Festas, encontros e celebrações que marcam a vida das nossas crianças e famílias — reviva cada momento com a gente.",
+};
+export const MOMENTOS_CTA: Bloco = {
+  titulo: "Quer ver de perto o dia a dia da CDA?",
+  p1: "Acompanhe nossos momentos no Instagram ou venha nos visitar — será um prazer receber a sua família.",
+  btn: "Seguir no Instagram",
+  p2: "Agendar visita",
+};
+
 /* ───── Home ───── */
 export const HOME_PROPOSITO: Bloco = {
   eyebrow: "EDUCAÇÃO COM PROPÓSITO", titulo: "Um jeito de aprender que respeita a infância",
