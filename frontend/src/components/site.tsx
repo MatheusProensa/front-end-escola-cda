@@ -8,6 +8,7 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { asset } from "../lib/assets";
 import { supabase, API_CONFIGURED } from "../lib/supabase";
+import { useGlobalContent, section } from "../lib/content";
 
 // WhatsApp padrão (fallback). O valor real vem das configurações editáveis no painel.
 export const WPP = "https://wa.me/555532177947";
@@ -159,10 +160,14 @@ const NAV: [string, string][] = [
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const g = useGlobalContent();
+  const navCfg = section(g, "nav", { logo: "", itens: [] as string[], btn: "Agende uma visita" });
+  const logoSrc = navCfg.logo || asset("logo-cda-15anos-semborda.webp");
+  const btnLabel = navCfg.btn || "Agende uma visita";
   return (
     <header className="navbar">
       <Link to="/" className="logo-link">
-        <img src={asset("logo-cda-15anos-semborda.webp")} alt="Escola CDA" className="logo" width={190} height={127} />
+        <img src={logoSrc} alt="Escola CDA" className="logo" width={190} height={127} />
       </Link>
       <button
         className={"nav-toggle" + (open ? " is-open" : "")}
@@ -173,16 +178,16 @@ export function Navbar() {
         <span></span><span></span><span></span>
       </button>
       <nav className={"nav" + (open ? " nav-open" : "")}>
-        {NAV.map(([to, label]) => (
+        {NAV.map(([to, label], i) => (
           <Link key={to} to={to} className={pathname === to ? "is-active" : ""} onClick={() => setOpen(false)}>
-            {label}
+            {navCfg.itens?.[i] || label}
           </Link>
         ))}
         <Link to="/matriculas" className="nav-button nav-button-mobile" onClick={() => setOpen(false)}>
-          Agende uma visita
+          {btnLabel}
         </Link>
       </nav>
-      <Link to="/matriculas" className="nav-button nav-button-desktop">Agende uma visita</Link>
+      <Link to="/matriculas" className="nav-button nav-button-desktop">{btnLabel}</Link>
     </header>
   );
 }
@@ -207,13 +212,28 @@ export function Footer() {
   ];
   const contact = useContact();
   const s = useSettings();
+  const g = useGlobalContent();
+  const f = section(g, "footer", {
+    blurb: "Há 15 anos formando crianças com afeto, propósito e experiências que transformam vidas e fortalecem famílias.",
+    colNav: "Navegação",
+    colSeg: "Segmentos",
+    colContato: "Contato",
+    navLabels: [] as string[],
+    segLabels: [] as string[],
+    credito: "Matheus Proensa",
+    copyright: "Escola CDA. Todos os direitos reservados.",
+    btn: "Agende uma visita",
+  });
+  const navL = section(g, "nav", { logo: "" });
+  const footerLogo = navL.logo || asset("logo-cda-15anos-semborda.webp");
+  const ano = new Date().getFullYear();
   const telHref = "tel:+" + s.telefone.replace(/\D/g, "");
   return (
     <footer className="footer" id="footer">
       <div className="footer-inner">
         <div className="footer-brand">
-          <img src={asset("logo-cda-15anos-semborda.webp")} alt="Escola CDA" className="footer-logo" />
-          <p>Há 15 anos formando crianças com afeto, propósito e experiências que transformam vidas e fortalecem famílias.</p>
+          <img src={footerLogo} alt="Escola CDA" className="footer-logo" />
+          <p>{f.blurb}</p>
           <div className="footer-social">
             <a href={instagramUrl(s.instagram)} target="_blank" rel="noreferrer" aria-label="Instagram" onClick={() => track("social_click", { rede: "instagram", local: "footer" })}><Icon name="instagram" brand size={16} /></a>
             <a href={facebookUrl(s.facebook)} target="_blank" rel="noreferrer" aria-label="Facebook" onClick={() => track("social_click", { rede: "facebook", local: "footer" })}><Icon name="facebook-f" brand size={16} /></a>
@@ -221,15 +241,15 @@ export function Footer() {
           </div>
         </div>
         <div className="footer-col">
-          <h4>Navegação</h4>
-          <ul>{nav.map(([x, to]) => <li key={x}><Link to={to}>{x}</Link></li>)}</ul>
+          <h4>{f.colNav}</h4>
+          <ul>{nav.map(([x, to], i) => <li key={i}><Link to={to}>{f.navLabels?.[i] || x}</Link></li>)}</ul>
         </div>
         <div className="footer-col">
-          <h4>Segmentos</h4>
-          <ul>{segs.map(([x, to], i) => <li key={i}><Link to={to}>{x}</Link></li>)}</ul>
+          <h4>{f.colSeg}</h4>
+          <ul>{segs.map(([x, to], i) => <li key={i}><Link to={to}>{f.segLabels?.[i] || x}</Link></li>)}</ul>
         </div>
         <div className="footer-contact">
-          <h4>Contato</h4>
+          <h4>{f.colContato}</h4>
           <div className="footer-contact-item"><Icon name="location-dot" color="#f0b400" size={14} /><span>{s.endereco}</span></div>
           <div className="footer-contact-item"><Icon name="phone" color="#f0b400" size={14} /><a href={telHref}>{s.telefone}</a></div>
           <div className="footer-contact-item"><Icon name="whatsapp" brand color="#f0b400" size={14} /><a href={s.wpp_link} target="_blank" rel="noreferrer" onClick={() => track("whatsapp_click", { local: "footer_contato" })}>{s.whatsapp}</a></div>
@@ -238,9 +258,9 @@ export function Footer() {
       </div>
       <div className="footer-bottom">
         <div className="footer-bottom-inner">
-          <p>© 2026 Escola CDA. Todos os direitos reservados.</p>
-          <span className="footer-credit">Desenvolvido por <strong>Matheus Proensa</strong></span>
-          <button type="button" className="footer-link-btn" onClick={() => contact("footer")}>Agende uma visita</button>
+          <p>© {ano} {f.copyright}</p>
+          <span className="footer-credit">Desenvolvido por <strong>{f.credito}</strong></span>
+          <button type="button" className="footer-link-btn" onClick={() => contact("footer")}>{f.btn}</button>
         </div>
       </div>
     </footer>

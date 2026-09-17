@@ -26,6 +26,7 @@ const NAV_ACOMPANHAR: [string, string, string, string][] = [
   ["/admin/historico", "Histórico", "clock-rotate-left", "historico"],
 ];
 const NAV_SISTEMA: [string, string, string, string][] = [
+  ["/admin/aparencia", "Rodapé e Menu", "table-columns", "aparencia"],
   ["/admin/configuracoes", "Configurações", "gear", "configuracoes"],
 ];
 

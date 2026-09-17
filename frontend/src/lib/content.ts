@@ -47,6 +47,28 @@ export function usePageContent(pagina: string): { sec: SectionMap; loading: bool
   return { sec, loading, erro };
 }
 
+// ── Conteúdo GLOBAL (rodapé, menu, logo) — aparece em todas as páginas ──
+// O Navbar e o Footer são usados dentro e fora do Layout (a Home renderiza
+// direto), então um cache em módulo garante UMA busca só compartilhada.
+let globalCache: SectionMap | null = null;
+let globalPromise: Promise<SectionMap> | null = null;
+
+// Limpa o cache global — chamado pelo painel após salvar para refletir na hora.
+export function invalidateGlobal() { globalCache = null; globalPromise = null; }
+
+export function useGlobalContent(): SectionMap {
+  const [sec, setSec] = useState<SectionMap>(globalCache ?? {});
+  useEffect(() => {
+    if (globalCache) { setSec(globalCache); return; }
+    if (!API_CONFIGURED) return;
+    if (!globalPromise) globalPromise = loadPage("global").catch(() => ({} as SectionMap));
+    let alive = true;
+    globalPromise.then((m) => { globalCache = m; if (alive) setSec(m); });
+    return () => { alive = false; };
+  }, []);
+  return sec;
+}
+
 // Lê uma seção com fallback no padrão. Mescla raso para tolerar campos novos.
 export function section<T>(sec: SectionMap, nome: string, fallback: T): T {
   const v = sec[nome];

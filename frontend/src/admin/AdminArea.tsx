@@ -15,6 +15,7 @@ import AdminMomentos from "./pages/Momentos";
 import AdminDepoimentos from "./pages/Depoimentos";
 import AdminMatriculas from "./pages/AdminMatriculas";
 import Contato from "./pages/Contato";
+import Aparencia from "./pages/Aparencia";
 import Estatisticas from "./pages/Estatisticas";
 import HistoricoEdicoes from "./pages/HistoricoEdicoes";
 import Configuracoes from "./pages/Configuracoes";
@@ -39,6 +40,7 @@ export default function AdminArea() {
         <Route path="depoimentos" element={guard(<AdminDepoimentos />)} />
         <Route path="matriculas" element={guard(<AdminMatriculas />)} />
         <Route path="contato" element={guard(<Contato />)} />
+        <Route path="aparencia" element={guard(<Aparencia />)} />
         <Route path="estatisticas" element={guard(<Estatisticas />)} />
         <Route path="historico" element={guard(<HistoricoEdicoes />)} />
         <Route path="configuracoes" element={guard(<Configuracoes />)} />
