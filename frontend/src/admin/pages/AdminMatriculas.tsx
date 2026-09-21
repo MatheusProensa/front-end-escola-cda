@@ -83,7 +83,7 @@ export default function AdminMatriculas() {
       {!API_CONFIGURED ? (
         <div className="adm-card" style={{ textAlign: "center", padding: 40 }}>
           <i className="fa-solid fa-plug" style={{ fontSize: 32, color: "var(--adm-ink-3)", marginBottom: 12, display: "block" }}></i>
-          <p style={{ color: "var(--adm-ink-3)" }}>Configure <code>VITE_API_URL</code> para visualizar as matrículas.</p>
+          <p style={{ color: "var(--adm-ink-3)" }}>Configure <code>VITE_SUPABASE_URL</code> para visualizar as matrículas.</p>
         </div>
       ) : (
         <>

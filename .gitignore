@@ -14,3 +14,7 @@ desktop.ini
 # ─── Logs ─────────────────────────────────────────────────────────────────────
 *.log
 logs/
+
+# ─── Dependências / build (o build de verdade é dentro de frontend/) ─────────
+node_modules/
+dist/

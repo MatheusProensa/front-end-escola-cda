@@ -91,7 +91,7 @@ export default function Dashboard() {
 
       {!API_CONFIGURED && (
         <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 10, padding: "12px 16px", marginBottom: 20, fontSize: 13, color: "#92400e" }}>
-          <i className="fa-solid fa-triangle-exclamation"></i> Painel em <strong>modo demo</strong> — configure <code>VITE_API_URL</code> no Vercel para conectar ao backend.
+          <i className="fa-solid fa-triangle-exclamation"></i> Painel em <strong>modo demo</strong> — configure <code>VITE_SUPABASE_URL</code> no Vercel para conectar ao backend.
         </div>
       )}
 

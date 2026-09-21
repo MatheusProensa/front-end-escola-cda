@@ -121,7 +121,7 @@ export default function Contato() {
           {!API_CONFIGURED && (
             <div className="adm-card" style={{ background: "#fffbeb", border: "1px solid #fde68a" }}>
               <p style={{ fontSize: 12.5, color: "#92400e", margin: 0, lineHeight: 1.6 }}>
-                <i className="fa-solid fa-triangle-exclamation"></i> Modo demo — configure <code>VITE_API_URL</code> para salvar no banco de dados.
+                <i className="fa-solid fa-triangle-exclamation"></i> Modo demo — configure <code>VITE_SUPABASE_URL</code> para salvar no banco de dados.
               </p>
             </div>
           )}
