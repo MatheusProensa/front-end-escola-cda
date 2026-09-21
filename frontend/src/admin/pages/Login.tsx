@@ -74,7 +74,7 @@ export default function Login() {
             <label htmlFor="email">E-mail</label>
             <div className="adm-input-wrap">
               <i className="fa-regular fa-envelope"></i>
-              <input id="email" className="adm-input" type="email" autoComplete="username" placeholder="seu@escolacda.com.br" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <input id="email" className="adm-input" type="email" autoComplete="username" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
           </div>
 
