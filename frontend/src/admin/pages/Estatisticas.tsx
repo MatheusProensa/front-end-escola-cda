@@ -21,6 +21,13 @@ type Dados = {
   usuariosAgora: number;
 };
 
+type DadosBusca = {
+  periodo: number;
+  totais: { cliques: number; impressoes: number; ctr: number; posicao: number };
+  termos: { termo: string; cliques: number; impressoes: number; ctr: number; posicao: number }[];
+  paginas: { pagina: string; cliques: number; impressoes: number }[];
+};
+
 const EVENTO_LABEL: Record<string, string> = {
   page_view: "Visualizações de página",
   whatsapp_click: "Cliques no WhatsApp",
@@ -156,6 +163,9 @@ export default function Estatisticas() {
   const [dados, setDados] = useState<Dados | null>(null);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState("");
+  const [busca, setBusca] = useState<DadosBusca | null>(null);
+  const [loadingBusca, setLoadingBusca] = useState(true);
+  const [erroBusca, setErroBusca] = useState(false);
 
   useEffect(() => {
     if (!API_CONFIGURED) { setLoading(false); return; }
@@ -177,12 +187,36 @@ export default function Estatisticas() {
     });
   }, [dias]);
 
+  // Dados de busca (Search Console) — carregados à parte para não travar o resto
+  // caso ainda não esteja configurado ou o Google ainda não tenha coletado nada.
+  useEffect(() => {
+    if (!API_CONFIGURED) { setLoadingBusca(false); return; }
+    setLoadingBusca(true);
+    setErroBusca(false);
+    supabase.auth.getSession().then(async ({ data }) => {
+      const token = data.session?.access_token;
+      if (!token) { setLoadingBusca(false); return; }
+      try {
+        const resp = await fetch(`/api/searchconsole?dias=${dias}`, { headers: { Authorization: `Bearer ${token}` } });
+        const json = await resp.json();
+        if (!resp.ok) throw new Error(json.error || "erro");
+        setBusca(json);
+      } catch {
+        setErroBusca(true);
+      } finally {
+        setLoadingBusca(false);
+      }
+    });
+  }, [dias]);
+
   const maxPagina = Math.max(1, ...(dados?.paginas.map((p) => p.visualizacoes) ?? [1]));
   const maxEvento = Math.max(1, ...(dados?.eventos.map((e) => e.total) ?? [1]));
   const maxDispositivo = Math.max(1, ...(dados?.dispositivos.map((d) => d.usuarios) ?? [1]));
   const maxOrigem = Math.max(1, ...(dados?.origens.map((o) => o.sessoes) ?? [1]));
   const maxTipo = Math.max(1, ...(dados?.novosVsRecorrentes.map((t) => t.usuarios) ?? [1]));
   const maxCidade = Math.max(1, ...(dados?.localizacao.map((c) => c.usuarios) ?? [1]));
+  const maxTermo = Math.max(1, ...(busca?.termos.map((t) => t.impressoes) ?? [1]));
+  const semBusca = !busca || busca.totais.impressoes === 0;
 
   return (
     <AdminShell active="estatisticas" title="Estatísticas" subtitle="Acompanhe o desempenho do site" logoSrc={logo()}>
@@ -238,6 +272,48 @@ export default function Estatisticas() {
               <div className="adm-stat-top"><div className="adm-stat-ic ic-green"><i className="fa-solid fa-clock"></i></div></div>
               <div className="adm-stat-num" style={{ fontSize: 22 }}>{loading ? "—" : formatarDuracao(dados?.totais.duracaoMediaSeg ?? 0)}</div>
               <div className="adm-stat-lbl">Tempo médio no site</div>
+            </div>
+          </div>
+
+          {/* ─── Busca no Google (Search Console) ─── */}
+          <div className="adm-panel">
+            <div className="adm-panel-head">
+              <div><h3><i className="fa-brands fa-google" style={{ marginRight: 8 }}></i>Busca no Google</h3><p>Cliques, impressões e o que as pessoas pesquisam pra achar a escola — últimos {dias} dias</p></div>
+            </div>
+            <div className="adm-panel-body" style={{ padding: 18 }}>
+              {loadingBusca ? (
+                <p style={{ color: "var(--adm-ink-3)", fontSize: 13 }}>Carregando…</p>
+              ) : (erroBusca || semBusca) ? (
+                <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 10, padding: "14px 16px" }}>
+                  <p style={{ fontSize: 13, color: "#1e40af", margin: 0, lineHeight: 1.6 }}>
+                    <i className="fa-solid fa-clock"></i> Os dados de busca do Google aparecem aqui em <strong>~2 dias</strong> depois de criar o Search Console (o Google precisa coletar). Assim que houver dados, esta seção mostra os cliques, as impressões e o que as pessoas pesquisam.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 12, marginBottom: 18 }}>
+                    {[
+                      { ic: "hand-pointer", tone: "ic-blue", num: busca!.totais.cliques as number | string, lbl: "Cliques" },
+                      { ic: "eye", tone: "ic-violet", num: busca!.totais.impressoes as number | string, lbl: "Impressões (apareceu na busca)" },
+                      { ic: "percent", tone: "ic-gold", num: busca!.totais.ctr.toFixed(1) + "%", lbl: "Taxa de clique (CTR)" },
+                      { ic: "ranking-star", tone: "ic-green", num: busca!.totais.posicao.toFixed(1), lbl: "Posição média" },
+                    ].map((s, i) => (
+                      <div className="adm-stat" key={i}>
+                        <div className="adm-stat-top"><div className={"adm-stat-ic " + s.tone}><i className={"fa-solid fa-" + s.ic}></i></div></div>
+                        <div className="adm-stat-num" style={{ fontSize: typeof s.num === "string" ? 22 : undefined }}>{typeof s.num === "number" ? <CountNum value={s.num} /> : s.num}</div>
+                        <div className="adm-stat-lbl">{s.lbl}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <h4 style={{ fontSize: 14, color: "var(--adm-ink)", margin: "0 0 12px" }}>O que as pessoas pesquisam</h4>
+                  {busca!.termos.length ? (
+                    <BarraLista itens={busca!.termos.map((t) => ({ rotulo: t.termo, valor: t.impressoes }))} max={maxTermo} render={(v) => `${v}×`} />
+                  ) : (
+                    <p style={{ color: "var(--adm-ink-3)", fontSize: 13 }}>Ainda sem termos de pesquisa no período.</p>
+                  )}
+                  <p className="hint" style={{ marginTop: 14 }}>“Impressões” = quantas vezes o site apareceu na busca. “Posição média” = a posição no Google (quanto menor, melhor).</p>
+                </>
+              )}
             </div>
           </div>
 
